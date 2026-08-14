@@ -1,0 +1,1254 @@
+Step 3: Primer Trimming with Cutadapt
+================
+
+- [Introduction](#introduction)
+  - [Purpose](#purpose)
+  - [Prerequisites](#prerequisites)
+  - [What This Notebook Does](#what-this-notebook-does)
+  - [Expected Input](#expected-input)
+  - [Expected Output](#expected-output)
+- [Environment Setup](#environment-setup)
+  - [Load Required Packages](#load-packages)
+- [Configuration](#configuration)
+  - [Define Path Parameters](#define-paths)
+  - [Define File Pattern Parameters](#define-patterns)
+  - [Define Primer Sequences](#define-primers)
+  - [Define Processing Parameters](#define-params)
+- [Initialize Output Directories](#initialize-output-directories)
+- [Define Helper Functions](#define-helper-functions)
+  - [Sample ID Extraction](#func-sample-id)
+  - [Primer Orientation Generator](#func-primer-orientations)
+  - [Anchored Primer-Hit Counter](#func-primer-hits)
+- [Discover FASTQ Files](#discover-fastq-files)
+  - [List Input Files](#list-files)
+  - [Validate File Pairing](#validate-pairing)
+- [Generate Primer Orientations](#generate-primer-orientations)
+- [Count Primers Before Trimming](#count-before)
+- [Run Cutadapt](#run-cutadapt)
+  - [Verify Cutadapt Installation](#verify-cutadapt)
+  - [Execute Primer Trimming](#execute-primer-trimming)
+- [Count Primers After Trimming](#count-after)
+  - [Build Combined Before/After Primer-Hit Table](#primer-hit-table)
+- [Export Results](#export-results)
+  - [Save to Excel](#save-excel)
+  - [Document and Export Column Dictionary](#column-dictionary)
+- [Output File Summary](#output-file-summary)
+- [Recommended Next Step](#recommended-next-step)
+- [Session Information](#session-information)
+- [References](#references)
+  - [Methods](#methods)
+  - [Related](#related)
+- [Appendix: Troubleshooting Guide](#appendix-troubleshooting-guide)
+  - [Common Issues and Solutions](#common-issues-and-solutions)
+    - [Cutadapt Not Found](#cutadapt-not-found)
+    - [Primers Still Present After
+      Trimming](#primers-still-present-after-trimming)
+    - [Low or Zero Primer Counts Even Before
+      Trimming](#low-or-zero-primer-counts-even-before-trimming)
+    - [Memory Issues](#memory-issues)
+  - [Understanding the Output](#understanding-the-output)
+    - [Which `Primer_Hit_Counts` values
+      matter](#which-primer_hit_counts-values-matter)
+    - [A note on exact matching](#a-note-on-exact-matching)
+
+<style type="text/css">
+/* Custom styling for improved readability */
+body {
+  font-size: 16px;
+  line-height: 1.6;
+}
+&#10;h1, h2, h3 {
+  color: #2c3e50;
+  margin-top: 1.5em;
+}
+&#10;code {
+  background-color: #F2F2F2;
+  color: #2c3e50;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 14px;
+}
+&#10;pre, pre code {
+  font-size: 14px;
+}
+&#10;.alert-info {
+  background-color: #2c3e50;
+  color: #ffffff;
+  border-left: 4px solid #f39c12;
+  padding: 12px;
+  margin: 15px 0;
+}
+&#10;.alert-warning {
+  background-color: #2c3e50;
+  color: #ffffff;
+  border-left: 4px solid #e74c3c;
+  padding: 12px;
+  margin: 15px 0;
+}
+&#10;.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+  border-left: 4px solid #28a745;
+  padding: 12px;
+  margin: 15px 0;
+}
+&#10;/* Table cells wrap long content (long inline code, sentences) instead of
+   overflowing or forcing horizontal scroll. */
+table {
+  width: 100%;
+}
+&#10;th, td {
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+&#10;/* Style for primer sequence display */
+.primer-seq {
+  font-family: monospace;
+  background-color: #f0f0f0;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 14px;
+}
+</style>
+
+# Introduction
+
+## Purpose
+
+This notebook is **Step 3** of the sequencing data processing pipeline.
+It removes primer sequences from paired-end reads using
+[Cutadapt](https://cutadapt.readthedocs.io/), a widely-used tool for
+finding and removing adapter sequences, primers, and other unwanted
+sequences from high-throughput sequencing reads. It produces a detailed,
+auditable account of primer content before and after trimming. Length
+filtering, N-filtering, and quality filtering are handled downstream in
+the [DADA2 pipeline (Step 5)](5_dada2_pipeline.md).
+
+Primer sequences must be removed before downstream analysis because:
+
+- **Primers are not biological sequences**: They are synthetic
+  oligonucleotides added during PCR
+- **They introduce bias**: Primers can inflate sequence similarity
+  scores
+- **[DADA2](https://benjjneb.github.io/dada2/) requires primer-free
+  reads**: its error model works best on amplicon sequences only
+- **Taxonomic assignment accuracy**: Primers can interfere with database
+  matching
+
+## Prerequisites
+
+Before running this notebook, ensure that:
+
+1.  FASTQ files (`.fastq`, `.fq`, and their gzip-compressed variants,
+    case-insensitively) are present in the
+    [data/fastq/](../../data/fastq/) directory
+2.  **Cutadapt** is installed in the
+    [tools/cutadapt/](../../tools/cutadapt/) R project directory by
+    running the
+    [setup/install_required_tools.R](../../setup/install_required_tools.R)
+    script
+3.  **[Step 1 (Data Integrity Check)](1_data_integrity_check.md)** has
+    been completed successfully (**optional**)
+4.  **[Step 2 (FastQC Quality Reports)](2_fastqc_quality_reports.md)**
+    has been completed successfully (**optional**)
+
+## What This Notebook Does
+
+1.  **Discovers FASTQ Files**: Scans the input directory for paired-end
+    FASTQ files
+2.  **Counts Primers Before Trimming**: Uses a custom, anchored search
+    to count, for every sample, primer, read file, and sequence
+    orientation, how many reads carry a primer at a read end
+3.  **Runs Cutadapt**: Trims primer sequences from both forward and
+    reverse reads, writing the primer-trimmed FASTQ files
+4.  **Counts Primers After Trimming**: Repeats the anchored count on the
+    trimmed reads, so before/after and the number removed are directly
+    comparable per sample
+5.  **Exports Results**: Saves the primer-hit table to an Excel workbook
+
+This notebook does **primer trimming only**. Length filtering (removing
+reads shorter than 100 bp), N-filtering, and quality filtering are all
+handled downstream in the [DADA2 pipeline (Step
+5)](5_dada2_pipeline.md), where the read losses at each stage are
+tracked together.
+
+## Expected Input
+
+- **Location**: FASTQ files should be placed in the
+  [data/fastq/](../../data/fastq/) directory relative to your [project
+  root](../../)
+- **Naming Convention**: Paired files must follow a consistent naming
+  pattern, for example:
+  - Forward reads: `{sample_id}_L001_R1_001.fastq.gz` or
+    `{sample_id}_L001_R1_001.fq`
+  - Reverse reads: `{sample_id}_L001_R2_001.fastq.gz` or
+    `{sample_id}_L001_R2_001.fq`
+  - The pipeline is intentionally hardcoded to lane token `L001`.
+    `.fastq`, `.fq`, and their gzip-compressed variants are detected
+    case-insensitively.
+  - This workflow expects one R1/R2 pair per `SampleID`. Merge
+    lane-split files and name the merged pair with the `L001` token
+    before running the notebook.
+- **Format**: Standard FASTQ format (4-line records per read)
+
+## Expected Output
+
+- Primer-trimmed reads in
+  [results/3_cutadapt_primer_trimming/primer_trimmed_reads/](../../results/3_cutadapt_primer_trimming/primer_trimmed_reads/)
+  (input to the [Step 4](4_dada2_parameter_selection.md) and [Step
+  5](5_dada2_pipeline.md))
+- Cutadapt log files for each sample in
+  [results/3_cutadapt_primer_trimming/cutadapt_logs/](../../results/3_cutadapt_primer_trimming/cutadapt_logs/)
+- Summary Excel file
+  ([primer_trimming_summary.xlsx](../../results/3_cutadapt_primer_trimming/primer_trimming_summary.xlsx))
+  with per-sample primer-hit counts before and after trimming
+
+<div class="alert alert-warning">
+
+**Downstream note**: The FASTQ files in
+[primer_trimmed_reads/](../../results/3_cutadapt_primer_trimming/primer_trimmed_reads/)
+are primer-trimmed only. Length filtering (\<100 bp), N-filtering, and
+quality filtering are performed in the [DADA2 pipeline (Step
+5)](5_dada2_pipeline.md), which takes this folder as its input.
+
+</div>
+
+------------------------------------------------------------------------
+
+# Environment Setup
+
+## Load Required Packages
+
+The chunk below loads every R package this notebook depends on, plus
+three helper functions shared across the whole pipeline: Excel writing,
+column-dictionary documentation, and clickable output links (each
+sourced from [R/functions/](../functions/)).
+
+``` r
+# Biostrings: Biological string manipulation (Bioconductor)
+# Provides functions for handling DNA/RNA sequences, generating orientations,
+# and pattern counting (vcountPattern) for the custom primer-hit counter
+library(Biostrings)
+
+# data.table: High-performance data manipulation
+# Provides fast operations for handling large result tables
+library(data.table)
+
+# DT: Interactive tables in R Markdown
+# Creates searchable, sortable HTML tables
+library(DT)
+
+# fs: Cross-platform filesystem operations
+# Consistent functions for file and directory manipulation
+library(fs)
+
+# here: Project-relative file paths
+# Enables reproducible path construction regardless of working directory
+library(here)
+
+# openxlsx: Excel file creation and manipulation
+# Read and write Excel files without Java dependencies
+library(openxlsx)
+
+# parallel: Parallel processing support
+# Built-in R package for multi-core processing
+library(parallel)
+
+# ShortRead: FASTQ file handling (Bioconductor)
+# Efficient tools for reading and counting FASTQ files
+library(ShortRead)
+
+# stringr: Consistent string manipulation
+# Intuitive string processing functions
+library(stringr)
+
+# Source our custom Excel utility function from the project's function library
+# This function handles creating or appending sheets to Excel workbooks
+source(here("R", "functions", "add_sheet_to_excel_function.R"))
+
+# Source our custom column-dictionary builder from the project's function library
+# This function documents every column of a sheet being exported to Excel
+source(here("R", "functions", "build_column_dictionary_function.R"))
+
+# Source our custom output-links helper from the project's function library
+# This function renders clickable Markdown links to this notebook's output files
+source(here("R", "functions", "render_output_links_function.R"))
+
+# Source the custom render_output_tree utility function from the project's
+# function library. This function prints this notebook's entire output
+# folder as a clickable directory tree (used in "Output File Summary" below),
+# scanned live from disk at knit time so it always matches what was actually
+# produced on this run.
+source(here("R", "functions", "render_output_tree_function.R"))
+```
+
+------------------------------------------------------------------------
+
+# Configuration
+
+## Define Path Parameters
+
+Set up the input and output directory paths. Using `here()` ensures
+paths are relative to the [project root](../../), making the script
+portable across different systems.
+
+``` r
+# Input folder containing raw FASTQ files
+# This should be the same directory used in Steps 1 and 2
+fastq_input_folder <- here("data", "fastq")
+
+# Base results folder for all pipeline outputs
+results_folder <- here("results")
+
+# Specific output folder for this step (Step 3: Primer Trimming)
+output_folder <- here(results_folder, "3_cutadapt_primer_trimming")
+
+# Output folder for the primer-trimmed reads. This is the final output of this
+# step and the input the DADA2 pipeline (Step 5) consumes.
+primer_trimmed_folder <- here(output_folder, "primer_trimmed_reads")
+
+# Folder for cutadapt log files (the human-readable record of what cutadapt did)
+log_folder <- here(output_folder, "cutadapt_logs")
+
+# Output Excel filename for primer trimming statistics
+output_excel_filename <- "primer_trimming_summary.xlsx"
+
+# Construct the full path to the output Excel file
+output_excel_path <- here(output_folder, output_excel_filename)
+```
+
+## Define File Pattern Parameters
+
+Configure the file naming patterns used to identify forward and reverse
+reads.
+
+``` r
+# Token identifying forward (Read 1) files in paired-end sequencing,
+# written as a regular expression (not a literal string) so it matches
+# .fastq/.fq and optional gzip compression for the required L001 lane token
+# automatically -- see data/README.md's "Naming Convention" section.
+# (?i) makes the extension match case-insensitively, and $ anchors the match
+# to the end of the filename.
+forward_pattern <- "(?i)_L001_R1_001\\.(fastq|fq)(\\.gz)?$"
+
+# Token identifying reverse (Read 2) files in paired-end sequencing -- see
+# forward_pattern above for why this is a regex rather than a literal
+# extension.
+reverse_pattern <- "(?i)_L001_R2_001\\.(fastq|fq)(\\.gz)?$"
+
+# Display configuration
+cat("File Pattern Configuration:\n",
+    "- Forward reads pattern:", forward_pattern, "\n",
+    "- Reverse reads pattern:", reverse_pattern, "\n")
+```
+
+## Define Primer Sequences
+
+Specify the primer sequences used for 16S amplicon generation. These
+primers will be trimmed from the reads.
+
+<div class="alert alert-warning">
+
+**Important**: Update these sequences to match the primers used in your
+experiment. The default primers below target the V3-V4 region of the 16S
+rRNA gene.
+
+</div>
+
+``` r
+# Forward primer sequence (5' -> 3') targeting the desired 16S variable region
+# IUPAC ambiguity codes: N = any, W = A/T
+forward_primer <- "CCTACGGGNGGCWGCAG"
+
+# Reverse primer sequence (5' -> 3') targeting the desired 16S variable region
+# IUPAC ambiguity codes: H = A/C/T, V = A/C/G
+reverse_primer <- "GACTACHVGGGTATCTAATCC"
+
+# Reverse complements of each primer. These are the sequences that appear at
+# the 3' END of a read when the insert is shorter than the read length and the
+# sequencer reads through into the opposite primer (read-through). They are
+# used by cutadapt (-a / -A) to trim that read-through.
+fwd_primer_rc <- as.character(reverseComplement(DNAString(forward_primer)))
+rev_primer_rc <- as.character(reverseComplement(DNAString(reverse_primer)))
+
+# Display primer information
+cat("Primer Configuration:\n",
+    "- Forward primer (5'->3'):", forward_primer, "\n",
+    "- Reverse primer (5'->3'):", reverse_primer, "\n",
+    "- Forward primer length:", nchar(forward_primer), "bp\n",
+    "- Reverse primer length:", nchar(reverse_primer), "bp\n",
+    "- Forward primer reverse complement:", fwd_primer_rc, "\n",
+    "- Reverse primer reverse complement:", rev_primer_rc, "\n")
+```
+
+## Define Processing Parameters
+
+Configure parameters for parallel processing, primer counting, and
+cutadapt execution.
+
+``` r
+# Determine the number of CPU threads for parallel processing
+# Reserve 2 cores for system operations to maintain responsiveness
+detected_cores <- suppressWarnings(detectCores())
+available_cores <- if (length(detected_cores) == 1L && is.finite(detected_cores) && detected_cores >= 1) as.integer(detected_cores) else 1L
+nr_threads <- max(1L, available_cores - 2L)
+
+# Anchor buffer (bp) for the custom primer-hit counter. A read counts as a hit
+# only if a primer orientation is found within the first or last
+# (primer_length + primer_anchor_buffer) bases. Kept deliberately small (2 bp)
+# so the window is precise -- just wide enough to tolerate a minor positional
+# offset (e.g. a stray leading base in some library preps) without letting the
+# search drift inward and pick up coincidental interior matches of the
+# degenerate primer. Raise to a slightly larger value only if primers are known
+# to sit several bases from the read end.
+primer_anchor_buffer <- 2L
+
+# Number of reads loaded from each FASTQ at a time while counting primer hits.
+# This bounds memory use independently of total file size.
+fastq_chunk_size <- 100000L
+
+# Path to the project-local Cutadapt executable
+cutadapt_path <- here("tools", "cutadapt", "venv", "bin", "cutadapt")
+
+if (!dir_exists(fastq_input_folder)) {
+  stop("Raw FASTQ input folder not found: ", fastq_input_folder,
+       "\nComplete Step 1 and verify the project paths before running Step 3.")
+}
+if (!file_exists(cutadapt_path) || file.access(cutadapt_path, mode = 1) != 0) {
+  stop("Cutadapt executable not found or not executable: ", cutadapt_path,
+       "\nRun setup/install_required_tools.R.")
+}
+
+# Verify that the executable can actually start. Merely checking the executable
+# bit is insufficient for a copied Python virtual environment because its
+# launcher can retain an absolute interpreter path from another machine.
+cutadapt_version_log <- tempfile("cutadapt-version-", fileext = ".log")
+cutadapt_version_status <- system2(
+  cutadapt_path,
+  args = "--version",
+  stdout = cutadapt_version_log,
+  stderr = cutadapt_version_log
+)
+cutadapt_version <- readLines(cutadapt_version_log, warn = FALSE)
+unlink(cutadapt_version_log)
+if (!identical(cutadapt_version_status, 0L)) {
+  stop("Cutadapt could not be started (exit status ", cutadapt_version_status, "): ",
+       paste(cutadapt_version, collapse = "\n"),
+       "\nRecreate the project-local tools with setup/install_required_tools.R --force-reinstall.")
+}
+
+# Display configuration
+cat("Processing Configuration:\n",
+    "- Available CPU cores:", available_cores, "\n",
+    "- Threads for processing:", nr_threads, "\n",
+    "- Primer anchor buffer (bp):", primer_anchor_buffer, "\n",
+    "- FASTQ counting chunk size:", fastq_chunk_size, "reads\n",
+    "- Cutadapt path:", cutadapt_path, "\n")
+```
+
+------------------------------------------------------------------------
+
+# Initialize Output Directories
+
+Create the output folder structure for primer trimming results.
+
+``` r
+# Create output directories if they don't exist
+# Using fs::dir_create which is safe to run multiple times
+
+# Main results folder
+if (!dir_exists(results_folder)) {
+  dir_create(results_folder, recurse = TRUE)
+  cat("Created results directory:", results_folder, "\n")
+}
+
+# Step 3 output folder
+if (!dir_exists(output_folder)) {
+  dir_create(output_folder, recurse = TRUE)
+  cat("Created output directory:", output_folder, "\n")
+} else {
+  cat("Using existing output directory:", output_folder, "\n")
+}
+```
+
+------------------------------------------------------------------------
+
+# Define Helper Functions
+
+## Sample ID Extraction
+
+This function extracts the sample identifier from a FASTQ filename.
+
+``` r
+# Extract Sample ID from FASTQ Filename
+#
+# Parses a FASTQ filename and returns the sample identifier portion.
+# Assumes sample ID is the first component before any underscore.
+#
+# Arguments:
+#   filename - Character string of the filename (without path)
+#   pattern  - The file pattern to remove, as a regular expression (e.g.
+#              forward_pattern/reverse_pattern above, which match both
+#              compressed and uncompressed FASTQ extensions)
+# Returns:
+#   Character string containing the sample ID
+#
+# Example:
+#   extract_sample_id("Sample001_L001_R1_001.fq.gz", forward_pattern)
+#   # Returns "Sample001"
+extract_sample_id <- function(filename, pattern) {
+  # Remove the pattern from the filename. `pattern` is matched as a
+  # regular expression here (NOT fixed()/literal matching) since
+  # forward_pattern/reverse_pattern above are regexes with an optional
+  # gzip-suffix group.
+  sample_name <- str_remove(filename, pattern)
+  # Extract first part before underscore (if present)
+  sample_id <- str_split(sample_name, "_", simplify = TRUE)[1]
+  return(sample_id)
+}
+```
+
+## Primer Orientation Generator
+
+This function generates all four orientations of a primer sequence
+(Forward, Complement, Reverse, ReverseComplement). Counting all four is
+the standard DADA2 sanity check: only two of them have a real biological
+mechanism (Forward = the primer itself at the 5’ end; ReverseComplement
+= read-through at the 3’ end), while non-zero counts in the
+Complement/Reverse columns would signal an unexpected library-prep or
+contamination issue.
+
+``` r
+# Generate All Primer Orientations
+#
+# Creates all four possible orientations of a DNA primer sequence, returned as
+# a named character vector so downstream tables can label each orientation.
+#
+# Arguments:
+#   primer - Character string of the primer sequence (5' -> 3')
+# Returns:
+#   Named character vector: Forward, Complement, Reverse, ReverseComplement
+get_primer_orientations <- function(primer) {
+  dna_seq <- DNAString(primer)
+  c(
+    Forward           = as.character(dna_seq),
+    Complement        = as.character(complement(dna_seq)),
+    Reverse           = as.character(reverse(dna_seq)),
+    ReverseComplement = as.character(reverseComplement(dna_seq))
+  )
+}
+```
+
+## Anchored Primer-Hit Counter
+
+This function counts how many reads carry a given primer orientation at
+a read **end**, honoring IUPAC ambiguity codes but requiring an exact
+(zero-mismatch) match.
+
+<div class="alert alert-info">
+
+**Note on the Custom Primer Counter (anchored matching)**: The
+before/after primer counts in this notebook are produced by a custom R
+search built on `Biostrings::vcountPattern()`.
+
+- The search is **anchored to the read ends**: a read only counts as a
+  hit if the primer (or one of its orientations) is found within the
+  first or last `primer_length + primer_anchor_buffer` bases, which is
+  where primers and read-through actually occur.
+
+- A small buffer (default **2 bp**) allows for minor positional offsets
+  – for example a stray leading base before the primer – without opening
+  the search up to the coincidental *interior* matches of a short,
+  IUPAC-degenerate primer that made earlier whole-read counts fail to
+  drop to zero after trimming.
+
+- Matching is **exact** (IUPAC-aware but zero-mismatch), so a read whose
+  primer region carries a sequencing error may not be counted; these
+  counts are therefore a conservative lower bound.
+
+- The cutadapt log files (`cutadapt_logs/`) hold cutadapt’s own
+  error-tolerant tally if needed.
+
+</div>
+
+``` r
+# Count Reads with a Primer Orientation at Either Read End
+#
+# For a single already-loaded set of reads (a DNAStringSet), counts how many
+# reads contain `orientation_seq` within the first or last
+# (nchar(orientation_seq) + anchor_buffer) bases. IUPAC codes in the query are
+# honored (fixed = FALSE); matching is exact (no mismatches), so counts are a
+# conservative lower bound relative to cutadapt's error-tolerant matching.
+#
+# Arguments:
+#   reads           - DNAStringSet from one streamed FASTQ chunk
+#   read_widths     - Integer vector of read lengths (width(reads)); passed in
+#                      so it is computed once per file rather than once per
+#                      orientation
+#   orientation_seq - Character string: the primer orientation to search for
+#   anchor_buffer   - Integer buffer (bp) added to the primer length to define
+#                      the 5' and 3' search windows
+# Returns:
+#   Integer count of reads with at least one anchored hit
+count_anchored_orientation_hits <- function(reads, read_widths, orientation_seq, anchor_buffer) {
+  primer_len  <- nchar(orientation_seq)
+  window_len  <- primer_len + anchor_buffer
+
+  # 5' window: bases 1 .. min(window_len, read_width)
+  five_prime_window <- subseq(reads,
+                              start = 1L,
+                              end   = pmin(window_len, read_widths))
+
+  # 3' window: last window_len bases, floored at base 1
+  three_prime_window <- subseq(reads,
+                               start = pmax(1L, read_widths - window_len + 1L),
+                               end   = read_widths)
+
+  # A read is a hit if the orientation is found in either anchored window
+  hits_5 <- vcountPattern(orientation_seq, five_prime_window, fixed = FALSE) > 0
+  hits_3 <- vcountPattern(orientation_seq, three_prime_window, fixed = FALSE) > 0
+  sum(hits_5 | hits_3)
+}
+
+# Count Primer Hits in One FASTQ File (long format)
+#
+# Streams bounded chunks rather than loading the complete file into memory.
+count_fastq_primer_hits <- function(fastq_path, primer_specs, read_label,
+                                    sample_id, anchor_buffer, chunk_size) {
+  hit_totals <- setNames(
+    integer(sum(lengths(primer_specs))),
+    unlist(lapply(names(primer_specs), function(primer_label) {
+      paste(primer_label, names(primer_specs[[primer_label]]), sep = "::")
+    }), use.names = FALSE)
+  )
+
+  streamer <- FastqStreamer(fastq_path, n = chunk_size)
+  on.exit(close(streamer), add = TRUE)
+
+  repeat {
+    fastq_chunk <- yield(streamer)
+    if (length(fastq_chunk) == 0L) break
+    reads <- sread(fastq_chunk)
+    read_widths <- width(reads)
+
+    for (primer_label in names(primer_specs)) {
+      for (orientation_label in names(primer_specs[[primer_label]])) {
+        key <- paste(primer_label, orientation_label, sep = "::")
+        hit_totals[[key]] <- hit_totals[[key]] + count_anchored_orientation_hits(
+          reads, read_widths, primer_specs[[primer_label]][[orientation_label]], anchor_buffer
+        )
+      }
+    }
+  }
+
+  rbindlist(lapply(names(hit_totals), function(key) {
+    key_parts <- str_split_fixed(key, fixed("::"), 2L)
+    data.table(
+      SampleID = sample_id,
+      Primer = key_parts[1L],
+      Read_File = read_label,
+      Orientation = key_parts[2L],
+      Hits = unname(hit_totals[[key]])
+    )
+  }))
+}
+
+# Count Primer Hits Across All Samples (long format)
+#
+# Builds a tidy per-sample / per-primer / per-read-file / per-orientation table
+# of anchored primer-hit counts. Each FASTQ file is read exactly once; all
+# primer/orientation counts for that file reuse the loaded reads.
+#
+# Arguments:
+#   fwd_paths, rev_paths           - Character vectors of R1/R2 FASTQ paths
+#                                     (paired)
+#   sample_ids                     - Character vector of sample identifiers
+#                                     (paired with paths)
+#   fwd_orientations, rev_orientations - Named character vectors from
+#                                     get_primer_orientations() for the
+#                                     forward and reverse primer
+#   anchor_buffer                  - Integer buffer passed to the anchored
+#                                     counter
+#   n_threads                      - Number of cores for mclapply
+#   chunk_size                     - Maximum reads held per FASTQ stream chunk
+# Returns:
+#   data.table with columns SampleID, Primer, Read_File, Orientation, Hits
+count_primer_hits_long <- function(fwd_paths, rev_paths, sample_ids,
+                                   fwd_orientations, rev_orientations,
+                                   anchor_buffer, n_threads, chunk_size) {
+  per_sample <- mclapply(seq_along(sample_ids), function(i) {
+    primer_specs <- list(FWD = fwd_orientations, REV = rev_orientations)
+    rbindlist(list(
+      count_fastq_primer_hits(fwd_paths[i], primer_specs, "R1", sample_ids[i],
+                              anchor_buffer, chunk_size),
+      count_fastq_primer_hits(rev_paths[i], primer_specs, "R2", sample_ids[i],
+                              anchor_buffer, chunk_size)
+    ))
+  }, mc.cores = if (.Platform$OS.type == "windows") 1L else n_threads)
+
+  rbindlist(per_sample)
+}
+```
+
+------------------------------------------------------------------------
+
+# Discover FASTQ Files
+
+## List Input Files
+
+Scan the input directory for paired-end FASTQ files.
+
+``` r
+# Get all forward read file paths
+fwd_raw_paths <- dir_ls(
+  path = fastq_input_folder,
+  regexp = forward_pattern
+) %>%
+  # Sort for consistent ordering
+  sort()
+
+# Get all reverse read file paths
+rev_raw_paths <- dir_ls(
+  path = fastq_input_folder,
+  regexp = reverse_pattern
+) %>%
+  sort()
+
+# Extract sample names from forward files
+sample_names <- sapply(
+  basename(fwd_raw_paths),
+  extract_sample_id,
+  pattern = forward_pattern,
+  USE.NAMES = FALSE
+)
+
+# Display discovery results
+cat("File Discovery Results:\n",
+    "- Input directory:", fastq_input_folder, "\n",
+    "- Forward files found:", length(fwd_raw_paths), "\n",
+    "- Reverse files found:", length(rev_raw_paths), "\n",
+    "- Samples identified:", length(sample_names), "\n")
+```
+
+## Validate File Pairing
+
+Verify that all samples have both forward and reverse read files.
+
+``` r
+# Compare complete filename stems first; comparing only the text before the
+# first underscore can conceal a mismatched pair with the same SampleID.
+fwd_pair_stems <- str_remove(basename(fwd_raw_paths), forward_pattern)
+rev_pair_stems <- str_remove(basename(rev_raw_paths), reverse_pattern)
+
+# Extract sample names from reverse files for comparison
+rev_sample_names <- sapply(
+  basename(rev_raw_paths),
+  extract_sample_id,
+  pattern = reverse_pattern,
+  USE.NAMES = FALSE
+)
+
+# Check that a non-empty set of complete forward/reverse stems matches.
+if (length(fwd_raw_paths) == 0L || length(rev_raw_paths) == 0L) {
+  stop("No paired FASTQ files matched the configured patterns in: ", fastq_input_folder,
+       "\nForward pattern: ", forward_pattern,
+       "\nReverse pattern: ", reverse_pattern)
+}
+if (length(fwd_pair_stems) != length(rev_pair_stems) ||
+    !identical(fwd_pair_stems, rev_pair_stems)) {
+  stop(
+    "Mismatch between forward and reverse files!\n",
+    "Forward samples: ", length(sample_names), "\n",
+    "Reverse samples: ", length(rev_sample_names), "\n",
+    "Forward-only stems: ", paste(setdiff(fwd_pair_stems, rev_pair_stems), collapse = ", "), "\n",
+    "Reverse-only stems: ", paste(setdiff(rev_pair_stems, fwd_pair_stems), collapse = ", "), "\n",
+    "Please check your input files."
+  )
+}
+if (anyDuplicated(sample_names)) {
+  stop("Sample IDs are not unique before the first underscore: ",
+       paste(unique(sample_names[duplicated(sample_names)]), collapse = ", "))
+}
+
+# Create sample inventory table
+sample_inventory <- data.table(
+  SampleID = sample_names,
+  Forward_File = basename(fwd_raw_paths),
+  Reverse_File = basename(rev_raw_paths)
+)
+
+# Display sample inventory
+cat("Sample Inventory:\n",
+    "- Total samples:", length(sample_names), "\n")
+```
+
+------------------------------------------------------------------------
+
+# Generate Primer Orientations
+
+Create all four orientations of the forward and reverse primers, which
+the anchored counter searches for in each read file.
+
+``` r
+fwd_primer_orientations <- get_primer_orientations(forward_primer)
+rev_primer_orientations <- get_primer_orientations(reverse_primer)
+
+primer_orientation_table <- data.table(
+  Orientation    = names(fwd_primer_orientations),
+  Forward_Primer = unname(fwd_primer_orientations),
+  Reverse_Primer = unname(rev_primer_orientations)
+)
+
+cat("Primer orientations generated (searched for at read ends):\n\n")
+```
+
+------------------------------------------------------------------------
+
+# Count Primers Before Trimming
+
+Count primer occurrences at the read ends of the **raw** reads, for
+every sample, primer, read file, and orientation. This establishes the
+baseline that the after-trimming counts are compared against.
+
+<div class="alert alert-info">
+
+**Note**: This step reads every raw FASTQ file once. It may take several
+minutes for large datasets.
+
+</div>
+
+``` r
+primer_hits_before_dt <- count_primer_hits_long(
+  fwd_paths        = fwd_raw_paths,
+  rev_paths        = rev_raw_paths,
+  sample_ids       = sample_names,
+  fwd_orientations = fwd_primer_orientations,
+  rev_orientations = rev_primer_orientations,
+  anchor_buffer    = primer_anchor_buffer,
+  n_threads        = nr_threads,
+  chunk_size       = fastq_chunk_size
+)
+
+cat("Pre-trimming primer counting complete (",
+    nrow(primer_hits_before_dt), "rows ).\n")
+```
+
+------------------------------------------------------------------------
+
+# Run Cutadapt
+
+## Verify Cutadapt Installation
+
+Check that Cutadapt is available and display its version.
+
+``` r
+cat("Cutadapt Configuration:\n",
+    "- Path:", cutadapt_path, "\n",
+    "- Version:", cutadapt_version, "\n")
+```
+
+## Execute Primer Trimming
+
+Run Cutadapt on each sample to remove primer sequences from paired-end
+reads. The primer-trimmed reads are written to the
+[primer_trimmed_reads/](../../results/3_cutadapt_primer_trimming/primer_trimmed_reads/)
+directory, which the [DADA2 pipeline (Step 5)](5_dada2_pipeline.md)
+consumes.
+
+<div class="alert alert-info">
+
+**Note**: Cutadapt is run with the following settings:
+
+- `-g PRIMER`: Trim 5’ forward primer from forward reads
+- `-a PRIMER_RC`: Trim 3’ read-through (reverse-complement of reverse
+  primer) from forward reads
+- `-G PRIMER`: Trim 5’ reverse primer from reverse reads
+- `-A PRIMER_RC`: Trim 3’ read-through (reverse-complement of forward
+  primer) from reverse reads
+- `-n 2`: Allow up to 2 primer sequences to be removed per read
+- `--cores N`: Use the configured `nr_threads` limit while reserving two
+  cores when available
+
+</div>
+
+``` r
+# Write this run into an isolated staging tree. The final folders consumed by
+# downstream steps are replaced only after every Cutadapt command succeeds.
+staging_folder <- path(
+  output_folder,
+  paste0(".cutadapt-staging-", format(Sys.time(), "%Y%m%d%H%M%S"), "-", Sys.getpid())
+)
+staging_trimmed_folder <- path(staging_folder, "primer_trimmed_reads")
+staging_log_folder <- path(staging_folder, "cutadapt_logs")
+dir_create(staging_trimmed_folder, recurse = TRUE)
+dir_create(staging_log_folder, recurse = TRUE)
+
+# Define output paths for cutadapt's primer-trimmed files
+fwd_staging_paths <- path(staging_trimmed_folder, basename(fwd_raw_paths))
+rev_staging_paths <- path(staging_trimmed_folder, basename(rev_raw_paths))
+
+cat("Running Cutadapt for primer trimming...\n",
+    "Processing", length(sample_names), "samples.\n\n")
+
+# Run cutadapt for each sample
+for (i in seq_along(sample_names)) {
+
+  cat("Processing sample", i, "of", length(sample_names), ":", sample_names[i], "\n")
+
+  # Define log file path
+  log_file <- path(staging_log_folder, paste0(sample_names[i], "_cutadapt.log"))
+
+  # Build cutadapt command arguments
+  cutadapt_args <- c(
+    # Forward read trimming:
+    # -g: Trim forward primer from 5' end of forward reads
+    # -a: Trim reverse complement of reverse primer from 3' end (read-through)
+    "-g", shQuote(forward_primer),
+    "-a", shQuote(rev_primer_rc),
+
+    # Reverse read trimming:
+    # -G: Trim reverse primer from 5' end of reverse reads
+    # -A: Trim reverse complement of forward primer from 3' end (read-through)
+    "-G", shQuote(reverse_primer),
+    "-A", shQuote(fwd_primer_rc),
+
+    # Allow up to 2 primers to be removed per read
+    "-n", "2",
+
+    # Respect the same bounded thread setting reported above.
+    paste0("--cores=", nr_threads),
+
+    # Output files
+    "-o", shQuote(as.character(fwd_staging_paths[i])),
+    "-p", shQuote(as.character(rev_staging_paths[i])),
+
+    # Input files (raw reads)
+    shQuote(as.character(fwd_raw_paths[i])),
+    shQuote(as.character(rev_raw_paths[i]))
+  )
+
+  # Execute cutadapt and capture output
+  result <- system2(
+    cutadapt_path,
+    args = cutadapt_args,
+    stdout = log_file,
+    stderr = log_file
+  )
+
+  # Check for errors
+  if (result != 0 || !file_exists(fwd_staging_paths[i]) || !file_exists(rev_staging_paths[i]) ||
+      file_size(fwd_staging_paths[i]) == 0 || file_size(rev_staging_paths[i]) == 0) {
+    stop("Cutadapt failed for sample ", sample_names[i],
+         " (exit code ", result, "). See log: ", log_file)
+  }
+}
+
+# Publish the complete run as one dataset only after every sample succeeded.
+# Preserve the previous run inside staging until both replacements succeed so a
+# filesystem error during publication can roll back to the complete old run.
+previous_trimmed_backup <- path(staging_folder, "previous_primer_trimmed_reads")
+previous_log_backup <- path(staging_folder, "previous_cutadapt_logs")
+tryCatch({
+  if (dir_exists(primer_trimmed_folder)) file_move(primer_trimmed_folder, previous_trimmed_backup)
+  if (dir_exists(log_folder)) file_move(log_folder, previous_log_backup)
+  file_move(staging_trimmed_folder, primer_trimmed_folder)
+  file_move(staging_log_folder, log_folder)
+}, error = function(e) {
+  if (dir_exists(primer_trimmed_folder)) dir_delete(primer_trimmed_folder)
+  if (dir_exists(log_folder)) dir_delete(log_folder)
+  if (dir_exists(previous_trimmed_backup)) file_move(previous_trimmed_backup, primer_trimmed_folder)
+  if (dir_exists(previous_log_backup)) file_move(previous_log_backup, log_folder)
+  stop("Could not publish the completed Cutadapt run; the previous output was restored: ",
+       conditionMessage(e))
+})
+dir_delete(staging_folder)
+
+fwd_trimmed_paths <- path(primer_trimmed_folder, basename(fwd_raw_paths))
+rev_trimmed_paths <- path(primer_trimmed_folder, basename(rev_raw_paths))
+```
+
+------------------------------------------------------------------------
+
+# Count Primers After Trimming
+
+Repeat the anchored count on the **cutadapt-trimmed** reads. Comparing
+these to the pre-trimming counts shows how many primer-bearing reads
+were cleaned per sample, primer, read file, and orientation.
+
+``` r
+primer_hits_after_dt <- count_primer_hits_long(
+  fwd_paths        = fwd_trimmed_paths,
+  rev_paths        = rev_trimmed_paths,
+  sample_ids       = sample_names,
+  fwd_orientations = fwd_primer_orientations,
+  rev_orientations = rev_primer_orientations,
+  anchor_buffer    = primer_anchor_buffer,
+  n_threads        = nr_threads,
+  chunk_size       = fastq_chunk_size
+)
+
+cat("Post-trimming primer counting complete (",
+    nrow(primer_hits_after_dt), "rows ).\n")
+```
+
+## Build Combined Before/After Primer-Hit Table
+
+Merge the before and after counts into one tidy table, adding the number
+of primer-bearing reads removed for each combination.
+
+``` r
+# Merge on the four identifying keys; rename the Hits columns to Before/After
+primer_hit_counts_dt <- merge(
+  setnames(copy(primer_hits_before_dt), "Hits", "Hits_Before"),
+  setnames(copy(primer_hits_after_dt),  "Hits", "Hits_After"),
+  by = c("SampleID", "Primer", "Read_File", "Orientation")
+)
+
+# Reads that carried a primer before but not after
+primer_hit_counts_dt[, Hits_Removed := Hits_Before - Hits_After]
+
+# Percentage of primer-bearing reads removed, relative to the pre-trimming
+# count for that same sample/primer/read-file/orientation. When Hits_Before is
+# 0 there was nothing to remove, so the percentage is undefined (0/0) and is
+# reported as NA rather than NaN.
+primer_hit_counts_dt[, Pct_Removed := fifelse(
+  Hits_Before > 0, round(100 * Hits_Removed / Hits_Before, 2), NA_real_
+)]
+
+# Order rows so each sample's block reads FWD-then-REV, R1-then-R2, in the
+# canonical orientation order
+primer_hit_counts_dt[, Orientation := factor(
+  Orientation, levels = c("Forward", "Complement", "Reverse", "ReverseComplement")
+)]
+setorder(primer_hit_counts_dt, SampleID, Primer, Read_File, Orientation)
+primer_hit_counts_dt[, Orientation := as.character(Orientation)]
+
+# Console summary: totals for the four biologically meaningful combinations,
+# summed across samples (see "Understanding the Output" for why these four)
+meaningful_combos <- rbind(
+  data.table(Primer = "FWD", Read_File = "R1", Orientation = "Forward"),
+  data.table(Primer = "REV", Read_File = "R2", Orientation = "Forward"),
+  data.table(Primer = "REV", Read_File = "R1", Orientation = "ReverseComplement"),
+  data.table(Primer = "FWD", Read_File = "R2", Orientation = "ReverseComplement")
+)
+# Flag which rows are biologically expected (a real primer / read-through
+# mechanism) versus not (no mechanism -- contaminant or other artefact).
+# meaningful_combos (above) lists the four combinations with a real mechanism;
+# every other row is a contaminant/artefact sanity-net cell.
+primer_hit_counts_dt[, Biological_Relevance := "Contaminant / other"]
+primer_hit_counts_dt[meaningful_combos, on = c("Primer", "Read_File", "Orientation"),
+                     Biological_Relevance := "Biologically relevant"]
+setcolorder(primer_hit_counts_dt,
+            c("SampleID", "Primer", "Read_File", "Orientation", "Biological_Relevance"))
+
+meaningful_totals <- merge(primer_hit_counts_dt, meaningful_combos,
+                           by = c("Primer", "Read_File", "Orientation"))[
+  , .(Hits_Before = sum(Hits_Before), Hits_After = sum(Hits_After)),
+  by = .(Primer, Read_File, Orientation)]
+
+cat("\nPRIMER HITS (anchored, exact match) -- biologically expected values:\n")
+```
+
+------------------------------------------------------------------------
+
+# Export Results
+
+## Save to Excel
+
+Export all results to an Excel workbook with multiple sheets.
+
+``` r
+# Recreate this run's workbook so sheets left by older notebook versions cannot
+# survive and be mistaken for current output.
+if (file_exists(output_excel_path)) file_delete(output_excel_path)
+
+# Sheet 1: Custom anchored primer-hit counts, before/after/removed, per
+# sample x primer x read file x orientation
+add_sheet_to_excel(
+  workbook_path = output_excel_path,
+  sheet_name = "Primer_Hit_Counts",
+  data = primer_hit_counts_dt,
+  rownames = FALSE,
+  overwrite = TRUE
+)
+```
+
+## Document and Export Column Dictionary
+
+Build a trailing `Column_Dictionary` sheet documenting every column of
+every sheet just written to `output_excel_path`, so the workbook
+explains itself to collaborators.
+
+------------------------------------------------------------------------
+
+# Output File Summary
+
+The tree below lists every file this notebook has written to its own
+output folder,
+[results/3_cutadapt_primer_trimming/](../../results/3_cutadapt_primer_trimming/),
+as a clickable, portable link (relative to this notebook’s own location)
+with a short description – built live from what is actually on disk at
+knit time via the project’s shared
+[render_output_tree_function.R](../functions/render_output_tree_function.R)
+helper, so it always matches this run’s real output rather than a
+hand-maintained list.
+
+------------------------------------------------------------------------
+
+# Recommended Next Step
+
+The primer-trimmed FASTQ files and per-sample primer-hit diagnostics
+exported above are ready for the next stages. First use the [Step 4 —
+DADA2 Parameter Explorer](4_dada2_parameter_selection.md) to visualize
+the amplified target, inspect read quality and retention, validate
+representative samples if needed, and save filtering parameters. Then
+proceed to [Step 5 — DADA2 Pipeline](5_dada2_pipeline.md), which reads
+this notebook’s
+[primer_trimmed_reads/](../../results/3_cutadapt_primer_trimming/primer_trimmed_reads)
+folder and performs length filtering, N-filtering, quality filtering,
+denoising, merging, chimera removal, ASV table construction, and
+taxonomy assignment.
+
+------------------------------------------------------------------------
+
+# Session Information
+
+Record the R environment for reproducibility.
+
+------------------------------------------------------------------------
+
+# References
+
+## Methods
+
+- Martin M (2011). Cutadapt removes adapter sequences from
+  high-throughput sequencing reads. *EMBnet.journal*, 17(1), 10-12.
+  <https://doi.org/10.14806/ej.17.1.200> — primary citation for the
+  [Cutadapt](https://cutadapt.readthedocs.io/en/stable/) tool this
+  notebook runs.
+- Callahan BJ, McMurdie PJ, Rosen MJ, Han AW, Johnson AJA, Holmes SP
+  (2016). DADA2: High-resolution sample inference from Illumina amplicon
+  data. *Nature Methods*, 13, 581-583.
+  <https://doi.org/10.1038/nmeth.3869> — see also the [DADA2 ITS
+  Pipeline Workflow](https://benjjneb.github.io/dada2/ITS_workflow.html)
+  documentation on removing primers before running DADA2.
+- Pagès H, Aboyoun P, Gentleman R, DebRoy S.
+  [Biostrings](https://bioconductor.org/packages/release/bioc/html/Biostrings.html):
+  Efficient manipulation of biological strings. Bioconductor. — provides
+  `vcountPattern()`, used by this notebook’s custom anchored primer-hit
+  counter.
+
+## Related
+
+- [Step 1 — Data Integrity Check](1_data_integrity_check.md) — optional
+  prerequisite; validates FASTQ files before this notebook runs.
+- [Step 2 — FastQC Quality Reports](2_fastqc_quality_reports.md) —
+  optional prerequisite; read-quality inspection before trimming.
+- [Step 4 — DADA2 Parameter Explorer](4_dada2_parameter_selection.md) —
+  optional prerequisite; visualize the amplified target, inspect read
+  quality and retention and save filtering parameters
+- [Step 5 — DADA2 Pipeline](5_dada2_pipeline.md) — this notebook’s
+  recommended next step; consumes the primer-trimmed reads produced
+  here.
+
+------------------------------------------------------------------------
+
+# Appendix: Troubleshooting Guide
+
+## Common Issues and Solutions
+
+### Cutadapt Not Found
+
+**Error**: `Cutadapt executable not found or not executable` or
+`Cutadapt could not be started`
+
+**Solutions**:
+
+- Recreate the project-local installation with
+  `Rscript setup/install_required_tools.R --force-reinstall`
+- Verify that `cutadapt_path` points to the recreated project-local
+  executable
+- Do not copy `tools/cutadapt/venv/` between project locations or
+  machines; Python virtual environments contain absolute interpreter
+  paths
+
+### Primers Still Present After Trimming
+
+**Symptom**: In `Primer_Hit_Counts`, the biologically meaningful cells
+(see below) still show substantial `Hits_After`
+
+**Possible causes**:
+
+- Primer sequences in `forward_primer`/`reverse_primer` do not match the
+  primers actually used
+- `primer_anchor_buffer` is too small for a library prep with several
+  leading bases before the primer (raising the buffer would catch
+  primers sitting a little further from the read end)
+- Read length is shorter than the primer, so the primer cannot be fully
+  contained in the read
+
+**Actions**:
+
+- Read the cutadapt logs
+  ([`cutadapt_logs/`](../../results/3_cutadapt_primer_trimming/cutadapt_logs/)):
+  the “=== Summary ===” and per-adapter “Trimmed: N times” lines are
+  cutadapt’s own error-tolerant tally. If cutadapt reports it trimmed
+  the primers but the anchored count is still high, the primer sequence
+  or anchor window is the likely culprit
+- Verify primer sequences are correct for the experiment’s amplicon
+  region
+
+### Low or Zero Primer Counts Even Before Trimming
+
+**Symptom**: `Hits_Before` is near zero in the meaningful values
+
+**Likely cause**: Primers were already removed upstream (e.g. by the
+sequencing facility), so there is nothing to trim. This reflects the
+input data and is not a notebook malfunction. Confirm with the cutadapt
+logs (they will also report near-zero matches) and by searching a few
+raw reads directly.
+
+### Memory Issues
+
+**Error**: Cannot allocate memory for FASTQ processing
+
+**Solutions**:
+
+- Reduce `nr_threads` to use fewer parallel processes
+- Reduce `fastq_chunk_size` so each worker holds fewer reads at once
+- Process samples in batches
+
+## Understanding the Output
+
+### Which `Primer_Hit_Counts` values matter
+
+The table reports all 32 combinations per sample (2 primers x 2 read
+files x 4 orientations x before/after collapsed into columns), but only
+four have a real biological mechanism and are expected to be non-zero
+*before* trimming:
+
+- **FWD primer, R1, Forward**: the forward primer at the 5’ start of
+  forward reads (the primary event; expected high before, ~0 after)
+- **REV primer, R2, Forward**: the reverse primer at the 5’ start of
+  reverse reads (the primary event; expected high before, ~0 after)
+- **REV primer, R1, ReverseComplement**: reverse-primer read-through at
+  the 3’ end of forward reads (expected only when the insert is shorter
+  than the read length; ~0 after)
+- **FWD primer, R2, ReverseComplement**: forward-primer read-through at
+  the 3’ end of reverse reads (expected only for short inserts; ~0
+  after)
+
+All other values (Complement/Reverse orientations, and each primer in
+the “wrong” read file) have no biological mechanism and should be at or
+near zero both before and after – they exist as a
+contamination/library-prep sanity net.
+
+### A note on exact matching
+
+`Primer_Hit_Counts` uses an anchored, exact (zero-mismatch) IUPAC
+search, so a read whose primer region carries a sequencing error may not
+be counted; the `Hits_Before` values are therefore a conservative lower
+bound. The cutadapt logs
+([`cutadapt_logs/`](../../results/3_cutadapt_primer_trimming/cutadapt_logs/))
+hold cutadapt’s own error-tolerant tally for comparison.

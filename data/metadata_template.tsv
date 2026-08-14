@@ -1,0 +1,11 @@
+SampleID	SubjectID	Treatment	Timepoint	SampleType	Batch
+S01	Subject01	Control	T0	Biological	Batch1
+S02	Subject02	Control	T0	Biological	Batch1
+S03	Subject03	Control	T0	Biological	Batch1
+S04	Subject04	Control	T0	Biological	Batch1
+S05	Subject05	Control	T0	Biological	Batch1
+S06	Subject06	Treatment	T1	Biological	Batch2
+S07	Subject07	Treatment	T1	Biological	Batch2
+S08	Subject08	Treatment	T1	Biological	Batch2
+S09	Subject09	Treatment	T1	Biological	Batch2
+S10	Subject10	Treatment	T1	Biological	Batch2

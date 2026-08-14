@@ -1,0 +1,28 @@
+# Normalize source and documentation text to LF across platforms.
+* text=auto
+*.R text eol=lf
+*.Rmd text eol=lf
+*.md text eol=lf
+*.sh text eol=lf
+*.tsv text eol=lf
+*.csv text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.nwk text eol=lf
+*.fasta text eol=lf
+*.fastq text eol=lf
+
+# Preserve binary scientific data, reports, images, and archives.
+*.RData binary
+*.rds binary
+*.xlsx binary
+*.pdf binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.gz binary
+*.zip binary
+*.jar binary
+*.parquet binary

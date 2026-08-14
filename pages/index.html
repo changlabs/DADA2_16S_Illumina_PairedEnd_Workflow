@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Executable R Markdown notebooks for the DADA2 Illumina paired-end 16S rRNA amplicon sequencing workflow.">
+  <meta name="theme-color" content="#315f72">
+  <title>DADA2 Paired-End 16S Workflow</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --navy: #10293b;
+      --navy-soft: #193e52;
+      --teal: #087f86;
+      --teal-dark: #05656b;
+      --teal-pale: #e5f4f3;
+      --amber: #d6aa16;
+      --amber-pale: #fff3df;
+      --green: #16835d;
+      --green-pale: #e3f5ec;
+      --required: #c65353;
+      --ink: #183746;
+      --muted: #5d7783;
+      --line: #c9e1e7;
+      --surface: #ffffff;
+      --background: #f2f9fb;
+      --shadow: 0 12px 32px rgba(49, 95, 114, 0.1);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--background);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+    a { color: inherit; }
+    a:focus-visible { outline: 3px solid #f1b85b; outline-offset: 3px; }
+
+    .site-header {
+      color: #fff;
+      background: #315f72;
+    }
+    .hero {
+      width: calc(100% - 48px);
+      margin-inline: auto;
+    }
+    main {
+      width: min(1180px, calc(100% - 48px));
+      margin-inline: auto;
+    }
+    .hero {
+      display: block;
+      padding: 18px 0 21px;
+    }
+    h1 {
+      max-width: none;
+      margin: 0;
+      font-size: clamp(1.85rem, 3.25vw, 2.85rem);
+      line-height: 1.04;
+      letter-spacing: -0.045em;
+    }
+    .intro {
+      max-width: 980px;
+      margin: 8px 0 0;
+      color: rgba(255, 255, 255, 0.76);
+      font-size: clamp(0.88rem, 1.25vw, 1rem);
+    }
+    main { padding: 16px 0 24px; }
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: end;
+      margin-bottom: 14px;
+    }
+    .section-head h2 { margin: 0; font-size: clamp(1.4rem, 2.2vw, 1.8rem); letter-spacing: -0.025em; }
+    .section-head p { max-width: 650px; margin: 3px 0 0; color: var(--muted); font-size: 0.88rem; }
+    .legend { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+    .legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .legend span { padding: 6px 10px; background: var(--surface); border: 1px solid var(--line); }
+    .legend span::before { width: 7px; height: 7px; border-radius: 50%; background: var(--required); content: ""; }
+    .legend .recommended::before { background: var(--amber); }
+    .legend .optional::before { background: var(--green); }
+
+    .workflow {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .phase {
+      display: grid;
+      grid-template-columns: 150px minmax(0, 1fr);
+      gap: 28px;
+      padding: 28px 0;
+      border-top: 1px solid var(--line);
+    }
+    .phase:last-child { border-bottom: 1px solid var(--line); }
+    .phase-label { padding-top: 4px; }
+    .phase-number { display: block; color: var(--teal); font-size: 0.72rem; font-weight: 850; letter-spacing: 0.12em; text-transform: uppercase; }
+    .phase-label h3 { margin: 5px 0 0; font-size: 1rem; }
+    .phase-label p { margin: 5px 0 0; color: var(--muted); font-size: 0.82rem; }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(var(--columns, 3), minmax(0, 1fr));
+      gap: 14px;
+    }
+    .card {
+      position: relative;
+      display: flex;
+      min-height: 218px;
+      flex-direction: column;
+      padding: 20px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-top: 4px solid var(--required);
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(16, 41, 59, 0.045);
+      transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+    }
+    .card:hover { transform: translateY(-3px); border-color: #9fc9d3; box-shadow: var(--shadow); }
+    .card.optional { border-top-color: var(--green); }
+    .card.recommended { border-top-color: var(--amber); }
+    .card-top { display: flex; justify-content: space-between; gap: 12px; align-items: center; }
+    .step { color: var(--muted); font-size: 0.75rem; font-weight: 850; letter-spacing: 0.1em; text-transform: uppercase; }
+    .card h4 { margin: 17px 0 7px; font-size: 1.15rem; line-height: 1.25; }
+    .card p { margin: 0 0 22px; color: var(--muted); font-size: 0.91rem; }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: auto; }
+    .report-link {
+      padding: 4px 8px;
+      color: #fff;
+      background: #5798ad;
+      border-radius: 7px;
+      font-size: 0.72rem;
+      font-weight: 780;
+      text-decoration: none;
+    }
+    .report-link:hover { background: #417f94; }
+    .source-link {
+      padding: 4px 8px;
+      color: #285a6d;
+      background: #dceff3;
+      border: 1px solid #abd3dc;
+      border-radius: 7px;
+      font-size: 0.72rem;
+      font-weight: 780;
+      text-decoration: none;
+    }
+    .source-link:hover { color: #214d5e; background: #c5e4ea; border-color: #86bdc9; }
+
+    .branch-note {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 4px 0 18px;
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+    .branch-note::before { width: 34px; height: 1px; background: var(--teal); content: ""; }
+
+    /* The phase wrappers remain in the document for semantics and screen
+       readers, while their cards participate in one compact 3 × 3 grid. */
+    .phase,
+    .phase > div:not(.phase-label),
+    .cards { display: contents; }
+    .phase-label, .branch-note { display: none; }
+    .card {
+      min-height: 152px;
+      padding: 14px 15px;
+    }
+    .card h4 { margin: 10px 0 4px; font-size: 1.02rem; }
+    .card p {
+      margin-bottom: 12px;
+      font-size: 0.82rem;
+      line-height: 1.42;
+    }
+    .report-link { padding: 4px 8px; }
+
+    .repo-panel {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: center;
+      margin-top: 18px;
+      padding: 15px 18px;
+      color: #214d5e;
+      background: #b0e0e6;
+      border-radius: 16px;
+    }
+    .repo-panel h2 { margin: 0 0 5px; font-size: 1.28rem; }
+    .repo-panel p { margin: 0; color: #456d7b; font-size: 0.92rem; }
+    .repo-panel a {
+      padding: 10px 15px;
+      color: #fff;
+      background: #417f94;
+      border-radius: 8px;
+      font-size: 0.86rem;
+      font-weight: 800;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 900px) {
+      .hero { padding: 22px 0 25px; }
+      .workflow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 640px) {
+      .hero, main { width: calc(100% - 28px); }
+      .hero { padding: 20px 0 23px; }
+      h1 { font-size: clamp(1.9rem, 10vw, 2.65rem); }
+      main { padding-top: 40px; }
+      .section-head { align-items: flex-start; flex-direction: column; }
+      .legend { justify-content: flex-start; }
+      .workflow { grid-template-columns: 1fr; }
+      .card { min-height: 0; }
+      .repo-panel { grid-template-columns: 1fr; }
+      .repo-panel a { justify-self: start; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .card { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="hero">
+      <div>
+        <h1>DADA2 Illumina Paired-End 16S Workflow</h1>
+      </div>
+    </div>
+  </header>
+
+  <main id="notebooks">
+    <div class="section-head">
+      <div class="legend" aria-label="Step status legend">
+        <span>Required</span>
+        <span class="recommended">Recommended</span>
+        <span class="optional">Optional</span>
+      </div>
+    </div>
+
+    <div class="workflow">
+      <section class="phase" aria-labelledby="phase-checks">
+        <div class="phase-label">
+          <span class="phase-number">Phase 01</span>
+          <h3 id="phase-checks">Preflight checks</h3>
+          <p>Inspect inputs before modifying reads.</p>
+        </div>
+        <div class="cards" style="--columns: 2">
+          <article class="card optional">
+            <div class="card-top"><span class="step">Step 1</span></div>
+            <h4>Data Integrity Check</h4>
+            <p>Validate FASTQ structure, naming, pairing, compression, and read integrity.</p>
+            <div class="actions"><a class="report-link" href="notebooks/1_data_integrity_check.html">Example</a><a class="source-link" href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/1_data_integrity_check.md">GitHub</a></div>
+          </article>
+          <article class="card optional">
+            <div class="card-top"><span class="step">Step 2</span></div>
+            <h4>FastQC Quality Reports</h4>
+            <p>Review per-file FastQC results and the combined MultiQC summary.</p>
+            <div class="actions"><a class="report-link" href="notebooks/2_fastqc_quality_reports.html">Example</a><a class="source-link" href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/2_fastqc_quality_reports.md">GitHub</a></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="phase" aria-labelledby="phase-processing">
+        <div class="phase-label">
+          <span class="phase-number">Phase 02</span>
+          <h3 id="phase-processing">Required processing</h3>
+          <p>Prepare reads and resolve ASVs.</p>
+        </div>
+        <div class="cards" style="--columns: 3">
+          <article class="card">
+            <div class="card-top"><span class="step">Step 3</span></div>
+            <h4>Primer Trimming</h4>
+            <p>Remove paired-end PCR primers with Cutadapt and verify trimming.</p>
+            <div class="actions"><a class="report-link" href="notebooks/3_cutadapt_primer_trimming.html">Example</a><a class="source-link" href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/3_cutadapt_primer_trimming.md">GitHub</a></div>
+          </article>
+          <article class="card recommended">
+            <div class="card-top"><span class="step">Step 4</span></div>
+            <h4>Parameter Explorer App</h4>
+            <p>Select and export filtering parameters with the interactive Shiny workflow.</p>
+            <div class="actions"><a class="report-link" href="notebooks/4_dada2_parameter_selection.html">Example</a><a class="source-link" href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/4_dada2_parameter_selection.md">GitHub</a></div>
+          </article>
+          <article class="card">
+            <div class="card-top"><span class="step">Step 5</span></div>
+            <h4>DADA2 Pipeline</h4>
+            <p>Filter, denoise, merge pairs, remove chimeras, and assign taxonomy.</p>
+            <div class="actions"><a class="report-link" href="notebooks/5_dada2_pipeline.html">Example</a><a class="source-link" href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/5_dada2_pipeline.md">GitHub</a></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="phase" aria-labelledby="phase-branches">
+        <div class="phase-label">
+          <span class="phase-number">Phase 03</span>
+          <h3 id="phase-branches">Analysis branches</h3>
+          <p>Select either or both after Step 5.</p>
+        </div>
+        <div>
+          <div class="branch-note">Step 6 and Step 7 branch independently from the DADA2 output; Step 8 follows Step 7.</div>
+          <div class="cards" style="--columns: 3">
+            <article class="card optional">
+              <div class="card-top"><span class="step">Step 6</span></div>
+              <h4>Phylogenetic Tree</h4>
+              <p>Align ASV sequences and construct a maximum-likelihood phylogenetic tree.</p>
+              <div class="actions"><a class="report-link" href="notebooks/6_phylogenetic_tree.html">Example</a><a class="source-link" href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/6_phylogenetic_tree.md">GitHub</a></div>
+            </article>
+            <article class="card optional">
+              <div class="card-top"><span class="step">Step 7</span></div>
+              <h4>Copy Number Correction</h4>
+              <p>Predict and correct 16S rRNA gene copy-number variation with PICRUSt2.</p>
+              <div class="actions"><a class="report-link" href="notebooks/7_copy_number_correction.html">Example</a><a class="source-link" href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/7_copy_number_correction.md">GitHub</a></div>
+            </article>
+            <article class="card optional">
+              <div class="card-top"><span class="step">Step 8</span></div>
+              <h4>Microbial Load Correction</h4>
+              <p>Generate cell-count-scaled quantitative microbiome profiles after Step 7.</p>
+              <div class="actions"><a class="report-link" href="notebooks/8_microbial_load_correction.html">Example</a><a class="source-link" href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/8_microbial_load_correction.md">GitHub</a></div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="phase" aria-labelledby="phase-assembly">
+        <div class="phase-label">
+          <span class="phase-number">Phase 04</span>
+          <h3 id="phase-assembly">Final assembly</h3>
+          <p>Combine whichever outputs are available.</p>
+        </div>
+        <div class="cards" style="--columns: 1">
+          <article class="card optional">
+            <div class="card-top"><span class="step">Step 9</span></div>
+            <h4>Phyloseq Objects</h4>
+            <p>Assemble validated abundance, taxonomy, metadata, and optional phylogenetic-tree inputs into analysis-ready objects.</p>
+            <div class="actions"><a class="report-link" href="notebooks/9_phyloseq_object.html">Example</a><a class="source-link" href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/9_phyloseq_object.md">GitHub</a></div>
+          </article>
+        </div>
+      </section>
+    </div>
+
+    <section class="repo-panel" aria-labelledby="repository-title">
+      <div>
+        <h2 id="repository-title">Run the workflow with your own data</h2>
+        <p>Open the repository for installation instructions, data templates, editable R Markdown notebooks, and source functions.</p>
+      </div>
+      <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow">Open GitHub repository</a>
+    </section>
+  </main>
+
+</body>
+</html>

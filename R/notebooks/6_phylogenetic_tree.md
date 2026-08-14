@@ -1,0 +1,1458 @@
+Step 6: Phylogenetic Tree Construction
+================
+
+- [Introduction](#introduction)
+  - [Purpose](#purpose)
+  - [Prerequisites](#prerequisites)
+  - [What This Notebook Does](#what-this-notebook-does)
+  - [Expected Input](#expected-input)
+  - [Expected Output](#expected-output)
+- [Environment Setup](#environment-setup)
+  - [Load Required Packages](#load-packages)
+  - [Helper Function: Transpose Summary Tables for Excel
+    Export](#transpose-helper)
+- [Configuration](#configuration)
+  - [Define Path Parameters](#define-paths)
+  - [Define Processing Parameters](#define-processing-params)
+  - [Define FastTreeMP Path](#define-fasttree)
+- [Load ASV Sequences](#load-asv-sequences)
+  - [Read ASV Sequence File](#read-asv-sequences)
+  - [Prepare Sequences for Alignment](#prepare-sequences)
+- [Multiple Sequence Alignment](#multiple-sequence-alignment)
+  - [Perform Alignment with DECIPHER](#perform-alignment)
+  - [Export Alignment](#export-alignment)
+  - [Alignment Quality Assessment](#alignment-quality)
+- [Phylogenetic Tree Construction](#phylogenetic-tree-construction)
+  - [Build Tree with FastTreeMP](#build-tree)
+  - [Tree Statistics](#tree-statistics)
+  - [Prepare Tip Labels from Taxonomy](#prepare-tip-labels)
+  - [Export Labeled Newick Files](#export-labeled-newick)
+  - [Tree Visualization](#tree-visualization)
+  - [Visualize Interactively with iTOL](#itol)
+  - [Branch Length Distribution](#branch-length-distribution)
+- [Results Summary](#results-summary)
+  - [Generate Summary Report](#summary-report)
+  - [Document and Export Column Dictionary](#column-dictionary)
+- [Output File Summary](#output-file-summary)
+- [Recommended Next Step](#recommended-next-step)
+- [Session Information](#session-information)
+- [References](#references)
+  - [Methods](#methods)
+  - [Related](#related)
+- [Appendix: Troubleshooting Guide](#appendix-troubleshooting-guide)
+  - [Understanding the Output](#understanding-the-output)
+    - [Alignment File (FASTA)](#alignment-file-fasta)
+    - [Tree File (Newick)](#tree-file-newick)
+    - [Tree Statistics](#tree-statistics-1)
+  - [Common Issues and Solutions](#common-issues-and-solutions)
+    - [Project-local FastTree Not
+      Found](#project-local-fasttree-not-found)
+    - [Memory Issues During Alignment](#memory-issues-during-alignment)
+    - [Tree Construction Fails](#tree-construction-fails)
+    - [ASV Sequences File Not Found](#asv-sequences-file-not-found)
+
+<style type="text/css">
+/* Custom styling for improved readability */
+body {
+  font-size: 16px;
+  line-height: 1.6;
+}
+&#10;h1, h2, h3 {
+  color: #2c3e50;
+  margin-top: 1.5em;
+}
+&#10;/* Code and code-output font size is pinned explicitly (rather than left to
+   inherit from body) so that raising the prose size above does not also
+   enlarge code blocks, inline code, or printed console output -- those stay
+   at this project's original 14px regardless of any future prose-size
+   changes. */
+code {
+  background-color: #F2F2F2;
+  color: #2c3e50;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 14px;
+}
+&#10;pre, pre code {
+  font-size: 14px;
+}
+&#10;.alert-info {
+  background-color: #2c3e50;
+  color: #ffffff;
+  border-left: 4px solid #f39c12;
+  padding: 12px;
+  margin: 15px 0;
+}
+&#10;.alert-warning {
+  background-color: #2c3e50;
+  color: #ffffff;
+  border-left: 4px solid #e74c3c;
+  padding: 12px;
+  margin: 15px 0;
+}
+&#10;.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+  border-left: 4px solid #28a745;
+  padding: 12px;
+  margin: 15px 0;
+}
+&#10;/* Table cells wrap long content (long inline code, sentences) instead of
+   overflowing or forcing horizontal scroll. */
+table {
+  width: 100%;
+}
+&#10;th, td {
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+&#10;/* Style for tree visualization */
+.tree-box {
+  font-family: monospace;
+  background-color: #f0f0f0;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 14px;
+}
+</style>
+
+# Introduction
+
+## Purpose
+
+This notebook is **Step 6** of the 16S rRNA sequencing data processing
+pipeline. Like [Step 7](7_copy_number_correction.md), it branches
+directly from [Step 5](5_dada2_pipeline.md) and is independent of the
+copy-number-correction branch. [Step 8](8_microbial_load_correction.md)
+does not branch directly from Step 5; it follows Step 7 because it
+requires Step 7’s copy-number-corrected abundance table. This notebook
+constructs a phylogenetic tree from the ASV sequences generated in Step
+5: sequences are first aligned with
+[DECIPHER](http://www2.decipher.codes/)’s profile-to-profile multiple
+sequence alignment algorithm, then used to infer an
+approximately-maximum-likelihood tree with
+[FastTree](http://www.microbesonline.org/fasttree/#Install) under the
+GTR+CAT substitution model.
+
+This step is optional in the sense that [Step 9 (Phyloseq
+Object)](9_phyloseq_object.md) runs without it, falling back gracefully
+if no tree is found – but it is a prerequisite for any downstream
+analysis that incorporates evolutionary relationships between ASVs.
+Phylogenetic trees are important for microbiome analyses because:
+
+- **UniFrac distances**: Weighted and unweighted
+  [UniFrac](https://doi.org/10.1128/AEM.71.12.8228-8235.2005) metrics
+  require phylogenetic information to calculate community dissimilarity
+  based on evolutionary relationships.
+- **Phylogenetic diversity (PD)**: [Faith’s
+  PD](https://doi.org/10.1016/0006-3207(92)91201-3) and other
+  phylogenetic alpha diversity metrics measure the total branch length
+  represented in a community.
+- **Evolutionary context**: Understanding how ASVs are related helps
+  interpret ecological patterns and identify taxonomic groups.
+- **Comparative analyses**: Phylogenetic placement allows comparison
+  with reference sequences.
+
+## Prerequisites
+
+Before running this notebook, ensure that:
+
+1.  **Step 5 (DADA2 Pipeline)** has been completed successfully.
+2.  The ASV sequences file
+    [asv_sequences.csv](../../results/5_dada2_pipeline/asv_sequences.csv)
+    is present in
+    [results/5_dada2_pipeline/](../../results/5_dada2_pipeline/).
+3.  The project-local **FastTree** executable is installed at
+    [tools/fasttree/FastTree](../../tools/fasttree/FastTree) by running
+    [setup/install_required_tools.R](../../setup/install_required_tools.R)
+    on Linux.
+4.  **[DECIPHER](http://www2.decipher.codes/)** package is installed
+    from Bioconductor.
+
+## What This Notebook Does
+
+The workflow accomplishes the following tasks:
+
+1.  **Load ASV Sequences**: Reads the ASV sequences generated by the
+    DADA2 pipeline
+2.  **Multiple Sequence Alignment**: Aligns all ASV sequences using
+    DECIPHER’s profile-to-profile alignment algorithm
+3.  **Phylogenetic Tree Construction**: Builds an
+    approximately-maximum-likelihood tree with FastTree under the
+    GTR+CAT model, validates its ASV tips, and midpoint-roots it
+4.  **Tree Export**: Saves the tree in Newick format (raw `ASV_ID` tip
+    labels) for use in downstream analyses, plus a second,
+    separately-labelled Newick file per available taxonomy database
+    (`SILVA`/`GTDB`, tip labels replaced with `Unique_Tax`) for direct
+    upload to [iTOL](https://itol.embl.de/)
+5.  **Static Tree Visualization**: Renders each database’s labelled tree
+    as a rectangular (phylogram) PDF plot with a substitutions-per-site
+    x-axis
+
+## Expected Input
+
+- **Location**: ASV sequences
+  [results/5_dada2_pipeline/asv_sequences.csv](../../results/5_dada2_pipeline/asv_sequences.csv)
+  and taxonomy tables from Step 5
+- **Format**: CSV file with columns `ASV_ID` and `Sequence`
+
+## Expected Output
+
+- Multiple sequence alignment in FASTA format
+  ([alignment.fasta](../../results/6_phylogenetic_tree/alignment.fasta))
+- Phylogenetic tree in Newick format, `ASV_ID` tip labels
+  ([phylogenetic_tree.nwk](../../results/6_phylogenetic_tree/phylogenetic_tree.nwk))
+- Phylogenetic tree in Newick format, `Unique_Tax` tip labels – one file
+  per available taxonomy database
+  (e.g. [phylogenetic_tree_SILVA_labeled.nwk](../../results/6_phylogenetic_tree/phylogenetic_tree_SILVA_labeled.nwk),
+  [phylogenetic_tree_GTDB_labeled.nwk](../../results/6_phylogenetic_tree/phylogenetic_tree_GTDB_labeled.nwk))
+  – ready to upload directly to [iTOL](https://itol.embl.de/) for
+  interactive visualization and editing
+- Static rectangular tree plots in PDF format, one per database
+  (e.g. [phylogenetic_tree_SILVA.pdf](../../results/6_phylogenetic_tree/phylogenetic_tree_SILVA.pdf)),
+  plus
+  [branch_length_distribution.pdf](../../results/6_phylogenetic_tree/branch_length_distribution.pdf)
+- Summary statistics Excel file
+  ([phylogenetic_tree_summary.xlsx](../../results/6_phylogenetic_tree/phylogenetic_tree_summary.xlsx))
+
+------------------------------------------------------------------------
+
+# Environment Setup
+
+## Load Required Packages
+
+The chunk below loads every R package this notebook depends on –
+`Biostrings` and `DECIPHER` for sequence handling and alignment, `ape`
+for tree validation, export, statistics and visualization, and
+`phangorn` for midpoint rooting – plus the shared reporting helpers
+sourced from [R/functions](../functions/). Interactive tree exploration
+and editing can be handled externally by uploading the Newick (`*.nwk`)
+files to [iTOL](https://itol.embl.de/) (see [Visualize Interactively
+with iTOL](#itol) below).
+
+``` r
+# Biostrings: Biological string manipulation (Bioconductor)
+# Provides functions for handling DNA/RNA sequences
+library(Biostrings)
+
+# DECIPHER: Tools for curating, analyzing, and manipulating biological sequences
+# Used for multiple sequence alignment with profile-to-profile algorithm
+library(DECIPHER)
+
+# data.table: High-performance data manipulation
+# Provides fast operations for handling large data tables
+library(data.table)
+
+# DT: Interactive tables in R Markdown
+# Creates searchable, sortable HTML tables
+library(DT)
+
+# fs: Cross-platform filesystem operations
+# Consistent functions for file and directory manipulation
+library(fs)
+
+# ggplot2: Grammar of graphics plotting
+# Used for creating publication-quality visualizations
+library(ggplot2)
+
+# here: Project-relative file paths
+# Enables reproducible path construction regardless of working directory
+library(here)
+
+# openxlsx: Excel file creation and manipulation
+# Read and write Excel files without Java dependencies
+library(openxlsx)
+
+# parallel: Parallel processing support
+# Built-in R package for multi-core processing
+library(parallel)
+
+# phangorn: Phylogenetic analysis and midpoint rooting
+library(phangorn)
+
+# ape: Core phylogenetic-tree validation, export, statistics, and plotting
+library(ape)
+
+# Source our custom Excel utility function from the project's function library
+# This function handles creating or appending sheets to Excel workbooks
+source(here("R", "functions", "add_sheet_to_excel_function.R"))
+
+# Source our custom column dictionary utility function from the project's function library
+# This function documents every exported column as a Sheet/Column/Explanation table
+source(here("R", "functions", "build_column_dictionary_function.R"))
+
+# Source our custom output-links utility function from the project's function library
+# This function renders clickable Markdown links to output files written by this notebook
+source(here("R", "functions", "render_output_links_function.R"))
+
+# Source the custom render_output_tree utility function from the project's
+# function library. This function prints this notebook's entire output
+# folder as a clickable directory tree (used in "Output File Summary" below),
+# scanned live from disk at knit time so it always matches what was actually
+# produced on this run.
+source(here("R", "functions", "render_output_tree_function.R"))
+```
+
+## Helper Function: Transpose Summary Tables for Excel Export
+
+The Alignment Quality Assessment, Tree Statistics, and Results Summary
+sections below each build a long, one-row-per-metric summary table for
+readable on-screen display, then transpose it to a single wide row – one
+column per metric – before writing it to the Excel workbook, so every
+metric becomes its own individually documented column in the
+`Column_Dictionary` sheet rather than two generic “Metric”/“Value”
+columns. The function below centralizes that transpose-and-clean logic
+in one place, since it is used identically by all three sections.
+
+``` r
+# Transpose a Long Metric/Value Table to a Wide, Type-Cleaned, Excel-Safe Row
+#
+# Arguments:
+#   - metric_names : Character vector of metric/step names, in display order
+#                     (e.g. alignment_stats$Metric).
+#   - values       : Vector of corresponding values, in the same order (e.g.
+#                     alignment_stats$Value). Typically already character,
+#                     since a mix of numeric and text summary values (such as
+#                     "245 - 250" length ranges alongside plain counts) forces
+#                     R's c() to coerce the whole vector to character when the
+#                     long table is first built.
+#
+# setNames() pairs each value with its metric name; t() flips that named
+# vector into a 1-row matrix whose column names are exactly those metric
+# strings; check.names = FALSE keeps them exactly as written (e.g. preserving
+# the parentheses and "%" in "Mean gap percentage (%)") instead of R's
+# default make.names() mangling.
+#
+# t() itself always returns a character matrix (a single R vector cannot mix
+# types), which is what previously made openxlsx write every cell as text --
+# triggering Excel's "Number Stored as Text" warning on every purely numeric
+# cell. type.convert(as.is = TRUE) is applied column-by-column afterwards to
+# convert each column back to its natural type (numeric/integer) whenever its
+# single value parses cleanly as a number, while genuinely textual columns
+# (e.g. "245 - 250" ranges, "Yes"/"No", "1.23 min") are left as character,
+# since they were never numbers to begin with -- so the resulting Excel cells
+# are typed correctly and no longer flagged.
+transpose_metrics_to_wide <- function(metric_names, values) {
+
+    wide_row <- as.data.frame(
+        t(setNames(values, metric_names)),
+        stringsAsFactors = FALSE,
+        check.names = FALSE
+    )
+
+    as.data.frame(
+        lapply(wide_row, type.convert, as.is = TRUE),
+        stringsAsFactors = FALSE,
+        check.names = FALSE
+    )
+}
+```
+
+------------------------------------------------------------------------
+
+# Configuration
+
+## Define Path Parameters
+
+Set up the input and output directory paths. Using `here()` ensures
+paths are relative to the [project root](../../), making the script
+portable across different systems.
+
+``` r
+# Input folder containing DADA2 pipeline results
+# This should contain the asv_sequences.csv file from Step 5
+dada2_results_folder <- here("results", "5_dada2_pipeline")
+
+# Base results folder for all pipeline outputs
+results_folder <- here("results")
+
+# Specific output folder for this step (Step 6: Phylogenetic Tree)
+# Numbered prefix maintains pipeline organization
+output_folder <- here(results_folder, "6_phylogenetic_tree")
+
+# Create the output directory if it does not already exist
+if (dir_exists(output_folder)) {
+    message("The existing output directory located at ", output_folder,
+            "\nwill be used for this step.")
+} else {
+    cat("Creating new output directory in", output_folder, "\n")
+    dir_create(output_folder, recurse = TRUE)
+}
+
+# Subdirectory for validated stage checkpoints
+checkpoints_folder <- here(output_folder, "checkpoints")
+dir_create(checkpoints_folder, recurse = TRUE)
+
+# Whole-workspace checkpoints from older notebook versions cannot be
+# validated safely and are not compatible with the resumable RDS format.
+legacy_checkpoints <- here(
+    checkpoints_folder,
+    c("checkpoint_1_alignment.RData", "checkpoint_2_tree.RData", "checkpoint_final.RData")
+)
+legacy_checkpoints <- legacy_checkpoints[file_exists(legacy_checkpoints)]
+if (length(legacy_checkpoints)) file_delete(legacy_checkpoints)
+
+# Output Excel filename for summary statistics
+output_excel_filename <- "phylogenetic_tree_summary.xlsx"
+
+# Construct the full path to the output Excel file
+output_excel_path <- here(output_folder, output_excel_filename)
+
+# Display configuration
+cat("Path Configuration:\n",
+    "- Input folder:", dada2_results_folder, "\n",
+    "- Output folder:", output_folder, "\n")
+```
+
+## Define Processing Parameters
+
+Configure parameters for parallel processing and tree construction.
+
+``` r
+# Determine the number of CPU threads for parallel processing
+# Reserve 2 cores for system operations to maintain responsiveness
+# Use at least 1 thread even on single-core systems
+detected_cores <- suppressWarnings(detectCores())
+available_cores <- if (length(detected_cores) == 1L && is.finite(detected_cores) && detected_cores >= 1) as.integer(detected_cores) else 1L
+nr_threads <- max(1L, available_cores - 2L)
+
+# Set non-random seed for reproducibility
+set.seed(42)
+
+# Display configuration
+cat("Processing Configuration:\n",
+    "- Available CPU cores:", available_cores, "\n",
+    "- Threads for alignment:", nr_threads, "\n",
+    "- Random seed:", 42, "\n")
+```
+
+## Define FastTreeMP Path
+
+Configure the path to the FastTreeMP executable.
+
+``` r
+# Path to FastTree executable
+# Installed by install_required_tools.R — compiled from source into tools/fasttree/
+fasttree_path <- here("tools", "fasttree", "FastTree")
+
+# Step 6 intentionally uses only the project-local executable installed by
+# install_required_tools.R. This keeps the FastTree build/version under the
+# workflow's control rather than silently selecting a system installation.
+if (file_exists(fasttree_path) && file.access(fasttree_path, mode = 1) == 0) {
+    cat("Project-local FastTree found at:", fasttree_path, "\n")
+    fasttree_available <- TRUE
+} else {
+    stop(
+        "The project-local FastTree executable is missing or not executable: ",
+        fasttree_path, "\nRun setup/install_required_tools.R on Linux, then rerun Step 6."
+    )
+}
+```
+
+------------------------------------------------------------------------
+
+# Load ASV Sequences
+
+## Read ASV Sequence File
+
+Load the ASV sequences generated by the DADA2 pipeline in Step 5.
+
+``` r
+# Path to ASV sequences file
+asv_sequences_path <- here(dada2_results_folder, "asv_sequences.csv")
+
+# Verify file exists
+if (!file_exists(asv_sequences_path)) {
+    stop("ASV sequences file not found: ", asv_sequences_path,
+         "\nPlease ensure Step 5 (DADA2 Pipeline) has been completed.")
+}
+
+# Read ASV sequences
+asv_sequences <- read.csv(asv_sequences_path, stringsAsFactors = FALSE)
+
+required_asv_columns <- c("ASV_ID", "Sequence")
+if (!all(required_asv_columns %in% names(asv_sequences))) {
+    stop("ASV sequence file must contain columns ASV_ID and Sequence: ",
+         asv_sequences_path)
+}
+if (nrow(asv_sequences) < 2L) {
+    stop("At least two ASV sequences are required to construct a tree; found ",
+         nrow(asv_sequences), ".")
+}
+if (anyNA(asv_sequences$ASV_ID) || any(asv_sequences$ASV_ID == "") ||
+    anyDuplicated(asv_sequences$ASV_ID)) {
+    stop("ASV_ID values must be non-missing and unique in: ", asv_sequences_path)
+}
+if (anyNA(asv_sequences$Sequence) || any(asv_sequences$Sequence == "") ||
+    any(!grepl("^[ACGTRYSWKMBDHVN]+$", toupper(asv_sequences$Sequence)))) {
+    stop("Sequence contains missing, empty, or non-IUPAC DNA values in: ",
+         asv_sequences_path)
+}
+
+# A checkpoint is reusable only for this exact ASV file, tool build,
+# processing configuration, and package stack.
+pipeline_signature <- list(
+    asv_file = path_norm(asv_sequences_path),
+    asv_md5 = unname(tools::md5sum(asv_sequences_path)),
+    fasttree_file = path_norm(fasttree_path),
+    fasttree_md5 = unname(tools::md5sum(fasttree_path)),
+    alignment = list(anchor = NA, processors = nr_threads),
+    tree = list(model = "GTR+CAT", midpoint_root = TRUE),
+    versions = c(
+        DECIPHER = as.character(packageVersion("DECIPHER")),
+        ape = as.character(packageVersion("ape")),
+        phangorn = as.character(packageVersion("phangorn"))
+    )
+)
+
+checkpoint_path <- function(stage) {
+    here(checkpoints_folder, paste0("checkpoint_", stage, ".rds"))
+}
+
+load_stage_checkpoint <- function(stage, required_objects) {
+    path <- checkpoint_path(stage)
+    if (!file_exists(path)) return(NULL)
+    checkpoint <- tryCatch(readRDS(path), error = function(e) {
+        warning("Ignoring unreadable checkpoint ", basename(path), ": ",
+                conditionMessage(e), call. = FALSE)
+        NULL
+    })
+    if (is.null(checkpoint) || !identical(checkpoint$stage, stage) ||
+        !identical(checkpoint$signature, pipeline_signature) ||
+        !all(required_objects %in% names(checkpoint$objects))) {
+        message("Ignoring incompatible checkpoint: ", basename(path))
+        return(NULL)
+    }
+    message("Resuming from validated checkpoint: ", basename(path))
+    checkpoint$objects
+}
+
+save_stage_checkpoint <- function(stage, objects) {
+    path <- checkpoint_path(stage)
+    temporary_path <- paste0(path, ".tmp")
+    saveRDS(list(stage = stage, signature = pipeline_signature, objects = objects),
+            temporary_path, compress = TRUE)
+    if (file_exists(path)) file_delete(path)
+    file_move(temporary_path, path)
+    path
+}
+
+# Display summary
+cat("ASV sequences loaded:\n",
+    "- Total ASVs:", nrow(asv_sequences), "\n",
+    "- Sequence length range:", min(nchar(asv_sequences$Sequence)), "-",
+    max(nchar(asv_sequences$Sequence)), "bp\n",
+    "- Mean sequence length:", round(mean(nchar(asv_sequences$Sequence)), 1), "bp\n")
+```
+
+## Prepare Sequences for Alignment
+
+Convert the ASV sequences to a DNAStringSet object for alignment.
+
+``` r
+# Extract sequences and assign ASV IDs as names
+sequences <- asv_sequences$Sequence
+
+# Extract ASV-IDs from the sequence table (propagate to tip labels of the tree)
+names(sequences) <- asv_sequences$ASV_ID
+
+# Convert to DNAStringSet for DECIPHER
+dna_stringset <- DNAStringSet(sequences)
+
+# Display summary
+cat("Prepared", length(dna_stringset), "sequences for alignment.\n")
+```
+
+------------------------------------------------------------------------
+
+# Multiple Sequence Alignment
+
+## Perform Alignment with DECIPHER
+
+Align all ASV sequences using DECIPHER’s profile-to-profile alignment
+algorithm. This method is particularly effective for aligning large
+numbers of sequences.
+
+<div class="alert alert-info">
+
+**Note**: Multiple sequence alignment can be computationally intensive
+for large datasets. The alignment uses parallel processing with the
+specified number of threads to accelerate computation.
+
+</div>
+
+## Export Alignment
+
+Save the multiple sequence alignment to a FASTA file.
+
+## Alignment Quality Assessment
+
+Assess the quality of the multiple sequence alignment.
+
+``` r
+# Calculate alignment statistics
+alignment_width <- width(sequence_alignment)[1]
+sequence_lengths <- width(dna_stringset)
+
+# Calculate gap statistics
+gap_counts <- sapply(as.character(sequence_alignment), function(x) {
+    sum(strsplit(x, "")[[1]] == "-")
+})
+
+# Create alignment summary table
+alignment_stats <- data.frame(
+    Metric = c(
+        "Number of sequences",
+        "Original mean length (bp)",
+        "Original length range (bp)",
+        "Alignment length (bp)",
+        "Mean gaps per sequence",
+        "Gap range per sequence",
+        "Mean gap percentage (%)"
+    ),
+    Value = c(
+        length(sequence_alignment),
+        round(mean(sequence_lengths), 1),
+        paste(min(sequence_lengths), "-", max(sequence_lengths)),
+        alignment_width,
+        round(mean(gap_counts), 1),
+        paste(min(gap_counts), "-", max(gap_counts)),
+        round(mean(gap_counts) / alignment_width * 100, 2)
+    ),
+    stringsAsFactors = FALSE
+)
+
+# Display statistics -- kept in this long (one row per Metric) shape for the
+# on-screen table below, which stays readable regardless of how many metrics
+# there are; the Excel export just below transposes to one column per Metric
+# instead (see comment there for why).
+datatable(
+    alignment_stats,
+    options = list(pageLength = 10, dom = 't',
+                    scrollY = "400px", scrollCollapse = TRUE, paging = FALSE),
+    caption = "Multiple sequence alignment statistics"
+)
+```
+
+------------------------------------------------------------------------
+
+# Phylogenetic Tree Construction
+
+## Build Tree with FastTreeMP
+
+Construct an approximately-maximum-likelihood phylogenetic tree using
+the project-local FastTree executable with the GTR+CAT model, validate
+its complete ASV tip set and branch lengths, and midpoint-root it for
+downstream analyses that require an explicit root.
+
+<div class="alert alert-info">
+
+**About FastTreeMP**: FastTreeMP infers approximately-maximum-likelihood
+phylogenetic trees from alignments of nucleotide or protein sequences.
+It uses the Generalized Time-Reversible (GTR) model with CAT
+approximation for rate variation across sites, which is appropriate for
+16S rRNA sequences.
+
+</div>
+
+``` r
+tree_output_path <- here(output_folder, "phylogenetic_tree.nwk")
+fasttree_log_path <- here(output_folder, "fasttree.log")
+tree_checkpoint_objects <- load_stage_checkpoint(
+    "2_tree", c("phylo_tree", "tree_duration", "fasttree_log_lines")
+)
+tree_checkpoint_loaded <- !is.null(tree_checkpoint_objects)
+
+if (tree_checkpoint_loaded) {
+    list2env(tree_checkpoint_objects, envir = environment())
+    writeLines(fasttree_log_lines, fasttree_log_path)
+} else {
+    cat("Starting phylogenetic tree construction with project-local FastTree...\n")
+    cat("Using the GTR+CAT model for nucleotide sequences.\n\n")
+    tree_start_time <- Sys.time()
+    temporary_tree_path <- paste0(tree_output_path, ".tmp")
+    if (file_exists(temporary_tree_path)) file_delete(temporary_tree_path)
+
+    # Quote the positional path explicitly so projects located below a
+    # directory containing spaces or shell-sensitive characters remain valid.
+    fasttree_args <- c("-nt", "-gtr", shQuote(alignment_output_path))
+
+    previous_omp_threads <- Sys.getenv("OMP_NUM_THREADS", unset = NA_character_)
+    Sys.setenv(OMP_NUM_THREADS = nr_threads)
+    fasttree_status <- tryCatch(
+        system2(
+            fasttree_path,
+            args = fasttree_args,
+            stdout = temporary_tree_path,
+            stderr = fasttree_log_path
+        ),
+        finally = {
+            if (is.na(previous_omp_threads)) {
+                Sys.unsetenv("OMP_NUM_THREADS")
+            } else {
+                Sys.setenv(OMP_NUM_THREADS = previous_omp_threads)
+            }
+        }
+    )
+
+    tree_end_time <- Sys.time()
+    tree_duration <- difftime(tree_end_time, tree_start_time, units = "mins")
+    if (!isTRUE(fasttree_status == 0) || !file_exists(temporary_tree_path) ||
+        file_size(temporary_tree_path) == 0) {
+        stop("FastTree failed or produced an empty tree (exit code ",
+             fasttree_status, "). See: ", fasttree_log_path)
+    }
+
+    phylo_tree <- tryCatch(
+        ape::read.tree(temporary_tree_path),
+        error = function(e) stop("FastTree produced invalid Newick output: ",
+                                 conditionMessage(e), "\nSee: ", fasttree_log_path)
+    )
+    if (anyDuplicated(phylo_tree$tip.label) ||
+        !setequal(phylo_tree$tip.label, asv_sequences$ASV_ID)) {
+        stop("FastTree tip labels do not exactly match the Step 5 ASV_ID set. See: ",
+             fasttree_log_path)
+    }
+    if (is.null(phylo_tree$edge.length) || anyNA(phylo_tree$edge.length)) {
+        stop("FastTree output has missing branch lengths. See: ", fasttree_log_path)
+    }
+
+    # FastTree infers an unrooted topology. Midpoint rooting supplies the
+    # explicit root required by downstream rooted phylogenetic analyses while
+    # preserving the ASV tip set and branch lengths.
+    phylo_tree <- phangorn::midpoint(phylo_tree)
+    if (!ape::is.rooted(phylo_tree)) stop("Midpoint rooting did not produce a rooted tree.")
+    fasttree_log_lines <- readLines(fasttree_log_path, warn = FALSE)
+    if (file_exists(temporary_tree_path)) file_delete(temporary_tree_path)
+}
+
+# Recreate the canonical output even when resuming from a checkpoint, so it
+# always belongs to the validated current run.
+ape::write.tree(phylo_tree, file = tree_output_path)
+tree_constructed <- TRUE
+cat("Tree construction complete:\n",
+    "- Output file:", tree_output_path, "\n",
+    "- Processing time:", round(as.numeric(tree_duration), 2), "minutes\n",
+    "- Rooting: midpoint rooted\n")
+render_output_links(
+    c(tree_output_path, fasttree_log_path),
+    labels = c("Midpoint-rooted phylogenetic tree (Newick)", "FastTree diagnostic log")
+)
+```
+
+## Tree Statistics
+
+Calculate and display summary statistics for the phylogenetic tree.
+
+``` r
+if (tree_constructed) {
+    
+    cat("Calculating tree statistics...\n")
+    
+    # Read the tree file
+    phylo_tree <- read.tree(tree_output_path)
+    
+    # Calculate tree statistics
+    tree_stats <- data.frame(
+        Metric = c(
+            "Number of tips (ASVs)",
+            "Number of internal nodes",
+            "Total number of nodes",
+            "Number of edges",
+            "Tree is rooted",
+            "Tree is binary",
+            "Total branch length",
+            "Mean branch length",
+            "Min branch length",
+            "Max branch length"
+        ),
+        Value = c(
+            length(phylo_tree$tip.label),
+            phylo_tree$Nnode,
+            length(phylo_tree$tip.label) + phylo_tree$Nnode,
+            nrow(phylo_tree$edge),
+            ifelse(is.rooted(phylo_tree), "Yes", "No"),
+            ifelse(is.binary(phylo_tree), "Yes", "No"),
+            round(sum(phylo_tree$edge.length), 4),
+            round(mean(phylo_tree$edge.length), 6),
+            round(min(phylo_tree$edge.length), 6),
+            round(max(phylo_tree$edge.length), 6)
+        ),
+        stringsAsFactors = FALSE
+    )
+    
+    # Display statistics -- kept in this long (one row per Metric) shape for
+    # the on-screen table, which stays readable regardless of how many
+    # metrics there are; the Excel export just below transposes to one
+    # column per Metric instead (see comment there for why).
+    datatable(
+        tree_stats,
+        options = list(pageLength = 12, dom = 't',
+                        scrollY = "400px", scrollCollapse = TRUE, paging = FALSE),
+        caption = "Phylogenetic tree statistics"
+    )
+
+    # Transpose to a single-row, one-column-per-metric table before
+    # exporting to Excel -- see "Helper Function: Transpose Summary Tables
+    # for Excel Export" above for why (each metric gets its own documented,
+    # correctly-typed column in the Column_Dictionary sheet instead of two
+    # generic "Metric"/"Value" columns stored entirely as text).
+    tree_stats_wide <- transpose_metrics_to_wide(tree_stats$Metric, tree_stats$Value)
+
+    # Export to Excel
+    add_sheet_to_excel(
+        workbook_path = output_excel_path,
+        sheet_name = "Tree_Statistics",
+        data = tree_stats_wide,
+        rownames = FALSE,
+        overwrite = TRUE
+    )
+
+    cat("Tree statistics exported.\n")
+    
+}
+```
+
+## Prepare Tip Labels from Taxonomy
+
+Build a display label for each tip from the `Unique_Tax` column of [Step
+5](5_dada2_pipeline.md)’s taxonomy table(s) (see [Format Taxonomy
+Tables](5_dada2_pipeline.md#format-taxonomy) in that notebook) instead
+of the raw `ASV_ID`, so the tree plots below are readable without
+cross-referencing a separate table. Each available database’s labels are
+kept entirely separate (never combined into one label) since every
+database gets its own tree plot/file, further below, rather than a
+single tree shared across databases. This only affects how tips are
+*displayed*; the underlying `phylo_tree` object (and the Newick file
+already exported above) keep `ASV_ID` as their tip labels throughout, so
+nothing downstream (e.g. [Step 9](9_phyloseq_object.md)’s taxa matching)
+is affected.
+
+``` r
+if (tree_constructed) {
+
+    # Both SILVA and GTDB taxonomy tables are optional outputs of Step 5,
+    # depending on which database(s) were assigned there -- check for
+    # whichever of the two is actually present on disk.
+    silva_taxonomy_path <- here(dada2_results_folder, "silva_taxonomy_table.csv")
+    gtdb_taxonomy_path  <- here(dada2_results_folder, "gtdb_taxonomy_table.csv")
+
+    silva_taxonomy_available <- file_exists(silva_taxonomy_path)
+    gtdb_taxonomy_available  <- file_exists(gtdb_taxonomy_path)
+
+    # Read a taxonomy table and return a named ASV_ID -> Unique_Tax lookup
+    # vector, so each database's labels can be pulled by ASV_ID regardless
+    # of row order.
+    read_unique_tax_lookup <- function(path) {
+        if (file_info(path)$modification_time < file_info(asv_sequences_path)$modification_time) {
+            stop("Taxonomy table is older than the current ASV sequence file: ", path,
+                 "\nRerun Step 5 taxonomy assignment before using taxonomy labels.")
+        }
+        tax_table <- read.csv(path, stringsAsFactors = FALSE)
+        if (!all(c("ASV_ID", "Unique_Tax") %in% names(tax_table))) {
+            stop(
+                "Taxonomy table is missing the ASV_ID and/or Unique_Tax ",
+                "column(s) expected from Step 5's \"Format Taxonomy Tables\" ",
+                "section: ", path
+            )
+        }
+        if (anyNA(tax_table$ASV_ID) || any(!nzchar(trimws(tax_table$ASV_ID))) ||
+            anyDuplicated(tax_table$ASV_ID)) {
+            stop("Taxonomy ASV_ID values must be non-missing and unique: ", path)
+        }
+        if (!setequal(tax_table$ASV_ID, asv_sequences$ASV_ID)) {
+            stop("Taxonomy ASV_ID values do not exactly match the current Step 5 ASV set: ",
+                 path, "\nRerun Step 5 taxonomy assignment for the current ASV table.")
+        }
+        if (anyNA(tax_table$Unique_Tax) ||
+            any(!nzchar(trimws(as.character(tax_table$Unique_Tax))))) {
+            stop("Taxonomy Unique_Tax values must be non-missing and non-empty: ", path)
+        }
+        setNames(tax_table$Unique_Tax, tax_table$ASV_ID)
+    }
+
+    # One ASV_ID -> display-label vector per available database, keyed in
+    # this list by database name -- each database is visualized as its own,
+    # separate tree below, so labels are never combined or prefixed with a
+    # database name here. Single-bracket indexing (`vec[name]`), not
+    # `[[name]]`, is required when looking up an asv_id below: `[[` on a
+    # named character vector throws "subscript out of bounds" for a name
+    # that is not present, whereas `[name]` simply returns an NA-named NA --
+    # which is exactly the "no matching row for this ASV_ID" case handled
+    # below via is.na(). unname() strips the (irrelevant) name single-bracket
+    # indexing attaches to the result.
+    tip_labels_by_database <- list()
+
+    if (silva_taxonomy_available) {
+        cat("SILVA taxonomy table found:", silva_taxonomy_path, "\n")
+        silva_unique_tax_lookup <- read_unique_tax_lookup(silva_taxonomy_path)
+        tip_labels_by_database[["SILVA"]] <- vapply(phylo_tree$tip.label, function(asv_id) {
+            label <- unname(silva_unique_tax_lookup[asv_id])
+            # ASV_ID has no matching row in this database's taxonomy table
+            # (unexpected, since Step 5 assigns taxonomy to the same full
+            # ASV set used here) -- fall back to the ASV_ID itself for just
+            # this tip rather than showing "NA".
+            if (is.na(label)) asv_id else label
+        }, character(1), USE.NAMES = TRUE)
+    }
+
+    if (gtdb_taxonomy_available) {
+        cat("GTDB taxonomy table found:", gtdb_taxonomy_path, "\n")
+        gtdb_unique_tax_lookup <- read_unique_tax_lookup(gtdb_taxonomy_path)
+        tip_labels_by_database[["GTDB"]] <- vapply(phylo_tree$tip.label, function(asv_id) {
+            label <- unname(gtdb_unique_tax_lookup[asv_id])
+            if (is.na(label)) asv_id else label
+        }, character(1), USE.NAMES = TRUE)
+    }
+
+    # Neither database available -- fall back to a single tree labelled with
+    # raw ASV_IDs, so this notebook still produces a labelled tree even when
+    # Step 5 taxonomy assignment was skipped or has not been run yet.
+    if (length(tip_labels_by_database) == 0) {
+        tip_labels_by_database[["ASV_ID"]] <- setNames(phylo_tree$tip.label, phylo_tree$tip.label)
+        cat("Note: no SILVA or GTDB taxonomy table found in", dada2_results_folder,
+            "-- tree tips will be labelled with ASV_ID instead of taxonomy.\n")
+    }
+
+    cat(
+        "Tip display labels prepared for", length(tip_labels_by_database),
+        "database(s):", paste(names(tip_labels_by_database), collapse = ", "), "\n"
+    )
+}
+```
+
+## Export Labeled Newick Files
+
+Export one additional Newick file per available taxonomy database, with
+tip labels replaced by that database’s `Unique_Tax` values instead of
+the raw `ASV_ID` – ready to upload directly to
+[iTOL](https://itol.embl.de/) (see [Visualize Interactively with
+iTOL](#itol) below) without needing a separate ID-to-taxonomy lookup
+step. As with the plots further below, the original
+[`phylogenetic_tree.nwk`](../../results/6_phylogenetic_tree/phylogenetic_tree.nwk)
+exported earlier (`ASV_ID` tip labels) is left untouched, since that is
+what [Step 9](9_phyloseq_object.md)’s taxa matching expects.
+
+``` r
+if (tree_constructed) {
+
+    # Newick format treats whitespace and the characters ( ) , : ; [ ] (plus
+    # quote characters, in case a taxonomy string ever contains one) as
+    # structural syntax -- an unquoted tip label containing any of them
+    # (e.g. "unclassified Lachnospiraceae ASV72", which contains spaces)
+    # would corrupt the file for any downstream parser (iTOL,
+    # ape::read.tree(), etc.), since ape::write.tree() does not quote
+    # labels itself. Each occurrence is replaced with an underscore here
+    # before export; "/" is left untouched (not a Newick-reserved
+    # character) since it appears throughout addSpecies()-derived
+    # Unique_Tax values listing multiple candidate species.
+    sanitize_newick_label <- function(label) {
+        sanitized <- gsub("[[:space:]]+", "_", label)
+        sanitized <- gsub("[()'\",:;]", "_", sanitized)
+        sanitized <- gsub("\\[", "_", sanitized)
+        sanitized <- gsub("\\]", "_", sanitized)
+        sanitized
+    }
+
+    labeled_newick_paths  <- character()
+    labeled_newick_labels <- character()
+
+    for (db_name in names(tip_labels_by_database)) {
+
+        # The "neither database available" fallback case labels tips with
+        # their own ASV_ID (see "Prepare Tip Labels from Taxonomy" above) --
+        # exporting that as a second Newick file would just be a byte-for-
+        # byte duplicate of phylogenetic_tree.nwk already exported above, so
+        # it is skipped here rather than writing a redundant file.
+        if (db_name == "ASV_ID") {
+            cat("No taxonomy-labelled Newick file to export (no SILVA or GTDB",
+                "taxonomy table was available) -- only phylogenetic_tree.nwk",
+                "(ASV_ID tip labels) was written.\n")
+            next
+        }
+
+        cat("Exporting", db_name, "-labelled Newick file...\n")
+
+        phylo_tree_export <- phylo_tree
+        sanitized_tip_labels <- sanitize_newick_label(
+            unname(tip_labels_by_database[[db_name]])
+        )
+        if (anyNA(sanitized_tip_labels) || any(!nzchar(sanitized_tip_labels)) ||
+            anyDuplicated(sanitized_tip_labels)) {
+            stop(db_name, " taxonomy labels are missing or become non-unique after Newick sanitization.")
+        }
+        phylo_tree_export$tip.label <- sanitized_tip_labels
+
+        labeled_newick_path <- here(output_folder, paste0("phylogenetic_tree_", db_name, "_labeled.nwk"))
+        write.tree(phylo_tree_export, file = labeled_newick_path)
+
+        cat("Saved to:", labeled_newick_path, "\n")
+
+        labeled_newick_paths  <- c(labeled_newick_paths, labeled_newick_path)
+        labeled_newick_labels <- c(labeled_newick_labels, paste(db_name, "phylogenetic tree, Unique_Tax tip labels (Newick)"))
+    }
+
+    if (length(labeled_newick_paths) > 0) {
+        render_output_links(labeled_newick_paths, labels = labeled_newick_labels)
+    }
+}
+```
+
+## Tree Visualization
+
+Generate a rectangular (phylogram) plot of the phylogenetic tree, with a
+proper substitutions-per-site x-axis, as its own PDF file for each
+taxonomy database available above (`SILVA`, `GTDB`, or both) – tips in
+each file are labelled with that database’s own `Unique_Tax` values. For
+a circular/fan layout or other interactive editing, upload the labelled
+Newick files to iTOL instead – see [Visualize Interactively with
+iTOL](#itol) below.
+
+``` r
+if (tree_constructed) {
+    local({
+
+    n_tips <- length(phylo_tree$tip.label)
+
+    # Space between a tip's branch endpoint and where its label text starts,
+    # in the same distance units as the tree's branch lengths (substitutions
+    # per site) -- scaled to the tree's total root-to-tip depth (rather than
+    # a fixed value) so the gap looks proportional whether the tree is
+    # shallow or deep. This is what keeps labels from sitting directly on
+    # top of (and overlapping) the branch tip itself. plot.phylo() already
+    # widens the plot's x-axis automatically to make room for the offset
+    # label text, so this does not get clipped at the right edge.
+    tree_depth <- max(node.depth.edgelength(phylo_tree))
+    tip_label_offset <- tree_depth * 0.015
+
+    # Bottom plot margin (in lines of text, the same unit par("mar") always
+    # uses), trimmed down from R's session default of 5.1 lines so
+    # axisPhylo()'s tick marks and labels sit close beneath the last tip's
+    # branch instead of leaving a wide band of empty space -- while still
+    # leaving enough room for the axis tick labels themselves not to be
+    # clipped. Only the bottom margin is touched; left/top/right stay at
+    # their defaults for the tip labels and main title. Captured once here
+    # and restored after the loop below so it does not leak into later
+    # chunks.
+    default_plot_mar <- par("mar")
+    tree_plot_mar <- c(3, default_plot_mar[2], default_plot_mar[3], default_plot_mar[4])
+
+    # R's default plotting behaviour (par("yaxs") = "r", for "regular") pads
+    # the y-axis by an extra 4% of the data range on *both* ends beyond
+    # whatever y.lim a plot actually asks for -- and since ape::plot.phylo()
+    # sets that range to exactly c(1, n_tips), 4% of it grows in lock-step
+    # with the tree's own tip count. That is what was still leaving a large,
+    # tree-size-dependent gap between the last tip and axisPhylo()'s tick
+    # marks below even after the bottom-margin trim above: for a small
+    # 10-tip tree 4% of the range is under a quarter of one tip-row, but for
+    # a real several-hundred-tip amplicon tree it can add up to multiple
+    # inches of empty space. yaxs = "i" ("internal") switches to using the
+    # supplied y.lim exactly as given, with no automatic padding, so the gap
+    # below is instead set explicitly and consistently via tree_plot_y_lim
+    # just below, regardless of how many tips the tree has.
+    default_plot_yaxs <- par("yaxs")
+    on.exit(par(mar = default_plot_mar, yaxs = default_plot_yaxs), add = TRUE)
+
+    # Explicit y-axis limits, padded by a fixed tree_plot_tip_row_padding
+    # fraction of one tip-row (rather than a fraction of the whole tree's
+    # tip count, as R's default padding does) on each end -- just enough
+    # room for the top and bottom tip labels' own text height not to be
+    # clipped by the plot's edges, without leaving a large gap above the
+    # first tip or below the last one. Used with yaxs = "i" (set alongside
+    # tree_plot_mar at each plot() call below) so this exact range is what
+    # gets drawn, instead of R's usual 4%-of-range auto-padding.
+    tree_plot_tip_row_padding <- 0.5
+    tree_plot_y_lim <- c(1 - tree_plot_tip_row_padding, n_tips + tree_plot_tip_row_padding)
+
+    # ape::plot.phylo() auto-computes x.lim (the horizontal data range shown,
+    # including space reserved for tip label text) from the CURRENT tip
+    # labels alone, separately for every plot -- so a database with much
+    # longer Unique_Tax strings (e.g. GTDB's long addSpecies() candidate
+    # lists) reserves more of the page for text and proportionally less for
+    # the tree itself, making the SAME underlying branch lengths look more
+    # compressed in that database's PDF than in a database with shorter
+    # labels, even though phylo_tree's edge.length values never change
+    # between databases (only the tip TEXT does) -- this is what was making
+    # the SILVA and GTDB tree plots look like they had different branch
+    # lengths side-by-side. To keep branch lengths visually comparable
+    # across every generated PDF, x.lim is instead computed once here -- via
+    # a throwaway plot to a null graphics device for every database's label
+    # set -- and the widest resulting range is reused for every actual plot
+    # below.
+    pdf(NULL)
+    tryCatch({
+        x_max <- -Inf
+        for (db_name in names(tip_labels_by_database)) {
+            probe_tree <- phylo_tree
+            probe_tree$tip.label <- unname(tip_labels_by_database[[db_name]])
+            plot(probe_tree, type = "phylogram", cex = 0.6, label.offset = tip_label_offset)
+            x_max <- max(x_max, get("last_plot.phylo", envir = ape::.PlotPhyloEnv)$x.lim[2])
+        }
+        shared_x_lim <- c(0, x_max)
+    }, finally = {
+        dev.off()
+    })
+
+    # Accumulated across the loop below and rendered once, after it, as a
+    # plain top-level statement -- see "Format Taxonomy Tables" in Step 5
+    # for why print()-ing this inside a for loop does not work: it bypasses
+    # knitr's own asis-output dispatch and dumps the raw string as literal
+    # text instead of a Markdown link.
+    tree_plot_paths  <- character()
+    tree_plot_labels <- character()
+
+    for (db_name in names(tip_labels_by_database)) {
+
+        cat("Generating tree visualization for", db_name, "...\n")
+
+        # A separate, relabelled copy of the tree for just this database --
+        # the original phylo_tree object (and the Newick file already
+        # exported from it above) keep ASV_ID as their tip labels
+        # throughout, which is what Step 9's taxa matching expects.
+        phylo_tree_labeled <- phylo_tree
+        phylo_tree_labeled$tip.label <- unname(tip_labels_by_database[[db_name]][phylo_tree_labeled$tip.label])
+
+        # Tip labels are always shown, however many ASVs there are -- PDF
+        # height scales with the number of tips so labels stay legible even
+        # for the large ASV counts typical of a real amplicon run (this can
+        # still make for a very tall PDF and a crowded inline plot with
+        # hundreds of tips).
+        tree_plot_path <- here(output_folder, paste0("phylogenetic_tree_", db_name, ".pdf"))
+
+        pdf(tree_plot_path, width = 12, height = max(10, n_tips * 0.15))
+        tryCatch({
+            par(mar = tree_plot_mar, yaxs = "i")
+
+            plot(phylo_tree_labeled,
+                 type = "phylogram",
+                 cex = 0.6,
+                 edge.width = 1,
+                 label.offset = tip_label_offset,
+                 tip.color = "darkblue",
+                 x.lim = shared_x_lim,
+                 y.lim = tree_plot_y_lim,
+                 main = paste("Phylogenetic Tree -", db_name, "-", n_tips, "ASVs"))
+
+            axisPhylo(backward = FALSE)
+        }, finally = {
+            dev.off()
+        })
+
+        cat("Tree plot saved to:", tree_plot_path, "\n")
+
+        tree_plot_paths  <- c(tree_plot_paths, tree_plot_path)
+        tree_plot_labels <- c(tree_plot_labels, paste(db_name, "phylogenetic tree (PDF)\n"))
+
+        # Also display in notebook -- one inline plot per database, each
+        # captured separately by knitr as its own figure.
+        par(mar = tree_plot_mar, yaxs = "i")
+        plot(phylo_tree_labeled,
+             type = "phylogram",
+             cex = 0.5,
+             edge.width = 0.8,
+             label.offset = tip_label_offset,
+             tip.color = "darkblue",
+             x.lim = shared_x_lim,
+             y.lim = tree_plot_y_lim,
+             main = paste("Phylogenetic Tree -", db_name, "-", n_tips, "ASVs"))
+        axisPhylo(backward = FALSE)
+    }
+
+    # Restore the session's default plot margin and y-axis padding mode so
+    # neither leaks into later chunks (e.g. the Branch Length Distribution
+    # ggplot below, which does not use par() itself but should not depend on
+    # this chunk having left it altered).
+    par(mar = default_plot_mar, yaxs = default_plot_yaxs)
+
+    render_output_links(tree_plot_paths, labels = tree_plot_labels)
+    })
+}
+```
+
+## Visualize Interactively with iTOL
+
+For interactive exploration and editing (zooming, panning, re-rooting,
+collapsing clades, recolouring by taxonomy, switching to a
+circular/unrooted layout, exporting a custom figure, and so on), upload
+one of the labelled Newick files from “Export Labeled Newick Files”
+above –
+[phylogenetic_tree_SILVA_labeled.nwk](../../results/6_phylogenetic_tree/phylogenetic_tree_SILVA_labeled.nwk)
+and/or
+[phylogenetic_tree_GTDB_labeled.nwk](../../results/6_phylogenetic_tree/phylogenetic_tree_GTDB_labeled.nwk)
+in [results/6_phylogenetic_tree/](../../results/6_phylogenetic_tree/) –
+to [iTOL](https://itol.embl.de/) (Interactive Tree Of Life), a free
+web-based tree viewer:
+
+1.  Go to <https://itol.embl.de/upload.cgi>.
+2.  Upload the labelled `.nwk` file for whichever database you want to
+    explore (tips are already `Unique_Tax` values, so no separate
+    ID-to-taxonomy lookup is needed).
+3.  Use iTOL’s controls to switch between rectangular/circular/unrooted
+    layouts, change colours and label styles, collapse or prune clades,
+    and export a publication-ready figure (SVG/PDF/PNG) directly from
+    the browser.
+
+An iTOL account is optional – an uploaded tree is viewable and editable
+immediately, though creating a free account lets you save and revisit
+trees later. This replaces this notebook’s previous built-in `ggtree` +
+`plotly` HTML widget, which is no longer generated. iTOL’s homepage:
+<https://itol.embl.de/>.
+
+## Branch Length Distribution
+
+Visualize the distribution of branch lengths in the phylogenetic tree.
+
+``` r
+if (tree_constructed) {
+    
+    # Create branch length histogram
+    branch_lengths <- phylo_tree$edge.length
+    
+    branch_length_plot <- ggplot(data.frame(length = branch_lengths), aes(x = length)) +
+        geom_histogram(bins = 50, fill = "steelblue", color = "white", alpha = 0.8) +
+        theme_minimal() +
+        labs(
+            title = "Distribution of Branch Lengths",
+            x = "Branch Length (substitutions per site)",
+            y = "Frequency"
+        ) +
+        theme(
+            plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
+            panel.grid.minor = element_blank()
+        )
+    
+    print(branch_length_plot)
+    
+    # Save plot
+    ggsave(
+        filename = here(output_folder, "branch_length_distribution.pdf"),
+        plot = branch_length_plot,
+        width = 10,
+        height = 6
+    )
+    
+    cat("Branch length distribution plot saved.\n")
+
+    render_output_links(
+        here(output_folder, "branch_length_distribution.pdf"),
+        labels = "Branch length distribution (PDF)"
+    )
+}
+```
+
+------------------------------------------------------------------------
+
+# Results Summary
+
+## Generate Summary Report
+
+This chunk compiles the key inputs, durations, and results from every
+step above (alignment, tree construction) into a single processing
+summary table, exported to the Excel workbook alongside the more
+detailed statistics tables.
+
+``` r
+# Compile processing summary
+processing_summary <- data.frame(
+    Step = c(
+        "Input ASVs",
+        "Alignment length",
+        "Alignment duration",
+        "Tree tips",
+        "Tree construction duration",
+        "Total branch length"
+    ),
+    Value = c(
+        nrow(asv_sequences),
+        ifelse(exists("sequence_alignment"), width(sequence_alignment)[1], NA),
+        ifelse(exists("alignment_duration"), 
+               paste(round(as.numeric(alignment_duration), 2), "min"), NA),
+        ifelse(tree_constructed, length(phylo_tree$tip.label), NA),
+        ifelse(exists("tree_duration"), 
+               paste(round(as.numeric(tree_duration), 2), "min"), NA),
+        ifelse(tree_constructed,
+               round(sum(phylo_tree$edge.length), 4), NA)
+    ),
+    stringsAsFactors = FALSE
+)
+
+# Display summary -- kept in this long (one row per Step) shape for the
+# console listing above, which stays readable regardless of how many steps
+# there are; the Excel export just below transposes to one column per Step
+# instead (see comment there for why).
+cat("Processing summary:\n")
+```
+
+## Document and Export Column Dictionary
+
+Build a trailing `Column_Dictionary` sheet that documents every column
+of every sheet written to `output_excel_path` (`Alignment_Statistics`,
+`Tree_Statistics` when the tree was constructed, and
+`Processing_Summary`), so the workbook is self-describing without a
+hand-maintained description list that can drift out of sync with the
+data it documents.
+
+------------------------------------------------------------------------
+
+# Output File Summary
+
+The tree below lists the files produced for the validated current run.
+Core alignment and rooted-tree outputs are always required;
+taxonomy-labelled outputs appear only for taxonomy tables that were
+present and validated during this run. Obsolete optional outputs are
+removed before regeneration so the listing cannot silently include
+products from an earlier database configuration.
+
+------------------------------------------------------------------------
+
+# Recommended Next Step
+
+The alignment and phylogenetic tree exported above are ready to be
+incorporated into the rest of the pipeline. Proceed to [Step 9 —
+Phyloseq Object Assembly](9_phyloseq_object.md), which automatically
+detects and imports this notebook’s tree
+[results/6_phylogenetic_tree/phylogenetic_tree.nwk](../../results/6_phylogenetic_tree/phylogenetic_tree.nwk)
+if present – alongside the ASV count table(s) and taxonomy from Step 5
+(and, optionally, Steps 7-8) – to build the final, annotated `phyloseq`
+object(s). Including the tree there is what enables UniFrac distances
+and phylogenetic diversity metrics in downstream analysis; if you
+skipped this notebook, Step 9 still builds its phyloseq object(s)
+without a tree, with no error.
+
+------------------------------------------------------------------------
+
+# Session Information
+
+Record the R environment for reproducibility.
+
+------------------------------------------------------------------------
+
+# References
+
+## Methods
+
+- Wright ES (2016). Using DECIPHER v2.0 to Analyze Big Biological
+  Sequence Data in R. *The R Journal*, 8(1), 352-359.
+  <https://journal.r-project.org/archive/2016/RJ-2016-025/index.html>
+  (provides `AlignSeqs()`, the profile-to-profile multiple sequence
+  alignment algorithm used above)
+- Price MN, Dehal PS, Arkin AP (2010). FastTree 2 – Approximately
+  Maximum-Likelihood Trees for Large Alignments. *PLoS ONE*, 5(3):e9490.
+  <https://doi.org/10.1371/journal.pone.0009490>
+- Paradis E, Schliep K (2019). ape 5.0: an environment for modern
+  phylogenetics and evolutionary analyses in R. *Bioinformatics*, 35(3),
+  526-528. <https://doi.org/10.1093/bioinformatics/bty633> (provides
+  tree import and the tree statistics and static plots computed above)
+- Letunic I, Bork P (2021). Interactive Tree Of Life (iTOL) v5: an
+  online tool for phylogenetic tree display and annotation. *Nucleic
+  Acids Research*, 49(W1), W293-W296.
+  <https://doi.org/10.1093/nar/gkab301> (the recommended tool for
+  interactively exploring and editing this notebook’s labelled Newick
+  files – see [Visualize Interactively with iTOL](#itol) above)
+- Lozupone C, Knight R (2005). UniFrac: a New Phylogenetic Method for
+  Comparing Microbial Communities. *Applied and Environmental
+  Microbiology*, 71(12), 8228-8235.
+  <https://doi.org/10.1128/AEM.71.12.8228-8235.2005> (the tree exported
+  by this notebook is the phylogenetic input UniFrac distance
+  calculations require downstream)
+- Faith DP (1992). Conservation Evaluation and Phylogenetic Diversity.
+  *Biological Conservation*, 61(1), 1-10.
+  <https://doi.org/10.1016/0006-3207(92)91201-3> (defines the
+  phylogenetic diversity metric this notebook’s tree also enables
+  downstream)
+
+## Related
+
+- [Step 5 — DADA2 Pipeline](5_dada2_pipeline.md) – this notebook’s
+  required input.
+- [Step 9 — Phyloseq Object Assembly](9_phyloseq_object.md) – this
+  notebook’s recommended next step, which incorporates the tree if
+  present.
+
+------------------------------------------------------------------------
+
+# Appendix: Troubleshooting Guide
+
+## Understanding the Output
+
+### Alignment File (FASTA)
+
+- Contains all ASV sequences aligned to a common coordinate system
+- Gaps (-) indicate insertions/deletions relative to other sequences
+- Used as input for phylogenetic tree construction
+
+### Tree File (Newick)
+
+- Standard format for phylogenetic trees
+- Contains topology and branch lengths
+- Can be loaded into tree visualization software (iTOL, FigTree, ggtree)
+- Branch lengths represent expected substitutions per site
+
+### Tree Statistics
+
+- **Total branch length**: Sum of all edge lengths; higher values
+  indicate more evolutionary diversity
+- **Mean branch length**: Average evolutionary distance between nodes
+- **Binary tree**: A tree where each internal node has exactly two
+  descendants
+
+## Common Issues and Solutions
+
+### Project-local FastTree Not Found
+
+**Error**:
+`The project-local FastTree executable is missing or not executable`
+
+**Solutions**:
+
+- On Linux, rerun
+  [setup/install_required_tools.R](../../setup/install_required_tools.R).
+  It installs the workflow-controlled executable at
+  [tools/fasttree/FastTree](../../tools/fasttree/FastTree).
+- Verify that the local file exists and has execute permission. Step 6
+  intentionally does not fall back to a system-wide executable.
+
+### Memory Issues During Alignment
+
+**Error**: Cannot allocate memory during DECIPHER alignment
+
+**Possible causes**:
+
+- Too many sequences for available RAM
+- Sequences are very long
+
+**Solutions**:
+
+- Reduce the number of sequences (subsample if necessary)
+- Increase system memory or use a machine with more RAM
+- Consider using an alternative aligner like MAFFT for very large
+  datasets
+
+### Tree Construction Fails
+
+**Error**: Tree file not created or is empty
+
+**Possible causes**:
+
+- Invalid alignment file
+- FastTreeMP execution failed
+- Insufficient disk space
+
+**Solutions**:
+
+- Verify the alignment file exists and is not empty
+- Run FastTreeMP manually from the command line to see error messages
+- Check disk space availability
+
+### ASV Sequences File Not Found
+
+**Error**: `ASV sequences file not found`
+
+**Solutions**:
+
+- Ensure Step 5 (DADA2 Pipeline) has been completed
+- Check the path in
+  [dada2_results_folder](../../results/5_dada2_pipeline)
+- Verify the file is named
+  [asv_sequences.csv](../../results/5_dada2_pipeline/asv_sequences.csv)
