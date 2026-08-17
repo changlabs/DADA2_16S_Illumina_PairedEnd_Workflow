@@ -5712,12 +5712,7 @@ afterward, and confirm the conda environment/executable this notebook
 will run PICRUSt2 through. <code>num_threads</code> is the setting most
 users need to change to match their own machine; the conda settings are
 resolved automatically below and rarely need manual editing.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># The repository&#39;s PICRUSt2 installer and this notebook intentionally support</span></span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co"># Linux only, so fail before resolving conda or creating outputs elsewhere.</span></span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#if (!identical(unname(Sys.info()[[&quot;sysname&quot;]]), &quot;Linux&quot;)) {</span></span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#  stop(&quot;Step 7 supports Linux only. Run this notebook on a Linux system.&quot;)</span></span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#}</span></span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co"># ------------------------------------------------------------------</span></span>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co"># ------------------------------------------------------------------</span></span>
 <span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co"># Number of CPU threads to use for PICRUSt2&#39;s placement and hidden-state</span></span>
 <span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co"># prediction steps (their own -p argument). As general guidance, leave 1-2</span></span>
 <span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co"># cores free on shared/interactive systems.</span></span>

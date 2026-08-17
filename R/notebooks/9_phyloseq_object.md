@@ -715,8 +715,8 @@ succeed.
 sample_metadata <- NULL
 
 if (!is.null(metadata_path) && !file_exists(metadata_path)) {
-    stop("Configured metadata file does not exist: ", metadata_path,
-         ". Set metadata_path <- NULL to run without metadata.")
+    message("Metadata file not found; continuing without sample metadata: ", metadata_path)
+    metadata_path <- NULL
 }
 
 if (!is.null(metadata_path) && file_exists(metadata_path)) {

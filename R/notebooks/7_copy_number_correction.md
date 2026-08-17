@@ -334,11 +334,6 @@ their own machine; the conda settings are resolved automatically below
 and rarely need manual editing.
 
 ``` r
-# The repository's PICRUSt2 installer and this notebook intentionally support
-# Linux only, so fail before resolving conda or creating outputs elsewhere.
-if (!identical(unname(Sys.info()[["sysname"]]), "Linux")) {
-  stop("Step 7 supports Linux only. Run this notebook on a Linux system.")
-}
 # ------------------------------------------------------------------
 # Number of CPU threads to use for PICRUSt2's placement and hidden-state
 # prediction steps (their own -p argument). As general guidance, leave 1-2

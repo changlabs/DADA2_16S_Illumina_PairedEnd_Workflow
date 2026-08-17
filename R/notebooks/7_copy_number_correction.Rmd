@@ -222,11 +222,6 @@ source(here("R", "functions", "render_output_tree_function.R"))
 Set the number of CPU threads PICRUSt2 should use, whether to keep `place_seqs.py`'s intermediate alignment/placement files afterward, and confirm the conda environment/executable this notebook will run PICRUSt2 through. `num_threads` is the setting most users need to change to match their own machine; the conda settings are resolved automatically below and rarely need manual editing.
 
 ```{r define-run-parameters}
-# The repository's PICRUSt2 installer and this notebook intentionally support
-# Linux only, so fail before resolving conda or creating outputs elsewhere.
-if (!identical(unname(Sys.info()[["sysname"]]), "Linux")) {
-  stop("Step 7 supports Linux only. Run this notebook on a Linux system.")
-}
 # ------------------------------------------------------------------
 # Number of CPU threads to use for PICRUSt2's placement and hidden-state
 # prediction steps (their own -p argument). As general guidance, leave 1-2
