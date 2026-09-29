@@ -52,6 +52,83 @@ if (length(missing_packages)) {
   )
 }
 
+# Validate the prepared Step 4 handoff before running any notebooks. Step 5
+# automatically imports this workbook from the isolated example results tree;
+# its generic fallback values must never be used for the tutorial dataset.
+expected_step4_parameters <- c(
+  truncation_length_forward = 240,
+  truncation_length_reverse = 160,
+  max_expected_errors_forward = 2,
+  max_expected_errors_reverse = 2,
+  amplicon_min_length = 250,
+  amplicon_max_length = 256
+)
+
+configuration_sheets <- openxlsx::getSheetNames(configuration_workbook)
+if (!all(c("Info", "Parameters") %in% configuration_sheets)) {
+  stop(
+    "The example Step 4 workbook must contain Info and Parameters sheets: ",
+    configuration_workbook,
+    call. = FALSE
+  )
+}
+
+step4_parameter_table <- openxlsx::read.xlsx(
+  configuration_workbook,
+  sheet = "Parameters",
+  check.names = FALSE
+)
+if (!all(c("Parameter", "Value") %in% names(step4_parameter_table))) {
+  stop("The example Step 4 Parameters sheet must contain Parameter and Value columns.", call. = FALSE)
+}
+
+parameter_rows <- match(names(expected_step4_parameters), step4_parameter_table$Parameter)
+if (anyNA(parameter_rows)) {
+  stop(
+    "The example Step 4 workbook is missing required parameter(s): ",
+    paste(names(expected_step4_parameters)[is.na(parameter_rows)], collapse = ", "),
+    call. = FALSE
+  )
+}
+observed_step4_parameters <- suppressWarnings(as.numeric(
+  step4_parameter_table$Value[parameter_rows]
+))
+names(observed_step4_parameters) <- names(expected_step4_parameters)
+if (anyNA(observed_step4_parameters) ||
+    !identical(unname(observed_step4_parameters),
+               unname(as.numeric(expected_step4_parameters)))) {
+  stop(
+    "The example Step 4 workbook does not contain the validated V4/2x250 settings.\n",
+    "Expected: ",
+    paste(names(expected_step4_parameters), expected_step4_parameters,
+          sep = "=", collapse = ", "),
+    call. = FALSE
+  )
+}
+
+step4_info <- openxlsx::read.xlsx(
+  configuration_workbook,
+  sheet = "Info",
+  check.names = FALSE
+)
+if (!all(c("Parameter", "Value") %in% names(step4_info))) {
+  stop("The example Step 4 Info sheet must contain Parameter and Value columns.", call. = FALSE)
+}
+step4_info_values <- setNames(as.character(step4_info$Value), step4_info$Parameter)
+if (!identical(unname(step4_info_values[["sequencing_platform"]]),
+               "Illumina MiSeq (2x250)") ||
+    !identical(unname(step4_info_values[["target_region"]]), "16S V4")) {
+  stop(
+    "The example Step 4 workbook must identify Illumina MiSeq (2x250) and 16S V4.",
+    call. = FALSE
+  )
+}
+
+message(
+  "Validated example Step 4 settings: Illumina MiSeq 2x250, 16S V4; ",
+  "truncLen 240/160; maxEE 2/2; amplicon 250-256 bp."
+)
+
 # rmarkdown needs Pandoc. RStudio normally configures it automatically; when
 # running from a plain terminal, reuse Quarto's bundled Pandoc if available.
 if (!rmarkdown::pandoc_available()) {
@@ -134,6 +211,10 @@ if (!file.copy(
 )) {
   stop("Could not stage the example DADA2 parameter workbook.", call. = FALSE)
 }
+message(
+  "Staged the validated Step 4 workbook for automatic import by Step 5: ",
+  file.path(parameter_directory, basename(configuration_workbook))
+)
 
 report_directory <- file.path(run_results, "reports")
 dir.create(report_directory, recursive = TRUE, showWarnings = FALSE)

@@ -137,7 +137,7 @@ After installing dependencies, project-local tools, PICRUSt2, and the taxonomy r
 Rscript example/run_example.R
 ```
 
-The command runs Steps 1–3, uses the supplied Step 4 parameter workbook, and then runs Steps 5–9. Step 4's Shiny app remains interactive; its bundled workbook is the validated example output passed to Step 5. The cell counts used in Steps 7–8 are plausible-scale synthetic test inputs, not measurements from the tutorial study, and must not be used for biological interpretation.
+The command runs Steps 1–3, uses the supplied Step 4 parameter workbook, and then runs Steps 5–9. Step 4's Shiny app remains interactive; its bundled workbook is the validated example output passed to Step 5. The runner verifies and reports its V4/2 x 250 settings before analysis: `truncLen = 240/160`, `maxEE = 2/2`, and a `250–256 bp` merged-amplicon filter. Step 5 imports these values automatically from the isolated example results tree, so its generic fallback values are not used. The cell counts used in Steps 7–8 are plausible-scale synthetic test inputs, not measurements from the tutorial study, and must not be used for biological interpretation.
 
 See the [example guide](example/README.md) for scope, renamed-sample mapping, provenance, and the required Kozich et al. (2013) dataset citation.
 

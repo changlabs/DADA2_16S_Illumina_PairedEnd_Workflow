@@ -19,7 +19,7 @@ Run from the repository root after installing the R dependencies, project-local 
 Rscript example/run_example.R
 ```
 
-This command runs Steps 1, 2, and 3; stages the supplied Step 4 parameter workbook; and then runs Steps 5, 6, 7, 8, and 9. Step 4 itself is an interactive Shiny app, so it cannot be meaningfully automated; the bundled workbook is its validated example output and is consumed by Step 5. The runner fails before analysis if the required external tools are unavailable.
+This command runs Steps 1, 2, and 3; stages the supplied Step 4 parameter workbook; and then runs Steps 5, 6, 7, 8, and 9. Step 4 itself is an interactive Shiny app, so it cannot be meaningfully automated; the bundled workbook is its validated example output and is consumed by Step 5. Before running any notebook, the runner verifies that the workbook identifies Illumina MiSeq 2 x 250 and 16S V4 and contains `truncLen = 240/160`, `maxEE = 2/2`, and `amplicon_min_length/amplicon_max_length = 250/256`. It prints these settings, copies the workbook into the isolated Step 4 results folder, and Step 5 imports it in preference to its generic fallback values. The runner also fails before analysis if required external tools are unavailable.
 
 The runner uses `DADA2_DATA_DIR`, `DADA2_RESULTS_DIR`, and `DADA2_TAXONOMY_DATABASE` only inside its R process. Normal notebook runs remain unchanged and continue to use `data/`, `results/`, and both taxonomy databases by default.
 
