@@ -5196,34 +5196,34 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ef2929; } 
-code span.an { color: #8f5902; font-weight: bold; font-style: italic; } 
-code span.at { color: #204a87; } 
-code span.bn { color: #0000cf; } 
-code span.cf { color: #204a87; font-weight: bold; } 
-code span.ch { color: #4e9a06; } 
-code span.cn { color: #8f5902; } 
-code span.co { color: #8f5902; font-style: italic; } 
-code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } 
-code span.do { color: #8f5902; font-weight: bold; font-style: italic; } 
-code span.dt { color: #204a87; } 
-code span.dv { color: #0000cf; } 
-code span.er { color: #a40000; font-weight: bold; } 
-code span.ex { } 
-code span.fl { color: #0000cf; } 
-code span.fu { color: #204a87; font-weight: bold; } 
-code span.im { } 
-code span.in { color: #8f5902; font-weight: bold; font-style: italic; } 
-code span.kw { color: #204a87; font-weight: bold; } 
-code span.op { color: #ce5c00; font-weight: bold; } 
-code span.ot { color: #8f5902; } 
-code span.pp { color: #8f5902; font-style: italic; } 
-code span.sc { color: #ce5c00; font-weight: bold; } 
-code span.ss { color: #4e9a06; } 
-code span.st { color: #4e9a06; } 
-code span.va { color: #000000; } 
-code span.vs { color: #4e9a06; } 
-code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } 
+code span.al { color: #ef2929; }
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; }
+code span.at { color: #204a87; }
+code span.bn { color: #0000cf; }
+code span.cf { color: #204a87; font-weight: bold; }
+code span.ch { color: #4e9a06; }
+code span.cn { color: #8f5902; }
+code span.co { color: #8f5902; font-style: italic; }
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; }
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; }
+code span.dt { color: #204a87; }
+code span.dv { color: #0000cf; }
+code span.er { color: #a40000; font-weight: bold; }
+code span.ex { }
+code span.fl { color: #0000cf; }
+code span.fu { color: #204a87; font-weight: bold; }
+code span.im { }
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; }
+code span.kw { color: #204a87; font-weight: bold; }
+code span.op { color: #ce5c00; font-weight: bold; }
+code span.ot { color: #8f5902; }
+code span.pp { color: #8f5902; font-style: italic; }
+code span.sc { color: #ce5c00; font-weight: bold; }
+code span.ss { color: #4e9a06; }
+code span.st { color: #4e9a06; }
+code span.va { color: #000000; }
+code span.vs { color: #4e9a06; }
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; }
 .sourceCode .row {
 width: 100%;
 }
@@ -5811,12 +5811,12 @@ executables installed via the Prerequisites step above.</p>
 <span id="cb3-55"><a href="#cb3-55" tabindex="-1"></a>    <span class="st">&quot;- FastQC path:&quot;</span>, fastqc_path, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
 <span id="cb3-56"><a href="#cb3-56" tabindex="-1"></a>    <span class="st">&quot;- MultiQC path:&quot;</span>, multiqc_path, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
 <pre><code>## FastQC / MultiQC Configuration:
-##  - Input folder: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/data/fastq 
-##  - FastQC output folder: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/run_results/2_fastqc_quality_reports/FastQC/quality_reports 
-##  - MultiQC output folder: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/run_results/2_fastqc_quality_reports/MultiQC 
-##  - Available CPU cores: 1 
-##  - Threads for FastQC: 1 
-##  - FastQC path: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/tools/FastQC/fastqc 
+##  - Input folder: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/data/fastq
+##  - FastQC output folder: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/run_results/2_fastqc_quality_reports/FastQC/quality_reports
+##  - MultiQC output folder: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/run_results/2_fastqc_quality_reports/MultiQC
+##  - Available CPU cores: 1
+##  - Threads for FastQC: 1
+##  - FastQC path: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/tools/FastQC/fastqc
 ##  - MultiQC path: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/tools/multiqc/venv/bin/multiqc</code></pre>
 <hr />
 </div>
@@ -5843,7 +5843,8 @@ Directory</h1>
 <span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;Using existing FastQC output directory:&quot;</span>, output_folder, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
 <span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>      <span class="st">&quot;  Note: Existing reports may be overwritten.</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
 <span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>}</span></code></pre></div>
-<pre><code>## Created FastQC output directory: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/run_results/2_fastqc_quality_reports/FastQC/quality_reports</code></pre>
+<pre><code>## Using existing FastQC output directory: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/run_results/2_fastqc_quality_reports/FastQC/quality_reports
+##    Note: Existing reports may be overwritten.</code></pre>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># Create the MultiQC-specific output folder</span></span>
 <span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">dir_exists</span>(multiqc_output_folder)) {</span>
 <span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  <span class="fu">dir_create</span>(multiqc_output_folder, <span class="at">recurse =</span> <span class="cn">TRUE</span>)</span>
@@ -5852,7 +5853,8 @@ Directory</h1>
 <span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;Using existing MultiQC output directory:&quot;</span>, multiqc_output_folder, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
 <span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>      <span class="st">&quot;  Note: Existing report may be overwritten.</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
 <span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>}</span></code></pre></div>
-<pre><code>## Created MultiQC output directory: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/run_results/2_fastqc_quality_reports/MultiQC</code></pre>
+<pre><code>## Using existing MultiQC output directory: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/run_results/2_fastqc_quality_reports/MultiQC
+##    Note: Existing report may be overwritten.</code></pre>
 <hr />
 </div>
 <div id="file-discovery" class="section level1" number="5">
@@ -5884,7 +5886,7 @@ Files</h2>
 <span id="cb11-21"><a href="#cb11-21" tabindex="-1"></a>  <span class="st">&quot;- Input directory:&quot;</span>, fastq_input_folder, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span></span>
 <span id="cb11-22"><a href="#cb11-22" tabindex="-1"></a>)</span></code></pre></div>
 <pre><code>## File discovery summary:
-##  - FASTQ files found: 40 
+##  - FASTQ files found: 40
 ##  - Input directory: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/data/fastq</code></pre>
 </div>
 <div id="file-inventory" class="section level2" number="5.2">
@@ -5917,8 +5919,8 @@ Inventory</h2>
 <span id="cb13-24"><a href="#cb13-24" tabindex="-1"></a>                 <span class="at">scrollY =</span> <span class="st">&quot;400px&quot;</span>, <span class="at">scrollCollapse =</span> <span class="cn">TRUE</span>, <span class="at">paging =</span> <span class="cn">FALSE</span>),</span>
 <span id="cb13-25"><a href="#cb13-25" tabindex="-1"></a>  <span class="at">rownames =</span> <span class="cn">FALSE</span></span>
 <span id="cb13-26"><a href="#cb13-26" tabindex="-1"></a>)</span></code></pre></div>
-<div class="datatables html-widget html-fill-item" id="htmlwidget-2c84f1e558370ffa7ebf" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-2c84f1e558370ffa7ebf">{"x":{"filter":"none","vertical":false,"data":[[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40],["Mock-Community_S280_L001_R1_001.fastq.gz","Mock-Community_S280_L001_R2_001.fastq.gz","Mouse-F3-Day-000_S188_L001_R1_001.fastq.gz","Mouse-F3-Day-000_S188_L001_R2_001.fastq.gz","Mouse-F3-Day-001_S189_L001_R1_001.fastq.gz","Mouse-F3-Day-001_S189_L001_R2_001.fastq.gz","Mouse-F3-Day-002_S190_L001_R1_001.fastq.gz","Mouse-F3-Day-002_S190_L001_R2_001.fastq.gz","Mouse-F3-Day-003_S191_L001_R1_001.fastq.gz","Mouse-F3-Day-003_S191_L001_R2_001.fastq.gz","Mouse-F3-Day-005_S193_L001_R1_001.fastq.gz","Mouse-F3-Day-005_S193_L001_R2_001.fastq.gz","Mouse-F3-Day-006_S194_L001_R1_001.fastq.gz","Mouse-F3-Day-006_S194_L001_R2_001.fastq.gz","Mouse-F3-Day-007_S195_L001_R1_001.fastq.gz","Mouse-F3-Day-007_S195_L001_R2_001.fastq.gz","Mouse-F3-Day-008_S196_L001_R1_001.fastq.gz","Mouse-F3-Day-008_S196_L001_R2_001.fastq.gz","Mouse-F3-Day-009_S197_L001_R1_001.fastq.gz","Mouse-F3-Day-009_S197_L001_R2_001.fastq.gz","Mouse-F3-Day-141_S207_L001_R1_001.fastq.gz","Mouse-F3-Day-141_S207_L001_R2_001.fastq.gz","Mouse-F3-Day-142_S208_L001_R1_001.fastq.gz","Mouse-F3-Day-142_S208_L001_R2_001.fastq.gz","Mouse-F3-Day-143_S209_L001_R1_001.fastq.gz","Mouse-F3-Day-143_S209_L001_R2_001.fastq.gz","Mouse-F3-Day-144_S210_L001_R1_001.fastq.gz","Mouse-F3-Day-144_S210_L001_R2_001.fastq.gz","Mouse-F3-Day-145_S211_L001_R1_001.fastq.gz","Mouse-F3-Day-145_S211_L001_R2_001.fastq.gz","Mouse-F3-Day-146_S212_L001_R1_001.fastq.gz","Mouse-F3-Day-146_S212_L001_R2_001.fastq.gz","Mouse-F3-Day-147_S213_L001_R1_001.fastq.gz","Mouse-F3-Day-147_S213_L001_R2_001.fastq.gz","Mouse-F3-Day-148_S214_L001_R1_001.fastq.gz","Mouse-F3-Day-148_S214_L001_R2_001.fastq.gz","Mouse-F3-Day-149_S215_L001_R1_001.fastq.gz","Mouse-F3-Day-149_S215_L001_R2_001.fastq.gz","Mouse-F3-Day-150_S216_L001_R1_001.fastq.gz","Mouse-F3-Day-150_S216_L001_R2_001.fastq.gz"],[0.49,0.6,0.77,1.04,0.61,0.79,1.84,2.61,0.63,0.9,0.44,0.61,0.76,1.06,0.47,0.68,0.53,0.71,0.6899999999999999,0.95,0.5600000000000001,0.79,0.3,0.43,0.3,0.43,0.46,0.68,0.68,1.03,0.5,0.67,1.56,2.31,1.17,1.65,1.26,1.77,0.53,0.75]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>#<\/th>\n      <th>Filename<\/th>\n      <th>Size (MB)<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"scrollX":true,"scrollY":"400px","scrollCollapse":true,"paging":false,"columnDefs":[{"className":"dt-right","targets":[0,2]},{"name":"Nr","targets":0},{"name":"Filename","targets":1},{"name":"Size_MB","targets":2}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-13c01a4813f9a3bd4da7" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-13c01a4813f9a3bd4da7">{"x":{"filter":"none","vertical":false,"data":[[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40],["Mock-Community_S280_L001_R1_001.fastq.gz","Mock-Community_S280_L001_R2_001.fastq.gz","Mouse-F3-Day-000_S188_L001_R1_001.fastq.gz","Mouse-F3-Day-000_S188_L001_R2_001.fastq.gz","Mouse-F3-Day-001_S189_L001_R1_001.fastq.gz","Mouse-F3-Day-001_S189_L001_R2_001.fastq.gz","Mouse-F3-Day-002_S190_L001_R1_001.fastq.gz","Mouse-F3-Day-002_S190_L001_R2_001.fastq.gz","Mouse-F3-Day-003_S191_L001_R1_001.fastq.gz","Mouse-F3-Day-003_S191_L001_R2_001.fastq.gz","Mouse-F3-Day-005_S193_L001_R1_001.fastq.gz","Mouse-F3-Day-005_S193_L001_R2_001.fastq.gz","Mouse-F3-Day-006_S194_L001_R1_001.fastq.gz","Mouse-F3-Day-006_S194_L001_R2_001.fastq.gz","Mouse-F3-Day-007_S195_L001_R1_001.fastq.gz","Mouse-F3-Day-007_S195_L001_R2_001.fastq.gz","Mouse-F3-Day-008_S196_L001_R1_001.fastq.gz","Mouse-F3-Day-008_S196_L001_R2_001.fastq.gz","Mouse-F3-Day-009_S197_L001_R1_001.fastq.gz","Mouse-F3-Day-009_S197_L001_R2_001.fastq.gz","Mouse-F3-Day-141_S207_L001_R1_001.fastq.gz","Mouse-F3-Day-141_S207_L001_R2_001.fastq.gz","Mouse-F3-Day-142_S208_L001_R1_001.fastq.gz","Mouse-F3-Day-142_S208_L001_R2_001.fastq.gz","Mouse-F3-Day-143_S209_L001_R1_001.fastq.gz","Mouse-F3-Day-143_S209_L001_R2_001.fastq.gz","Mouse-F3-Day-144_S210_L001_R1_001.fastq.gz","Mouse-F3-Day-144_S210_L001_R2_001.fastq.gz","Mouse-F3-Day-145_S211_L001_R1_001.fastq.gz","Mouse-F3-Day-145_S211_L001_R2_001.fastq.gz","Mouse-F3-Day-146_S212_L001_R1_001.fastq.gz","Mouse-F3-Day-146_S212_L001_R2_001.fastq.gz","Mouse-F3-Day-147_S213_L001_R1_001.fastq.gz","Mouse-F3-Day-147_S213_L001_R2_001.fastq.gz","Mouse-F3-Day-148_S214_L001_R1_001.fastq.gz","Mouse-F3-Day-148_S214_L001_R2_001.fastq.gz","Mouse-F3-Day-149_S215_L001_R1_001.fastq.gz","Mouse-F3-Day-149_S215_L001_R2_001.fastq.gz","Mouse-F3-Day-150_S216_L001_R1_001.fastq.gz","Mouse-F3-Day-150_S216_L001_R2_001.fastq.gz"],[0.49,0.6,0.77,1.04,0.61,0.79,1.84,2.61,0.63,0.9,0.44,0.61,0.76,1.06,0.47,0.68,0.53,0.71,0.6899999999999999,0.95,0.5600000000000001,0.79,0.3,0.43,0.3,0.43,0.46,0.68,0.68,1.03,0.5,0.67,1.56,2.31,1.17,1.65,1.26,1.77,0.53,0.75]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>#<\/th>\n      <th>Filename<\/th>\n      <th>Size (MB)<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"scrollX":true,"scrollY":"400px","scrollCollapse":true,"paging":false,"columnDefs":[{"className":"dt-right","targets":[0,2]},{"name":"Nr","targets":0},{"name":"Filename","targets":1},{"name":"Size_MB","targets":2}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 <hr />
 </div>
 </div>
@@ -5981,11 +5983,11 @@ displayed during execution!</p>
 <span id="cb14-46"><a href="#cb14-46" tabindex="-1"></a><span class="co"># folder is linked rather than every individual file.</span></span>
 <span id="cb14-47"><a href="#cb14-47" tabindex="-1"></a><span class="fu">render_output_links</span>(output_folder, <span class="at">labels =</span> <span class="st">&quot;FastQC HTML reports and ZIP archives (folder)&quot;</span>)</span></code></pre></div>
 <pre><code>## Running FastQC analysis:
-##  - Files to process: 40 
-##  - Parallel threads: 1 
+##  - Files to process: 40
+##  - Parallel threads: 1
 ##  - Output directory: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/run_results/2_fastqc_quality_reports/FastQC/quality_reports</code></pre>
-<pre><code>## 
-## Elapsed time: 0.63 minutes
+<pre><code>##
+## Elapsed time: 0.65 minutes
 ##  FastQC analysis complete.</code></pre>
 </div>
 <div id="verify-reports" class="section level2" number="6.2">
@@ -6015,8 +6017,8 @@ Reports</h2>
 <span id="cb17-21"><a href="#cb17-21" tabindex="-1"></a>  )</span>
 <span id="cb17-22"><a href="#cb17-22" tabindex="-1"></a>}</span></code></pre></div>
 <pre><code>## Report generation summary:
-##  - HTML reports generated: 40 
-##  - ZIP archives generated: 40 
+##  - HTML reports generated: 40
+##  - ZIP archives generated: 40
 ##  - Output location: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/run_results/2_fastqc_quality_reports/FastQC/quality_reports</code></pre>
 </div>
 <div id="run-multiqc" class="section level2" number="6.3">
@@ -6064,7 +6066,7 @@ place.</p>
 <span id="cb19-33"><a href="#cb19-33" tabindex="-1"></a>  <span class="co"># when this branch actually ran, i.e. MultiQC succeeded.</span></span>
 <span id="cb19-34"><a href="#cb19-34" tabindex="-1"></a>  <span class="fu">render_output_links</span>(multiqc_report_path, <span class="at">labels =</span> <span class="st">&quot;MultiQC aggregated report (HTML)&quot;</span>)</span>
 <span id="cb19-35"><a href="#cb19-35" tabindex="-1"></a>}</span></code></pre></div>
-<pre><code>## 
+<pre><code>##
 ## MultiQC report generated.
 ##    Elapsed time: 3.3 seconds
 ##    Report: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/run_results/2_fastqc_quality_reports/MultiQC/multiqc_report.html</code></pre>
@@ -6267,8 +6269,8 @@ samples.</p>
 <span id="cb23-139"><a href="#cb23-139" tabindex="-1"></a>                            <span class="at">scrollY =</span> <span class="st">&quot;400px&quot;</span>, <span class="at">scrollCollapse =</span> <span class="cn">TRUE</span>, <span class="at">paging =</span> <span class="cn">FALSE</span>),</span>
 <span id="cb23-140"><a href="#cb23-140" tabindex="-1"></a>            <span class="at">rownames =</span> <span class="cn">FALSE</span>,</span>
 <span id="cb23-141"><a href="#cb23-141" tabindex="-1"></a>            <span class="at">caption =</span> <span class="st">&quot;FastQC basic statistics per sample&quot;</span>)</span></code></pre></div>
-<div class="datatables html-widget html-fill-item" id="htmlwidget-fed8ee8cf605d9cdf960" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-fed8ee8cf605d9cdf960">{"x":{"filter":"none","vertical":false,"caption":"<caption>FastQC basic statistics per sample<\/caption>","data":[["Mock-Community","Mock-Community","Mouse-F3-Day-000","Mouse-F3-Day-000","Mouse-F3-Day-001","Mouse-F3-Day-001","Mouse-F3-Day-002","Mouse-F3-Day-002","Mouse-F3-Day-003","Mouse-F3-Day-003","Mouse-F3-Day-005","Mouse-F3-Day-005","Mouse-F3-Day-006","Mouse-F3-Day-006","Mouse-F3-Day-007","Mouse-F3-Day-007","Mouse-F3-Day-008","Mouse-F3-Day-008","Mouse-F3-Day-009","Mouse-F3-Day-009","Mouse-F3-Day-141","Mouse-F3-Day-141","Mouse-F3-Day-142","Mouse-F3-Day-142","Mouse-F3-Day-143","Mouse-F3-Day-143","Mouse-F3-Day-144","Mouse-F3-Day-144","Mouse-F3-Day-145","Mouse-F3-Day-145","Mouse-F3-Day-146","Mouse-F3-Day-146","Mouse-F3-Day-147","Mouse-F3-Day-147","Mouse-F3-Day-148","Mouse-F3-Day-148","Mouse-F3-Day-149","Mouse-F3-Day-149","Mouse-F3-Day-150","Mouse-F3-Day-150"],["Mock-Community_S280_L001_RX_001","Mock-Community_S280_L001_RX_001","Mouse-F3-Day-000_S188_L001_RX_001","Mouse-F3-Day-000_S188_L001_RX_001","Mouse-F3-Day-001_S189_L001_RX_001","Mouse-F3-Day-001_S189_L001_RX_001","Mouse-F3-Day-002_S190_L001_RX_001","Mouse-F3-Day-002_S190_L001_RX_001","Mouse-F3-Day-003_S191_L001_RX_001","Mouse-F3-Day-003_S191_L001_RX_001","Mouse-F3-Day-005_S193_L001_RX_001","Mouse-F3-Day-005_S193_L001_RX_001","Mouse-F3-Day-006_S194_L001_RX_001","Mouse-F3-Day-006_S194_L001_RX_001","Mouse-F3-Day-007_S195_L001_RX_001","Mouse-F3-Day-007_S195_L001_RX_001","Mouse-F3-Day-008_S196_L001_RX_001","Mouse-F3-Day-008_S196_L001_RX_001","Mouse-F3-Day-009_S197_L001_RX_001","Mouse-F3-Day-009_S197_L001_RX_001","Mouse-F3-Day-141_S207_L001_RX_001","Mouse-F3-Day-141_S207_L001_RX_001","Mouse-F3-Day-142_S208_L001_RX_001","Mouse-F3-Day-142_S208_L001_RX_001","Mouse-F3-Day-143_S209_L001_RX_001","Mouse-F3-Day-143_S209_L001_RX_001","Mouse-F3-Day-144_S210_L001_RX_001","Mouse-F3-Day-144_S210_L001_RX_001","Mouse-F3-Day-145_S211_L001_RX_001","Mouse-F3-Day-145_S211_L001_RX_001","Mouse-F3-Day-146_S212_L001_RX_001","Mouse-F3-Day-146_S212_L001_RX_001","Mouse-F3-Day-147_S213_L001_RX_001","Mouse-F3-Day-147_S213_L001_RX_001","Mouse-F3-Day-148_S214_L001_RX_001","Mouse-F3-Day-148_S214_L001_RX_001","Mouse-F3-Day-149_S215_L001_RX_001","Mouse-F3-Day-149_S215_L001_RX_001","Mouse-F3-Day-150_S216_L001_RX_001","Mouse-F3-Day-150_S216_L001_RX_001"],["Forward","Reverse","Forward","Reverse","Forward","Reverse","Forward","Reverse","Forward","Reverse","Forward","Reverse","Forward","Reverse","Forward","Reverse","Forward","Reverse","Forward","Reverse","Forward","Reverse","Forward","Reverse","Forward","Reverse","Forward","Reverse","Forward","Reverse","Forward","Reverse","Forward","Reverse","Forward","Reverse","Forward","Reverse","Forward","Reverse"],[53,52,55,54,55,54,54,53,54,53,55,54,54,53,54,53,54,53,54,53,55,54,55,54,55,54,55,54,55,54,55,54,55,54,55,54,55,54,55,54],["Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9"],["Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls"],["268-270","267-271","268-270","267-271","269-270","267-271","267-270","267-271","269-270","267-271","269-270","267-271","269-270","267-271","267-270","267-271","269-270","267-271","269-270","268-271","267-270","267-271","269-270","267-271","267-270","267-271","269-270","267-271","269-270","267-271","269-270","267-271","267-270","267-271","267-270","267-271","267-270","267-271","269-270","267-271"],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[1200000,1200000,2100000,2100000,1500000,1500000,5200000,5300000,1800000,1800000,1200000,1200000,2100000,2100000,1300000,1300000,1400000,1400000,1900000,1900000,1600000,1600000,859300,861300,858000,860100,1300000,1300000,1900000,1900000,1300000,1300000,4600000,4600000,3300000,3300000,3500000,3500000,1400000,1400000],[4779,4779,7793,7793,5869,5869,19620,19620,6758,6758,4448,4448,7989,7989,5129,5129,5294,5294,7070,7070,5958,5958,3183,3183,3178,3178,4827,4827,7377,7377,5021,5021,17070,17070,12405,12405,13083,13083,5509,5509]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>SampleID<\/th>\n      <th>Pair_Key<\/th>\n      <th>Read_Direction<\/th>\n      <th>GC<\/th>\n      <th>Encoding<\/th>\n      <th>File_type<\/th>\n      <th>Sequence_length<\/th>\n      <th>Sequences_flagged_as_poor_quality<\/th>\n      <th>Total_Bases<\/th>\n      <th>Total_Sequences<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"scrollX":true,"scrollY":"400px","scrollCollapse":true,"paging":false,"columnDefs":[{"className":"dt-right","targets":[3,7,8,9]},{"name":"SampleID","targets":0},{"name":"Pair_Key","targets":1},{"name":"Read_Direction","targets":2},{"name":"GC","targets":3},{"name":"Encoding","targets":4},{"name":"File_type","targets":5},{"name":"Sequence_length","targets":6},{"name":"Sequences_flagged_as_poor_quality","targets":7},{"name":"Total_Bases","targets":8},{"name":"Total_Sequences","targets":9}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-e8e0401cd9ea6a4dbf3b" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-e8e0401cd9ea6a4dbf3b">{"x":{"filter":"none","vertical":false,"caption":"<caption>FastQC basic statistics per sample<\/caption>","data":[["Mock-Community","Mock-Community","Mouse-F3-Day-000","Mouse-F3-Day-000","Mouse-F3-Day-001","Mouse-F3-Day-001","Mouse-F3-Day-002","Mouse-F3-Day-002","Mouse-F3-Day-003","Mouse-F3-Day-003","Mouse-F3-Day-005","Mouse-F3-Day-005","Mouse-F3-Day-006","Mouse-F3-Day-006","Mouse-F3-Day-007","Mouse-F3-Day-007","Mouse-F3-Day-008","Mouse-F3-Day-008","Mouse-F3-Day-009","Mouse-F3-Day-009","Mouse-F3-Day-141","Mouse-F3-Day-141","Mouse-F3-Day-142","Mouse-F3-Day-142","Mouse-F3-Day-143","Mouse-F3-Day-143","Mouse-F3-Day-144","Mouse-F3-Day-144","Mouse-F3-Day-145","Mouse-F3-Day-145","Mouse-F3-Day-146","Mouse-F3-Day-146","Mouse-F3-Day-147","Mouse-F3-Day-147","Mouse-F3-Day-148","Mouse-F3-Day-148","Mouse-F3-Day-149","Mouse-F3-Day-149","Mouse-F3-Day-150","Mouse-F3-Day-150"],["Mock-Community_S280_L001_RX_001","Mock-Community_S280_L001_RX_001","Mouse-F3-Day-000_S188_L001_RX_001","Mouse-F3-Day-000_S188_L001_RX_001","Mouse-F3-Day-001_S189_L001_RX_001","Mouse-F3-Day-001_S189_L001_RX_001","Mouse-F3-Day-002_S190_L001_RX_001","Mouse-F3-Day-002_S190_L001_RX_001","Mouse-F3-Day-003_S191_L001_RX_001","Mouse-F3-Day-003_S191_L001_RX_001","Mouse-F3-Day-005_S193_L001_RX_001","Mouse-F3-Day-005_S193_L001_RX_001","Mouse-F3-Day-006_S194_L001_RX_001","Mouse-F3-Day-006_S194_L001_RX_001","Mouse-F3-Day-007_S195_L001_RX_001","Mouse-F3-Day-007_S195_L001_RX_001","Mouse-F3-Day-008_S196_L001_RX_001","Mouse-F3-Day-008_S196_L001_RX_001","Mouse-F3-Day-009_S197_L001_RX_001","Mouse-F3-Day-009_S197_L001_RX_001","Mouse-F3-Day-141_S207_L001_RX_001","Mouse-F3-Day-141_S207_L001_RX_001","Mouse-F3-Day-142_S208_L001_RX_001","Mouse-F3-Day-142_S208_L001_RX_001","Mouse-F3-Day-143_S209_L001_RX_001","Mouse-F3-Day-143_S209_L001_RX_001","Mouse-F3-Day-144_S210_L001_RX_001","Mouse-F3-Day-144_S210_L001_RX_001","Mouse-F3-Day-145_S211_L001_RX_001","Mouse-F3-Day-145_S211_L001_RX_001","Mouse-F3-Day-146_S212_L001_RX_001","Mouse-F3-Day-146_S212_L001_RX_001","Mouse-F3-Day-147_S213_L001_RX_001","Mouse-F3-Day-147_S213_L001_RX_001","Mouse-F3-Day-148_S214_L001_RX_001","Mouse-F3-Day-148_S214_L001_RX_001","Mouse-F3-Day-149_S215_L001_RX_001","Mouse-F3-Day-149_S215_L001_RX_001","Mouse-F3-Day-150_S216_L001_RX_001","Mouse-F3-Day-150_S216_L001_RX_001"],["Forward","Reverse","Forward","Reverse","Forward","Reverse","Forward","Reverse","Forward","Reverse","Forward","Reverse","Forward","Reverse","Forward","Reverse","Forward","Reverse","Forward","Reverse","Forward","Reverse","Forward","Reverse","Forward","Reverse","Forward","Reverse","Forward","Reverse","Forward","Reverse","Forward","Reverse","Forward","Reverse","Forward","Reverse","Forward","Reverse"],[53,52,55,54,55,54,54,53,54,53,55,54,54,53,54,53,54,53,54,53,55,54,55,54,55,54,55,54,55,54,55,54,55,54,55,54,55,54,55,54],["Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9","Sanger / Illumina 1.9"],["Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls","Conventional base calls"],["268-270","267-271","268-270","267-271","269-270","267-271","267-270","267-271","269-270","267-271","269-270","267-271","269-270","267-271","267-270","267-271","269-270","267-271","269-270","268-271","267-270","267-271","269-270","267-271","267-270","267-271","269-270","267-271","269-270","267-271","269-270","267-271","267-270","267-271","267-270","267-271","267-270","267-271","269-270","267-271"],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[1200000,1200000,2100000,2100000,1500000,1500000,5200000,5300000,1800000,1800000,1200000,1200000,2100000,2100000,1300000,1300000,1400000,1400000,1900000,1900000,1600000,1600000,859300,861300,858000,860100,1300000,1300000,1900000,1900000,1300000,1300000,4600000,4600000,3300000,3300000,3500000,3500000,1400000,1400000],[4779,4779,7793,7793,5869,5869,19620,19620,6758,6758,4448,4448,7989,7989,5129,5129,5294,5294,7070,7070,5958,5958,3183,3183,3178,3178,4827,4827,7377,7377,5021,5021,17070,17070,12405,12405,13083,13083,5509,5509]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>SampleID<\/th>\n      <th>Pair_Key<\/th>\n      <th>Read_Direction<\/th>\n      <th>GC<\/th>\n      <th>Encoding<\/th>\n      <th>File_type<\/th>\n      <th>Sequence_length<\/th>\n      <th>Sequences_flagged_as_poor_quality<\/th>\n      <th>Total_Bases<\/th>\n      <th>Total_Sequences<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"scrollX":true,"scrollY":"400px","scrollCollapse":true,"paging":false,"columnDefs":[{"className":"dt-right","targets":[3,7,8,9]},{"name":"SampleID","targets":0},{"name":"Pair_Key","targets":1},{"name":"Read_Direction","targets":2},{"name":"GC","targets":3},{"name":"Encoding","targets":4},{"name":"File_type","targets":5},{"name":"Sequence_length","targets":6},{"name":"Sequences_flagged_as_poor_quality","targets":7},{"name":"Total_Bases","targets":8},{"name":"Total_Sequences","targets":9}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <div id="qc-status-overview" class="section level1" number="8">
@@ -6298,10 +6300,10 @@ Statistics</h2>
 <span id="cb24-19"><a href="#cb24-19" tabindex="-1"></a>)</span></code></pre></div>
 <pre><code>## Overall QC summary:
 ##  Sequencing statistics:
-##  - Biological sample/pair keys: 20 
-##  - FASTQ files/read directions: 40 
-##  - Files with unclassified direction: 0 
-##  - Total reads: 304,720 
+##  - Biological sample/pair keys: 20
+##  - FASTQ files/read directions: 40
+##  - Files with unclassified direction: 0
+##  - Total reads: 304,720
 ##  - Average GC content: 54.1 %
 ##  - Total poor quality sequences: 0</code></pre>
 </div>
@@ -6331,7 +6333,7 @@ Statistics</h2>
 <span id="cb26-21"><a href="#cb26-21" tabindex="-1"></a>)</span></code></pre></div>
 <pre><code>## Sheet FastQC_Basic_Statistics added successfully to the workbook: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/run_results/2_fastqc_quality_reports/FastQC/fastqc_basic_statistics.xlsx</code></pre>
 <pre><code>## Basic statistics exported to:
-##    File: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/run_results/2_fastqc_quality_reports/FastQC/fastqc_basic_statistics.xlsx 
+##    File: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/run_results/2_fastqc_quality_reports/FastQC/fastqc_basic_statistics.xlsx
 ##    Sheet: FastQC_Basic_Statistics</code></pre>
 </div>
 <div id="column-dictionary" class="section level2" number="8.3">
@@ -6447,8 +6449,8 @@ report on the left and its reverse report on the right.</p>
 <span id="cb30-79"><a href="#cb30-79" tabindex="-1"></a>            <span class="at">rownames =</span> <span class="cn">FALSE</span>,</span>
 <span id="cb30-80"><a href="#cb30-80" tabindex="-1"></a>            <span class="at">escape =</span> <span class="cn">FALSE</span>,</span>
 <span id="cb30-81"><a href="#cb30-81" tabindex="-1"></a>            <span class="at">caption =</span> <span class="st">&quot;Paired FastQC HTML reports per sample&quot;</span>)</span></code></pre></div>
-<div class="datatables html-widget html-fill-item" id="htmlwidget-10158649e1a0007ea9a6" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-10158649e1a0007ea9a6">{"x":{"filter":"none","vertical":false,"caption":"<caption>Paired FastQC HTML reports per sample<\/caption>","data":[["Mock-Community","Mouse-F3-Day-000","Mouse-F3-Day-001","Mouse-F3-Day-002","Mouse-F3-Day-003","Mouse-F3-Day-005","Mouse-F3-Day-006","Mouse-F3-Day-007","Mouse-F3-Day-008","Mouse-F3-Day-009","Mouse-F3-Day-141","Mouse-F3-Day-142","Mouse-F3-Day-143","Mouse-F3-Day-144","Mouse-F3-Day-145","Mouse-F3-Day-146","Mouse-F3-Day-147","Mouse-F3-Day-148","Mouse-F3-Day-149","Mouse-F3-Day-150"],["Mock-Community_S280_L001_RX_001","Mouse-F3-Day-000_S188_L001_RX_001","Mouse-F3-Day-001_S189_L001_RX_001","Mouse-F3-Day-002_S190_L001_RX_001","Mouse-F3-Day-003_S191_L001_RX_001","Mouse-F3-Day-005_S193_L001_RX_001","Mouse-F3-Day-006_S194_L001_RX_001","Mouse-F3-Day-007_S195_L001_RX_001","Mouse-F3-Day-008_S196_L001_RX_001","Mouse-F3-Day-009_S197_L001_RX_001","Mouse-F3-Day-141_S207_L001_RX_001","Mouse-F3-Day-142_S208_L001_RX_001","Mouse-F3-Day-143_S209_L001_RX_001","Mouse-F3-Day-144_S210_L001_RX_001","Mouse-F3-Day-145_S211_L001_RX_001","Mouse-F3-Day-146_S212_L001_RX_001","Mouse-F3-Day-147_S213_L001_RX_001","Mouse-F3-Day-148_S214_L001_RX_001","Mouse-F3-Day-149_S215_L001_RX_001","Mouse-F3-Day-150_S216_L001_RX_001"],["<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mock-Community_S280_L001_R1_001_fastqc.html\">Mock-Community_S280_L001_R1_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-000_S188_L001_R1_001_fastqc.html\">Mouse-F3-Day-000_S188_L001_R1_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-001_S189_L001_R1_001_fastqc.html\">Mouse-F3-Day-001_S189_L001_R1_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-002_S190_L001_R1_001_fastqc.html\">Mouse-F3-Day-002_S190_L001_R1_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-003_S191_L001_R1_001_fastqc.html\">Mouse-F3-Day-003_S191_L001_R1_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-005_S193_L001_R1_001_fastqc.html\">Mouse-F3-Day-005_S193_L001_R1_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-006_S194_L001_R1_001_fastqc.html\">Mouse-F3-Day-006_S194_L001_R1_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-007_S195_L001_R1_001_fastqc.html\">Mouse-F3-Day-007_S195_L001_R1_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-008_S196_L001_R1_001_fastqc.html\">Mouse-F3-Day-008_S196_L001_R1_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-009_S197_L001_R1_001_fastqc.html\">Mouse-F3-Day-009_S197_L001_R1_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-141_S207_L001_R1_001_fastqc.html\">Mouse-F3-Day-141_S207_L001_R1_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-142_S208_L001_R1_001_fastqc.html\">Mouse-F3-Day-142_S208_L001_R1_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-143_S209_L001_R1_001_fastqc.html\">Mouse-F3-Day-143_S209_L001_R1_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-144_S210_L001_R1_001_fastqc.html\">Mouse-F3-Day-144_S210_L001_R1_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-145_S211_L001_R1_001_fastqc.html\">Mouse-F3-Day-145_S211_L001_R1_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-146_S212_L001_R1_001_fastqc.html\">Mouse-F3-Day-146_S212_L001_R1_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-147_S213_L001_R1_001_fastqc.html\">Mouse-F3-Day-147_S213_L001_R1_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-148_S214_L001_R1_001_fastqc.html\">Mouse-F3-Day-148_S214_L001_R1_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-149_S215_L001_R1_001_fastqc.html\">Mouse-F3-Day-149_S215_L001_R1_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-150_S216_L001_R1_001_fastqc.html\">Mouse-F3-Day-150_S216_L001_R1_001_fastqc.html<\/a>"],["<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mock-Community_S280_L001_R2_001_fastqc.html\">Mock-Community_S280_L001_R2_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-000_S188_L001_R2_001_fastqc.html\">Mouse-F3-Day-000_S188_L001_R2_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-001_S189_L001_R2_001_fastqc.html\">Mouse-F3-Day-001_S189_L001_R2_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-002_S190_L001_R2_001_fastqc.html\">Mouse-F3-Day-002_S190_L001_R2_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-003_S191_L001_R2_001_fastqc.html\">Mouse-F3-Day-003_S191_L001_R2_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-005_S193_L001_R2_001_fastqc.html\">Mouse-F3-Day-005_S193_L001_R2_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-006_S194_L001_R2_001_fastqc.html\">Mouse-F3-Day-006_S194_L001_R2_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-007_S195_L001_R2_001_fastqc.html\">Mouse-F3-Day-007_S195_L001_R2_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-008_S196_L001_R2_001_fastqc.html\">Mouse-F3-Day-008_S196_L001_R2_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-009_S197_L001_R2_001_fastqc.html\">Mouse-F3-Day-009_S197_L001_R2_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-141_S207_L001_R2_001_fastqc.html\">Mouse-F3-Day-141_S207_L001_R2_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-142_S208_L001_R2_001_fastqc.html\">Mouse-F3-Day-142_S208_L001_R2_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-143_S209_L001_R2_001_fastqc.html\">Mouse-F3-Day-143_S209_L001_R2_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-144_S210_L001_R2_001_fastqc.html\">Mouse-F3-Day-144_S210_L001_R2_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-145_S211_L001_R2_001_fastqc.html\">Mouse-F3-Day-145_S211_L001_R2_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-146_S212_L001_R2_001_fastqc.html\">Mouse-F3-Day-146_S212_L001_R2_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-147_S213_L001_R2_001_fastqc.html\">Mouse-F3-Day-147_S213_L001_R2_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-148_S214_L001_R2_001_fastqc.html\">Mouse-F3-Day-148_S214_L001_R2_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-149_S215_L001_R2_001_fastqc.html\">Mouse-F3-Day-149_S215_L001_R2_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-150_S216_L001_R2_001_fastqc.html\">Mouse-F3-Day-150_S216_L001_R2_001_fastqc.html<\/a>"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Sample<\/th>\n      <th>Pair Key<\/th>\n      <th>Forward Report<\/th>\n      <th>Reverse Report<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"scrollX":true,"scrollY":"400px","scrollCollapse":true,"paging":false,"columnDefs":[{"name":"Sample","targets":0},{"name":"Pair Key","targets":1},{"name":"Forward Report","targets":2},{"name":"Reverse Report","targets":3}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-0a9d569e33068483df21" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-0a9d569e33068483df21">{"x":{"filter":"none","vertical":false,"caption":"<caption>Paired FastQC HTML reports per sample<\/caption>","data":[["Mock-Community","Mouse-F3-Day-000","Mouse-F3-Day-001","Mouse-F3-Day-002","Mouse-F3-Day-003","Mouse-F3-Day-005","Mouse-F3-Day-006","Mouse-F3-Day-007","Mouse-F3-Day-008","Mouse-F3-Day-009","Mouse-F3-Day-141","Mouse-F3-Day-142","Mouse-F3-Day-143","Mouse-F3-Day-144","Mouse-F3-Day-145","Mouse-F3-Day-146","Mouse-F3-Day-147","Mouse-F3-Day-148","Mouse-F3-Day-149","Mouse-F3-Day-150"],["Mock-Community_S280_L001_RX_001","Mouse-F3-Day-000_S188_L001_RX_001","Mouse-F3-Day-001_S189_L001_RX_001","Mouse-F3-Day-002_S190_L001_RX_001","Mouse-F3-Day-003_S191_L001_RX_001","Mouse-F3-Day-005_S193_L001_RX_001","Mouse-F3-Day-006_S194_L001_RX_001","Mouse-F3-Day-007_S195_L001_RX_001","Mouse-F3-Day-008_S196_L001_RX_001","Mouse-F3-Day-009_S197_L001_RX_001","Mouse-F3-Day-141_S207_L001_RX_001","Mouse-F3-Day-142_S208_L001_RX_001","Mouse-F3-Day-143_S209_L001_RX_001","Mouse-F3-Day-144_S210_L001_RX_001","Mouse-F3-Day-145_S211_L001_RX_001","Mouse-F3-Day-146_S212_L001_RX_001","Mouse-F3-Day-147_S213_L001_RX_001","Mouse-F3-Day-148_S214_L001_RX_001","Mouse-F3-Day-149_S215_L001_RX_001","Mouse-F3-Day-150_S216_L001_RX_001"],["<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mock-Community_S280_L001_R1_001_fastqc.html\">Mock-Community_S280_L001_R1_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-000_S188_L001_R1_001_fastqc.html\">Mouse-F3-Day-000_S188_L001_R1_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-001_S189_L001_R1_001_fastqc.html\">Mouse-F3-Day-001_S189_L001_R1_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-002_S190_L001_R1_001_fastqc.html\">Mouse-F3-Day-002_S190_L001_R1_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-003_S191_L001_R1_001_fastqc.html\">Mouse-F3-Day-003_S191_L001_R1_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-005_S193_L001_R1_001_fastqc.html\">Mouse-F3-Day-005_S193_L001_R1_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-006_S194_L001_R1_001_fastqc.html\">Mouse-F3-Day-006_S194_L001_R1_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-007_S195_L001_R1_001_fastqc.html\">Mouse-F3-Day-007_S195_L001_R1_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-008_S196_L001_R1_001_fastqc.html\">Mouse-F3-Day-008_S196_L001_R1_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-009_S197_L001_R1_001_fastqc.html\">Mouse-F3-Day-009_S197_L001_R1_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-141_S207_L001_R1_001_fastqc.html\">Mouse-F3-Day-141_S207_L001_R1_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-142_S208_L001_R1_001_fastqc.html\">Mouse-F3-Day-142_S208_L001_R1_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-143_S209_L001_R1_001_fastqc.html\">Mouse-F3-Day-143_S209_L001_R1_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-144_S210_L001_R1_001_fastqc.html\">Mouse-F3-Day-144_S210_L001_R1_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-145_S211_L001_R1_001_fastqc.html\">Mouse-F3-Day-145_S211_L001_R1_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-146_S212_L001_R1_001_fastqc.html\">Mouse-F3-Day-146_S212_L001_R1_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-147_S213_L001_R1_001_fastqc.html\">Mouse-F3-Day-147_S213_L001_R1_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-148_S214_L001_R1_001_fastqc.html\">Mouse-F3-Day-148_S214_L001_R1_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-149_S215_L001_R1_001_fastqc.html\">Mouse-F3-Day-149_S215_L001_R1_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-150_S216_L001_R1_001_fastqc.html\">Mouse-F3-Day-150_S216_L001_R1_001_fastqc.html<\/a>"],["<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mock-Community_S280_L001_R2_001_fastqc.html\">Mock-Community_S280_L001_R2_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-000_S188_L001_R2_001_fastqc.html\">Mouse-F3-Day-000_S188_L001_R2_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-001_S189_L001_R2_001_fastqc.html\">Mouse-F3-Day-001_S189_L001_R2_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-002_S190_L001_R2_001_fastqc.html\">Mouse-F3-Day-002_S190_L001_R2_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-003_S191_L001_R2_001_fastqc.html\">Mouse-F3-Day-003_S191_L001_R2_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-005_S193_L001_R2_001_fastqc.html\">Mouse-F3-Day-005_S193_L001_R2_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-006_S194_L001_R2_001_fastqc.html\">Mouse-F3-Day-006_S194_L001_R2_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-007_S195_L001_R2_001_fastqc.html\">Mouse-F3-Day-007_S195_L001_R2_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-008_S196_L001_R2_001_fastqc.html\">Mouse-F3-Day-008_S196_L001_R2_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-009_S197_L001_R2_001_fastqc.html\">Mouse-F3-Day-009_S197_L001_R2_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-141_S207_L001_R2_001_fastqc.html\">Mouse-F3-Day-141_S207_L001_R2_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-142_S208_L001_R2_001_fastqc.html\">Mouse-F3-Day-142_S208_L001_R2_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-143_S209_L001_R2_001_fastqc.html\">Mouse-F3-Day-143_S209_L001_R2_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-144_S210_L001_R2_001_fastqc.html\">Mouse-F3-Day-144_S210_L001_R2_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-145_S211_L001_R2_001_fastqc.html\">Mouse-F3-Day-145_S211_L001_R2_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-146_S212_L001_R2_001_fastqc.html\">Mouse-F3-Day-146_S212_L001_R2_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-147_S213_L001_R2_001_fastqc.html\">Mouse-F3-Day-147_S213_L001_R2_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-148_S214_L001_R2_001_fastqc.html\">Mouse-F3-Day-148_S214_L001_R2_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-149_S215_L001_R2_001_fastqc.html\">Mouse-F3-Day-149_S215_L001_R2_001_fastqc.html<\/a>","<a href=\"../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-150_S216_L001_R2_001_fastqc.html\">Mouse-F3-Day-150_S216_L001_R2_001_fastqc.html<\/a>"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Sample<\/th>\n      <th>Pair Key<\/th>\n      <th>Forward Report<\/th>\n      <th>Reverse Report<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"scrollX":true,"scrollY":"400px","scrollCollapse":true,"paging":false,"columnDefs":[{"name":"Sample","targets":0},{"name":"Pair Key","targets":1},{"name":"Forward Report","targets":2},{"name":"Reverse Report","targets":3}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 <div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">nrow</span>(unclassified_reports) <span class="sc">&gt;</span> <span class="dv">0</span><span class="dt">L</span>) {</span>
 <span id="cb31-2"><a href="#cb31-2" tabindex="-1"></a>  unclassified_reports[, Report <span class="sc">:=</span> <span class="fu">vapply</span>(Report_Path, build_report_link, <span class="fu">character</span>(<span class="dv">1</span>))]</span>
 <span id="cb31-3"><a href="#cb31-3" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">datatable</span>(</span>
@@ -6561,66 +6563,66 @@ Information</h1>
 <pre><code>## R version 4.5.2 (2025-10-31)
 ## Platform: aarch64-apple-darwin20
 ## Running under: macOS Tahoe 26.6.2
-## 
+##
 ## Matrix products: default
-## BLAS:   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib 
+## BLAS:   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib
 ## LAPACK: /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
-## 
+##
 ## locale:
 ## [1] C.UTF-8/C.UTF-8/C.UTF-8/C/C.UTF-8/C.UTF-8
-## 
+##
 ## time zone: Europe/Berlin
 ## tzcode source: internal
-## 
+##
 ## attached base packages:
-## [1] parallel  stats4    stats     graphics  grDevices utils     datasets 
-## [8] methods   base     
-## 
+## [1] parallel  stats4    stats     graphics  grDevices utils     datasets
+## [8] methods   base
+##
 ## other attached packages:
-##  [1] knitr_1.51                  fastqcr_0.1.3              
-##  [3] dplyr_1.2.1                 stringr_1.6.0              
-##  [5] ShortRead_1.66.0            GenomicAlignments_1.44.0   
-##  [7] SummarizedExperiment_1.38.1 Biobase_2.73.1             
-##  [9] MatrixGenerics_1.20.0       matrixStats_1.5.0          
-## [11] Rsamtools_2.24.1            GenomicRanges_1.60.0       
-## [13] GenomeInfoDb_1.44.3         Biostrings_2.78.0          
-## [15] Seqinfo_1.0.0               XVector_0.48.0             
-## [17] IRanges_2.42.0              S4Vectors_0.48.1           
-## [19] BiocParallel_1.42.2         BiocGenerics_0.56.0        
-## [21] generics_0.1.4              openxlsx_4.2.8.1           
-## [23] here_1.0.2                  fs_2.1.0                   
-## [25] DT_0.34.0                   data.table_1.18.4          
-## 
+##  [1] knitr_1.51                  fastqcr_0.1.3
+##  [3] dplyr_1.2.1                 stringr_1.6.0
+##  [5] ShortRead_1.66.0            GenomicAlignments_1.44.0
+##  [7] SummarizedExperiment_1.38.1 Biobase_2.73.1
+##  [9] MatrixGenerics_1.20.0       matrixStats_1.5.0
+## [11] Rsamtools_2.24.1            GenomicRanges_1.60.0
+## [13] GenomeInfoDb_1.44.3         Biostrings_2.78.0
+## [15] Seqinfo_1.0.0               XVector_0.48.0
+## [17] IRanges_2.42.0              S4Vectors_0.48.1
+## [19] BiocParallel_1.42.2         BiocGenerics_0.56.0
+## [21] generics_0.1.4              openxlsx_4.2.8.1
+## [23] here_1.0.2                  fs_2.1.0
+## [25] DT_0.34.0                   data.table_1.18.4
+##
 ## loaded via a namespace (and not attached):
-##  [1] bitops_1.1-0            deldir_2.0-4            permute_0.9-10         
-##  [4] rlang_1.3.0             magrittr_2.0.5          ade4_1.7-24            
-##  [7] otel_0.2.0              compiler_4.5.2          mgcv_1.9-4             
-## [10] png_0.1-9               vctrs_0.7.3             reshape2_1.4.5         
-## [13] pwalign_1.4.0           pkgconfig_2.0.3         crayon_1.5.3           
-## [16] fastmap_1.2.0           rmarkdown_2.31          tzdb_0.5.0             
-## [19] UCSC.utils_1.4.0        bit_4.6.0               xfun_0.60              
-## [22] cachem_1.1.0            jsonlite_2.0.0          biomformat_1.36.0      
-## [25] rhdf5filters_1.20.0     DelayedArray_0.34.1     Rhdf5lib_1.30.0        
-## [28] jpeg_0.1-11             cluster_2.1.8.3         R6_2.6.1               
-## [31] bslib_0.12.0            stringi_1.8.9           RColorBrewer_1.1-3     
-## [34] jquerylib_0.1.4         Rcpp_1.1.2              iterators_1.0.14       
-## [37] readr_2.2.0             Matrix_1.7-6            splines_4.5.2          
-## [40] igraph_2.3.3            tidyselect_1.2.1        abind_1.4-8            
-## [43] yaml_2.3.12             vegan_2.7-5             codetools_0.2-20       
-## [46] hwriter_1.3.2.1         lattice_0.23-1          tibble_3.3.1           
-## [49] plyr_1.8.9              withr_3.0.3             S7_0.2.2               
-## [52] evaluate_1.0.5          survival_3.8-9          RcppParallel_6.2.0     
-## [55] zip_3.0.2               pillar_1.11.1           phyloseq_1.52.0        
-## [58] foreach_1.5.2           vroom_1.7.1             rprojroot_2.1.1        
-## [61] hms_1.1.4               ggplot2_4.0.3           scales_1.4.0           
-## [64] glue_1.8.1              tools_4.5.2             interp_1.1-6           
-## [67] rhdf5_2.52.1            grid_4.5.2              ape_5.8-1              
-## [70] crosstalk_1.2.2         latticeExtra_0.6-31     colorspace_2.1-3       
-## [73] nlme_3.1-170            GenomeInfoDbData_1.2.14 cli_3.6.6              
-## [76] S4Arrays_1.8.1          dada2_1.36.0            gtable_0.3.6           
-## [79] sass_0.4.10             digest_0.6.39           SparseArray_1.8.1      
-## [82] htmlwidgets_1.6.4       farver_2.1.2            htmltools_0.5.9        
-## [85] multtest_2.64.0         lifecycle_1.0.5         httr_1.4.8             
+##  [1] bitops_1.1-0            deldir_2.0-4            permute_0.9-10
+##  [4] rlang_1.3.0             magrittr_2.0.5          ade4_1.7-24
+##  [7] otel_0.2.0              compiler_4.5.2          mgcv_1.9-4
+## [10] png_0.1-9               vctrs_0.7.3             reshape2_1.4.5
+## [13] pwalign_1.4.0           pkgconfig_2.0.3         crayon_1.5.3
+## [16] fastmap_1.2.0           rmarkdown_2.31          tzdb_0.5.0
+## [19] UCSC.utils_1.4.0        bit_4.6.0               xfun_0.60
+## [22] cachem_1.1.0            jsonlite_2.0.0          biomformat_1.36.0
+## [25] rhdf5filters_1.20.0     DelayedArray_0.34.1     Rhdf5lib_1.30.0
+## [28] jpeg_0.1-11             cluster_2.1.8.3         R6_2.6.1
+## [31] bslib_0.12.0            stringi_1.8.9           RColorBrewer_1.1-3
+## [34] jquerylib_0.1.4         Rcpp_1.1.2              iterators_1.0.14
+## [37] readr_2.2.0             Matrix_1.7-6            splines_4.5.2
+## [40] igraph_2.3.3            tidyselect_1.2.1        abind_1.4-8
+## [43] yaml_2.3.12             vegan_2.7-5             codetools_0.2-20
+## [46] hwriter_1.3.2.1         lattice_0.23-1          tibble_3.3.1
+## [49] plyr_1.8.9              withr_3.0.3             S7_0.2.2
+## [52] evaluate_1.0.5          survival_3.8-9          RcppParallel_6.2.0
+## [55] zip_3.0.2               pillar_1.11.1           phyloseq_1.52.0
+## [58] foreach_1.5.2           vroom_1.7.1             rprojroot_2.1.1
+## [61] hms_1.1.4               ggplot2_4.0.3           scales_1.4.0
+## [64] glue_1.8.1              tools_4.5.2             interp_1.1-6
+## [67] rhdf5_2.52.1            grid_4.5.2              ape_5.8-1
+## [70] crosstalk_1.2.2         latticeExtra_0.6-31     colorspace_2.1-3
+## [73] nlme_3.1-170            GenomeInfoDbData_1.2.14 cli_3.6.6
+## [76] S4Arrays_1.8.1          dada2_1.36.0            gtable_0.3.6
+## [79] sass_0.4.10             digest_0.6.39           SparseArray_1.8.1
+## [82] htmlwidgets_1.6.4       farver_2.1.2            htmltools_0.5.9
+## [85] multtest_2.64.0         lifecycle_1.0.5         httr_1.4.8
 ## [88] bit64_4.8.4             MASS_7.3-66</code></pre>
 <hr />
 </div>

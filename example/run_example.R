@@ -34,7 +34,7 @@ Sys.setenv(
   DADA2_DATA_DIR = data_root,
   DADA2_RESULTS_DIR = run_results,
   DADA2_PARAMETER_FILE = configuration_workbook,
-  DADA2_TAXONOMY_DATABASE = "GTDB",
+  DADA2_TAXONOMY_DATABASE = "BOTH",
   DADA2_FORWARD_PRIMER = "GTGCCAGCMGCCGCGGTAA",
   DADA2_REVERSE_PRIMER = "GGACTACHVGGGTWTCTAAT",
   DADA2_TRIM_READ_THROUGH = "false",
@@ -152,18 +152,27 @@ if (!rmarkdown::pandoc_available()) {
   stop("Pandoc is required. Run from RStudio or install Quarto/Pandoc.", call. = FALSE)
 }
 
-gtdb_files <- file.path(
-  project_root,
-  "tools", "trainsets", "GTDB",
-  c(
-    "GTDB_bac120_arc53_ssu_r220_genus.fa.gz",
-    "GTDB_bac120_arc53_ssu_r220_species.fa.gz"
+taxonomy_files <- c(
+  file.path(
+    project_root, "tools", "trainsets", "SILVA",
+    c(
+      "silva_nr99_v138.2_toGenus_trainset.fa.gz",
+      "silva_v138.2_assignSpecies.fa.gz"
+    )
+  ),
+  file.path(
+    project_root, "tools", "trainsets", "GTDB",
+    c(
+      "GTDB_bac120_arc53_ssu_r220_genus.fa.gz",
+      "GTDB_bac120_arc53_ssu_r220_species.fa.gz"
+    )
   )
 )
-if (!all(file.exists(gtdb_files))) {
+if (!all(file.exists(taxonomy_files))) {
   stop(
-    "The GTDB trainset is missing. Run setup/download_reference_databases.R ",
-    "before the example (the example itself uses only GTDB).",
+    "The complete SILVA and GTDB trainsets are required. Run ",
+    "setup/download_reference_databases.R before the example. Missing:\n  - ",
+    paste(taxonomy_files[!file.exists(taxonomy_files)], collapse = "\n  - "),
     call. = FALSE
   )
 }
@@ -236,9 +245,44 @@ render_step("7_copy_number_correction.Rmd")
 render_step("8_microbial_load_correction.Rmd")
 render_step("9_phyloseq_object.Rmd")
 
+required_dual_taxonomy_outputs <- c(
+  file.path(run_results, "5_dada2_pipeline", c(
+    "silva_taxonomy_table.csv",
+    "gtdb_taxonomy_table.csv"
+  )),
+  file.path(run_results, "6_phylogenetic_tree", c(
+    "phylogenetic_tree_SILVA_labeled.nwk",
+    "phylogenetic_tree_GTDB_labeled.nwk",
+    "phylogenetic_tree_SILVA.pdf",
+    "phylogenetic_tree_GTDB.pdf"
+  )),
+  file.path(run_results, "9_phyloseq_object", "SILVA", "phyloseq_objects", c(
+    "phyloseq_object_silva_raw_counts.RData",
+    "phyloseq_object_silva_copy_number_corrected.RData",
+    "phyloseq_object_silva_microbial_load_corrected.RData"
+  )),
+  file.path(run_results, "9_phyloseq_object", "GTDB", "phyloseq_objects", c(
+    "phyloseq_object_gtdb_raw_counts.RData",
+    "phyloseq_object_gtdb_copy_number_corrected.RData",
+    "phyloseq_object_gtdb_microbial_load_corrected.RData"
+  ))
+)
+missing_dual_taxonomy_outputs <- required_dual_taxonomy_outputs[
+  !file.exists(required_dual_taxonomy_outputs)
+]
+if (length(missing_dual_taxonomy_outputs)) {
+  stop(
+    "The example run did not produce the complete SILVA + GTDB deliverable set:\n  - ",
+    paste(missing_dual_taxonomy_outputs, collapse = "\n  - "),
+    call. = FALSE
+  )
+}
+
 message(
   "\nExample run complete.\n",
   "Completed: Steps 1-3, preconfigured Step 4 handoff, and Steps 5-9.\n",
+  "Taxonomy: SILVA and GTDB, including both labelled trees and all six ",
+  "database-by-abundance phyloseq objects.\n",
   "Generated results: ", run_results, "\n",
   "Bundled reference results: ", reference_results, "\n",
   "Compare the two trees without touching data/fastq or results/."
