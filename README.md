@@ -224,6 +224,8 @@ A `download_manifest.txt` file is written to each subfolder recording the source
 
 [SILVA](https://www.arb-silva.de/) is appropriate for most studies. [GTDB](https://gtdb.ecogenomic.org/) uses a rank-normalized, genome-based taxonomy and is better suited for prokaryote-focused analyses where consistent genus/species nomenclature matters.
 
+The setup script installs SILVA 144 and the SBDI Sativa-curated GTDB R11-RS232-1 DADA2 files. Step 5 uses their exact versioned filenames, preventing older files left in an existing `tools/trainsets/` directory from being selected accidentally. The committed example reports predate this reference update and retain their original database provenance; they were not regenerated for this setup-only change.
+
 ### 7. Copy Your FASTQ Files
 
 Copy your paired-end raw FASTQ files into the [`data/fastq/`](data/fastq/) directory.
@@ -406,12 +408,12 @@ DADA2_16S_Illumina_PairedEnd_Workflow/
     │   └── install_manifest.txt
     └── trainsets/
         ├── SILVA/
-        │   ├── silva_nr99_v138.2_toGenus_trainset.fa.gz
-        │   ├── silva_v138.2_assignSpecies.fa.gz
+        │   ├── silva_nr99_v144_toGenus_trainset.fa.gz
+        │   ├── silva_v144_assignSpecies.fa.gz
         │   └── download_manifest.txt
         └── GTDB/
-            ├── GTDB_bac120_arc53_ssu_r220_genus.fa.gz
-            ├── GTDB_bac120_arc53_ssu_r220_species.fa.gz
+            ├── sbdi-gtdb-sativa.r11rs232-1.1genome.assignTaxonomy.fna.gz
+            ├── sbdi-gtdb-sativa.r11rs232-1.20genomes.addSpecies.fna.gz
             └── download_manifest.txt
 ```
 
@@ -440,8 +442,9 @@ DADA2_16S_Illumina_PairedEnd_Workflow/
 
 ### Databases
 
-- Quast C, et al. (2013). The SILVA ribosomal RNA gene database project: improved data processing and web-based tools. *Nucleic Acids Research*, 41(D1):D590-D596. [DADA2-formatted SILVA reference database](https://zenodo.org/records/14169026)
-- Parks DH, et al. (2022). GTDB: an ongoing census of bacterial and archaeal diversity through a phylogenetically consistent, rank normalized and complete genome-based taxonomy. *Nucleic Acids Research*, 50(D1):D199-D207. [DADA2-formatted GTDB reference database](https://zenodo.org/records/13984843)
+- Quast C, et al. (2013). The SILVA ribosomal RNA gene database project: improved data processing and web-based tools. *Nucleic Acids Research*, 41(D1):D590-D596. [Official SILVA 144 DADA2 files](https://www.arb-silva.de/archive/release_144/DADA2/1.36.0/SSU)
+- Parks DH, et al. (2022). GTDB: an ongoing census of bacterial and archaeal diversity through a phylogenetically consistent, rank normalized and complete genome-based taxonomy. *Nucleic Acids Research*, 50(D1):D199-D207. [GTDB](https://gtdb.ecogenomic.org/)
+- Lundin D, Andersson A. SBDI Sativa curated 16S GTDB database. [SBDI-GTDB R11-RS232-1 DADA2 files](https://doi.org/10.17044/scilifelab.14869077)
 
 ------------------------------------------------------------------------
 

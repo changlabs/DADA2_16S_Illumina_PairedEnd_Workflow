@@ -379,8 +379,8 @@ Primer pairs included in the DADA2 Parameter Explorer.
   Y=C/T, N=any, V=A/C/G, H=A/C/T, and K=G/T.
 
 The **target Min/Max bounds** were derived by in silico PCR against
-SILVA 138.2 SSURef NR99, a phylogenetically stratified NCBI sample, GTDB
-r220 representatives, and NCBI RefSeq Targeted Loci 16S sequences.
+SILVA 144 SSU Ref NR99, a phylogenetically stratified NCBI sample, GTDB
+R11-RS232 representatives, and NCBI RefSeq Targeted Loci 16S sequences.
 Within each source, the first and 99th percentiles of primer-trimmed
 length were expanded by 2 bp; the app uses the union across sources.
 These are evidence-based starting bounds, not a replacement for checking

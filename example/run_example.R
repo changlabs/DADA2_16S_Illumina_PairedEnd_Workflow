@@ -156,15 +156,15 @@ taxonomy_files <- c(
   file.path(
     project_root, "tools", "trainsets", "SILVA",
     c(
-      "silva_nr99_v138.2_toGenus_trainset.fa.gz",
-      "silva_v138.2_assignSpecies.fa.gz"
+      "silva_nr99_v144_toGenus_trainset.fa.gz",
+      "silva_v144_assignSpecies.fa.gz"
     )
   ),
   file.path(
     project_root, "tools", "trainsets", "GTDB",
     c(
-      "GTDB_bac120_arc53_ssu_r220_genus.fa.gz",
-      "GTDB_bac120_arc53_ssu_r220_species.fa.gz"
+      "sbdi-gtdb-sativa.r11rs232-1.1genome.assignTaxonomy.fna.gz",
+      "sbdi-gtdb-sativa.r11rs232-1.20genomes.addSpecies.fna.gz"
     )
   )
 )

@@ -683,10 +683,10 @@ primer_database <- data.frame(
         #
         # Derivation: for each primer pair, in silico PCR was run against four
         # reference databases --
-        # SILVA 138.2 SSURef NR99 (~200k bacterial sequences), a
+        # SILVA 144 SSU Ref NR99, a
         # phylogenetically stratified NCBI sample (500 sequences x 10
-        # major phyla = 5,000 total), GTDB r220 bacterial species
-        # representatives (66k full-length sequences), and NCBI RefSeq
+        # major phyla = 5,000 total), GTDB R11-RS232 bacterial species
+        # representatives, and NCBI RefSeq
         # Targeted Loci 16S bacteria (26k sequences). For each database,
         # the primer-trimmed amplicon lengths were extracted, the 1st and
         # 99th percentiles computed, and the filter bounds set as p1-2
@@ -2304,11 +2304,10 @@ ui <- page_navbar(
                                   "For each primer pair, ", tags$em("in silico"), " PCR was run",
                                   " against four reference databases:"),
                                 tags$ul(class = "small mb-1",
-                                    tags$li("SILVA 138.2 SSURef NR99 (~200k bacterial sequences)"),
+                                    tags$li("SILVA 144 SSU Ref NR99"),
                                     tags$li("A phylogenetically stratified NCBI sample (500 sequences",
                                             " x 10 major phyla = 5,000 total)"),
-                                    tags$li("GTDB r220 bacterial species representatives (66k",
-                                            " full-length sequences)"),
+                                    tags$li("GTDB R11-RS232 bacterial species representatives"),
                                     tags$li("NCBI RefSeq Targeted Loci 16S bacteria (26k sequences)")
                                 ),
                                 p(class = "small mb-0",

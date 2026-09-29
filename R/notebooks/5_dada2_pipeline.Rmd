@@ -673,51 +673,16 @@ trainsets_folder <- here("tools", "trainsets")
 silva_trainset_folder <- here(trainsets_folder, "SILVA")
 gtdb_trainset_folder <- here(trainsets_folder, "GTDB")
 
-# Define database configuration list for SILVA and GTDB
+# Use exact versioned paths so older trainsets left in an existing clone cannot
+# be selected accidentally after the setup script installs the current files.
 database_config <- list(
-  
-  # -------------------------------
-  # SILVA database configuration
-  # -------------------------------
   SILVA = list(
-    
-    # Detect the trainset file (genus-level reference)
-    trainset = list.files(
-      here(silva_trainset_folder),      # Path to SILVA directory (constructed reproducibly)
-      pattern = "genus.*\\.fa(\\.gz)?$", # Regex: match files containing "genus" + .fa or .fa.gz
-      ignore.case = TRUE,               # Case-insensitive matching (e.g., Genus, GENUS)
-      full.names = TRUE                 # Return full file paths instead of just filenames
-    )[1],                                 # Take first match (assumes exactly one correct file)
-    
-    # Detect the species assignment file
-    species = list.files(
-      here(silva_trainset_folder),      # Same SILVA directory
-      pattern = "species.*\\.fa(\\.gz)?$", # Regex: match files containing "species"
-      ignore.case = TRUE,               # Case-insensitive matching
-      full.names = TRUE                 # Return full paths
-    )[1]                                  # Take first match
+    trainset = here(silva_trainset_folder, "silva_nr99_v144_toGenus_trainset.fa.gz"),
+    species = here(silva_trainset_folder, "silva_v144_assignSpecies.fa.gz")
   ),
-  
-  # -------------------------------
-  # GTDB database configuration
-  # -------------------------------
   GTDB = list(
-    
-    # Detect the trainset file (genus-level reference)
-    trainset = list.files(
-      here(gtdb_trainset_folder),       # Path to GTDB directory
-      pattern = "genus.*\\.fa(\\.gz)?$", # Match "genus" FASTA files
-      ignore.case = TRUE,               # Case-insensitive
-      full.names = TRUE                 # Return full paths
-    )[1],                                 # Take first match
-    
-    # Detect the species assignment file
-    species = list.files(
-      here(gtdb_trainset_folder),       # Same GTDB directory
-      pattern = "species.*\\.fa(\\.gz)?$", # Match "species" FASTA files
-      ignore.case = TRUE,               # Case-insensitive
-      full.names = TRUE                 # Return full paths
-    )[1]                                  # Take first match
+    trainset = here(gtdb_trainset_folder, "sbdi-gtdb-sativa.r11rs232-1.1genome.assignTaxonomy.fna.gz"),
+    species = here(gtdb_trainset_folder, "sbdi-gtdb-sativa.r11rs232-1.20genomes.addSpecies.fna.gz")
   )
 )
 
@@ -2383,6 +2348,13 @@ tryCatch({
         taxonomy_assignments <- assignTaxonomy(
             seqs = non_chimeric_table,
             refFasta = trainset_path,
+            # SBDI-GTDB provides Domain through Species; SILVA 144 toGenus
+            # provides Domain through Genus. Name each reference's ranks explicitly.
+            taxLevels = if (identical(db_name, "GTDB")) {
+                c("Domain", "Kingdom", "Phylum", "Class", "Order", "Family", "Genus", "Species")
+            } else {
+                c("Domain", "Kingdom", "Phylum", "Class", "Order", "Family", "Genus")
+            },
             multithread = nr_threads,
             verbose = TRUE,
             tryRC = TRUE,
@@ -2392,6 +2364,16 @@ tryCatch({
         )
 
         cat("\n", db_name, "taxonomy assignment complete.\n")
+
+        # The SBDI-GTDB assignTaxonomy file includes a seventh, classifier-level
+        # Species rank. This workflow uses exact sequence matching in addSpecies()
+        # for species calls, so discard any provisional Species column before
+        # appending the exact-match result. SILVA's toGenus file is unchanged.
+        if ("Species" %in% colnames(taxonomy_assignments)) {
+            taxonomy_assignments <- taxonomy_assignments[
+                , colnames(taxonomy_assignments) != "Species", drop = FALSE
+            ]
+        }
 
         # Species assignment
         cat("\nAssigning species using", db_name, "database...\n\n")

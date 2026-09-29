@@ -3,11 +3,11 @@
 # Purpose:
 #   - Download the DADA2-formatted 16S rRNA gene reference databases for both
 #     bacteria and archaea from two authoritative sources: the Genome Taxonomy
-#     Database (GTDB release r220) and SILVA (version 138.2).
+#     Database (GTDB release R11-RS232) and SILVA (version 144).
 #   - Organise the downloaded files into a consistent directory hierarchy under
 #     tools/trainsets/, with one subfolder per database (GTDB/ and SILVA/).
-#   - Verify each downloaded file is non-empty and, where possible, confirm the
-#     expected file size against the known Zenodo record sizes.
+#   - Verify each downloaded file is non-empty and confirm the expected file
+#     size against the published release metadata.
 #   - Write a human-readable plain-text manifest (download_manifest.txt) inside
 #     each subfolder recording the source URLs, download timestamp, file sizes,
 #     and the exact R path strings that must be used in downstream DADA2
@@ -22,23 +22,23 @@
 #      encodes the full taxonomic lineage (kingdom through genus). The function
 #      trains a naive Bayes classifier on this file and classifies ASVs down to
 #      genus level.
-#      Files used: *_genus.fa.gz (GTDB)  |  *_toGenus_trainset.fa.gz (SILVA)
+#      Files used: *.assignTaxonomy.fna.gz (GTDB) | *_toGenus_trainset.fa.gz (SILVA)
 #
 #   2. addSpecies() — Uses a species-assignment FASTA containing exact-match
 #      reference sequences with genus+species labels. The function attempts to
 #      assign species to ASVs that share 100% identity with a reference sequence.
-#      Files used: *_species.fa.gz (GTDB)  |  *_assignSpecies.fa.gz (SILVA)
+#      Files used: *.addSpecies.fna.gz (GTDB) | *_assignSpecies.fa.gz (SILVA)
 #
 # Database versions downloaded by this script:
-#   GTDB  r220   — Genome Taxonomy Database release 220 formatted for DADA2.
-#                  Contains 46,891 bacterial and 2,812 archaeal 16S rRNA gene
-#                  sequences derived from GTDB-curated genome trees.
-#                  Zenodo record: https://zenodo.org/records/13984843
+#   GTDB R11-RS232-1 — SBDI Sativa-curated GTDB release 232 files formatted
+#                      for DADA2. The recommended one-genome file is used by
+#                      assignTaxonomy(), and the 20-genome file by addSpecies().
+#                      Dataset: https://doi.org/10.17044/scilifelab.14869077
 #
-#   SILVA v138.2 — SILVA small-subunit (SSU) rRNA database version 138.2
-#                  formatted for DADA2. Covers all three domains of life
-#                  (Bacteria, Archaea, Eukarya) with comprehensive curation.
-#                  Zenodo record: https://zenodo.org/records/14169026
+#   SILVA v144 — SILVA small-subunit (SSU) rRNA database version 144 formatted
+#                for DADA2. Covers all three domains of life (Bacteria,
+#                Archaea, Eukarya) with comprehensive curation.
+#                Source: https://www.arb-silva.de/archive/release_144/DADA2/1.36.0/SSU
 #
 # Note on database choice for your analysis:
 #   - Use GTDB if your study focuses on bacterial/archaeal community composition
@@ -56,12 +56,12 @@
 #   └── tools/
 #       └── trainsets/
 #           ├── GTDB/
-#           │   ├── GTDB_bac120_arc53_ssu_r220_genus.fa.gz
-#           │   ├── GTDB_bac120_arc53_ssu_r220_species.fa.gz
+#           │   ├── sbdi-gtdb-sativa.r11rs232-1.1genome.assignTaxonomy.fna.gz
+#           │   ├── sbdi-gtdb-sativa.r11rs232-1.20genomes.addSpecies.fna.gz
 #           │   └── download_manifest.txt
 #           └── SILVA/
-#               ├── silva_nr99_v138.2_toGenus_trainset.fa.gz
-#               ├── silva_v138.2_assignSpecies.fa.gz
+#               ├── silva_nr99_v144_toGenus_trainset.fa.gz
+#               ├── silva_v144_assignSpecies.fa.gz
 #               └── download_manifest.txt
 #
 ################################################################################
@@ -107,9 +107,9 @@ default_download_method <- "auto"
 # ==============================================================================
 # These lists define every file this script will download. Each entry is a
 # named list with:
-#   url         : Direct download URL (Zenodo download=1 link)
+#   url         : Direct download URL from the published source
 #   filename    : Local filename to save as inside the database subfolder
-#   expected_size_bytes : Exact byte size for the fixed Zenodo release
+#   expected_size_bytes : Exact byte size from the published release metadata
 #   description : Human-readable description of the file's role in DADA2
 #   dada2_role  : Either "assignTaxonomy" or "addSpecies" — the DADA2 function
 #                 that uses this file
@@ -119,34 +119,34 @@ default_download_method <- "auto"
 
 gtdb_files <- list(
   list(
-    url         = "https://zenodo.org/records/13984843/files/GTDB_bac120_arc53_ssu_r220_genus.fa.gz?download=1",
-    filename    = "GTDB_bac120_arc53_ssu_r220_genus.fa.gz",
-    expected_size_bytes = 17453606,
-    description = "GTDB r220 — genus-level training set for assignTaxonomy(). Contains full taxonomic lineages from domain to genus for 46,891 bacterial and 2,812 archaeal 16S rRNA sequences.",
+    url         = "https://ndownloader.figshare.com/files/64711203",
+    filename    = "sbdi-gtdb-sativa.r11rs232-1.1genome.assignTaxonomy.fna.gz",
+    expected_size_bytes = 25539319,
+    description = "SBDI-curated GTDB R11-RS232-1 — one-genome-per-species training set recommended for assignTaxonomy().",
     dada2_role  = "assignTaxonomy"
   ),
   list(
-    url         = "https://zenodo.org/records/13984843/files/GTDB_bac120_arc53_ssu_r220_species.fa.gz?download=1",
-    filename    = "GTDB_bac120_arc53_ssu_r220_species.fa.gz",
-    expected_size_bytes = 17443214,
-    description = "GTDB r220 — species-level assignment set for addSpecies(). Contains exact-match reference sequences with genus+species labels for 100%-identity species assignment.",
+    url         = "https://ndownloader.figshare.com/files/64711218",
+    filename    = "sbdi-gtdb-sativa.r11rs232-1.20genomes.addSpecies.fna.gz",
+    expected_size_bytes = 30281149,
+    description = "SBDI-curated GTDB R11-RS232-1 — 20-genome-per-species exact-match set recommended for addSpecies().",
     dada2_role  = "addSpecies"
   )
 )
 
 silva_files <- list(
   list(
-    url         = "https://zenodo.org/records/14169026/files/silva_nr99_v138.2_toGenus_trainset.fa.gz?download=1",
-    filename    = "silva_nr99_v138.2_toGenus_trainset.fa.gz",
-    expected_size_bytes = 139996892,
-    description = "SILVA v138.2 — genus-level training set for assignTaxonomy(). Non-redundant (nr99) sequences from the SILVA SSU database covering Bacteria, Archaea, and Eukarya, annotated down to genus level.",
+    url         = "https://www.arb-silva.de/fileadmin/silva_databases/release_144/DADA2/1.36.0/SSU/silva_nr99_v144_toGenus_trainset.fa.gz",
+    filename    = "silva_nr99_v144_toGenus_trainset.fa.gz",
+    expected_size_bytes = 201077116,
+    description = "SILVA v144 — genus-level training set for assignTaxonomy(). Non-redundant SSU Ref NR99 sequences covering Bacteria, Archaea, and Eukarya.",
     dada2_role  = "assignTaxonomy"
   ),
   list(
-    url         = "https://zenodo.org/records/14169026/files/silva_v138.2_assignSpecies.fa.gz?download=1",
-    filename    = "silva_v138.2_assignSpecies.fa.gz",
-    expected_size_bytes = 69899323,
-    description = "SILVA v138.2 — species-level assignment set for addSpecies(). Contains exact-match reference sequences annotated with genus+species for 100%-identity species assignment.",
+    url         = "https://www.arb-silva.de/fileadmin/silva_databases/release_144/DADA2/1.36.0/SSU/silva_v144_assignSpecies.fa.gz",
+    filename    = "silva_v144_assignSpecies.fa.gz",
+    expected_size_bytes = 148184768,
+    description = "SILVA v144 — species-level exact-match assignment set for addSpecies().",
     dada2_role  = "addSpecies"
   )
 )
@@ -570,15 +570,15 @@ download_database_file <- function(url,
 #           recording everything a future user needs to understand, verify, and
 #           reproduce the installation:
 #             - Which database and version was installed
-#             - The source Zenodo record URL
+#             - The published source record URL
 #             - Each downloaded file: URL, local path, file size, timestamp
 #             - The exact R code to paste into DADA2 notebooks/scripts
 #             - Guidance on which DADA2 function each file feeds
 #
 # Args    : manifest_path  — character scalar, full path for the manifest file.
 #           db_name        — character scalar, database label ("GTDB" or "SILVA").
-#           db_version     — character scalar, version label (e.g., "r220").
-#           zenodo_record  — character scalar, Zenodo record URL.
+#           db_version     — character scalar, version label (e.g., "R11-RS232-1").
+#           source_record  — character scalar, published source record URL.
 #           file_results   — list of named lists returned by download_database_file().
 #           r_var_genus    — character scalar, R variable name for the genus file path.
 #           r_var_species  — character scalar, R variable name for the species file path.
@@ -586,7 +586,7 @@ download_database_file <- function(url,
 write_database_manifest <- function(manifest_path,
                                     db_name,
                                     db_version,
-                                    zenodo_record,
+                                    source_record,
                                     file_results,
                                     r_var_genus,
                                     r_var_species,
@@ -594,10 +594,10 @@ write_database_manifest <- function(manifest_path,
 
   # Identify genus and species file entries by their role indicator
   # (stored in the file definition lists at the top of the script).
-  # We match against the expected filename patterns so the function is robust
-  # even if the order of file_results changes.
-  genus_result   <- Filter(function(x) grepl("genus|toGenus",   x$filename), file_results)[[1]]
-  species_result <- Filter(function(x) grepl("species|assignSpecies", x$filename), file_results)[[1]]
+  # Match the explicit DADA2 role recorded during download so this works for
+  # both SILVA and the SBDI-GTDB naming scheme.
+  genus_result   <- Filter(function(x) identical(x$dada2_role, "assignTaxonomy"), file_results)[[1]]
+  species_result <- Filter(function(x) identical(x$dada2_role, "addSpecies"), file_results)[[1]]
 
   lines <- c(
     # -----------------------------------------------------------------------
@@ -605,7 +605,7 @@ write_database_manifest <- function(manifest_path,
     # -----------------------------------------------------------------------
     paste0(db_name, " REFERENCE DATABASE — DOWNLOAD MANIFEST"),
     paste0("Database version : ", db_version),
-    paste0("Zenodo record    : ", zenodo_record),
+    paste0("Source record   : ", source_record),
     paste0("Script           : download_reference_databases.R"),
     paste0("Manifest written : ", format(Sys.time(), tz = Sys.timezone(), usetz = TRUE)),
     "",
@@ -734,18 +734,18 @@ message_line("  ✓ ", silva_dir)
 
 
 # ==============================================================================
-# Download GTDB r220 reference files
+# Download GTDB R11-RS232-1 reference files
 # ==============================================================================
-# GTDB (Genome Taxonomy Database) release r220 provides a phylogenetically
-# consistent taxonomy derived from concatenated protein trees of archaeal and
-# bacterial genomes. The DADA2-formatted files are hosted on Zenodo record
-# 13984843 and were prepared by the DADA2 community.
+# GTDB (Genome Taxonomy Database) release R11-RS232 provides a phylogenetically
+# consistent taxonomy derived from archaeal and bacterial genome trees. These
+# DADA2-formatted files were curated with Sativa by the Swedish Biodiversity
+# Data Infrastructure and are published on Figshare.
 #
 # Two files are downloaded:
 #   1. Genus-level training FASTA  → used by assignTaxonomy()
 #   2. Species-level FASTA         → used by addSpecies()
-section_header("Downloading GTDB r220 reference files")
-message_line("Source: https://zenodo.org/records/13984843")
+section_header("Downloading GTDB R11-RS232-1 reference files")
+message_line("Source: https://doi.org/10.17044/scilifelab.14869077")
 
 gtdb_results <- list()
 
@@ -767,24 +767,24 @@ for (file_def in gtdb_files) {
     force_download  = force_download,
     expected_size_bytes = file_def$expected_size_bytes
   )
+  result$dada2_role <- file_def$dada2_role
 
   gtdb_results[[length(gtdb_results) + 1L]] <- result
 }
 
 
 # ==============================================================================
-# Download SILVA v138.2 reference files
+# Download SILVA v144 reference files
 # ==============================================================================
-# SILVA (https://www.arb-silva.de/) is the most widely used rRNA reference
-# database. Version 138.2 is the latest SILVA release with DADA2-formatted
-# training files and covers all three domains of life. The DADA2-formatted
-# files are hosted on Zenodo record 14169026.
+# SILVA (https://www.arb-silva.de/) is a widely used rRNA reference database.
+# Version 144 is the current SSU release and SILVA publishes these DADA2 1.36.0
+# training files directly. They cover all three domains of life.
 #
 # Two files are downloaded:
 #   1. Genus-level training FASTA  → used by assignTaxonomy()
 #   2. Species-level FASTA         → used by addSpecies()
-section_header("Downloading SILVA v138.2 reference files")
-message_line("Source: https://zenodo.org/records/14169026")
+section_header("Downloading SILVA v144 reference files")
+message_line("Source: https://www.arb-silva.de/archive/release_144/DADA2/1.36.0/SSU")
 
 silva_results <- list()
 
@@ -802,6 +802,7 @@ for (file_def in silva_files) {
     force_download  = force_download,
     expected_size_bytes = file_def$expected_size_bytes
   )
+  result$dada2_role <- file_def$dada2_role
 
   silva_results[[length(silva_results) + 1L]] <- result
 }
@@ -824,8 +825,8 @@ gtdb_manifest_path <- file.path(gtdb_dir, "download_manifest.txt")
 write_database_manifest(
   manifest_path  = gtdb_manifest_path,
   db_name        = "GTDB",
-  db_version     = "r220 (bac120_arc53_ssu)",
-  zenodo_record  = "https://zenodo.org/records/13984843",
+  db_version     = "R11-RS232-1 (SBDI Sativa curated)",
+  source_record  = "https://doi.org/10.17044/scilifelab.14869077",
   file_results   = gtdb_results,
   r_var_genus    = "gtdb_genus_db",
   r_var_species  = "gtdb_species_db",
@@ -841,8 +842,8 @@ silva_manifest_path <- file.path(silva_dir, "download_manifest.txt")
 write_database_manifest(
   manifest_path  = silva_manifest_path,
   db_name        = "SILVA",
-  db_version     = "v138.2 (nr99)",
-  zenodo_record  = "https://zenodo.org/records/14169026",
+  db_version     = "v144 (SSU Ref NR99)",
+  source_record  = "https://www.arb-silva.de/archive/release_144/DADA2/1.36.0/SSU",
   file_results   = silva_results,
   r_var_genus    = "silva_genus_db",
   r_var_species  = "silva_species_db",
@@ -888,16 +889,16 @@ cat("\n
 # Retrieve the exact local paths from the download results for display.
 # Using the result objects (rather than constructing paths from variables)
 # ensures the printed paths exactly match the files on disk.
-gtdb_genus_result   <- Filter(function(x) grepl("genus",         x$filename), gtdb_results)[[1]]
-gtdb_species_result <- Filter(function(x) grepl("species",       x$filename), gtdb_results)[[1]]
-silva_genus_result  <- Filter(function(x) grepl("toGenus",       x$filename), silva_results)[[1]]
-silva_species_result <- Filter(function(x) grepl("assignSpecies", x$filename), silva_results)[[1]]
+gtdb_genus_result    <- Filter(function(x) identical(x$dada2_role, "assignTaxonomy"), gtdb_results)[[1]]
+gtdb_species_result  <- Filter(function(x) identical(x$dada2_role, "addSpecies"), gtdb_results)[[1]]
+silva_genus_result   <- Filter(function(x) identical(x$dada2_role, "assignTaxonomy"), silva_results)[[1]]
+silva_species_result <- Filter(function(x) identical(x$dada2_role, "addSpecies"), silva_results)[[1]]
 
-message_line("# ── GTDB r220 ───────────────────────────────────────────────────────────────")
+message_line("# ── GTDB R11-RS232-1 ────────────────────────────────────────────────────────")
 message_line('gtdb_genus_db   <- "', gtdb_genus_result$dest_path,    '"')
 message_line('gtdb_species_db <- "', gtdb_species_result$dest_path,  '"')
 message_line("")
-message_line("# ── SILVA v138.2 ─────────────────────────────────────────────────────────────")
+message_line("# ── SILVA v144 ───────────────────────────────────────────────────────────────")
 message_line('silva_genus_db   <- "', silva_genus_result$dest_path,   '"')
 message_line('silva_species_db <- "', silva_species_result$dest_path, '"')
 message_line("")
