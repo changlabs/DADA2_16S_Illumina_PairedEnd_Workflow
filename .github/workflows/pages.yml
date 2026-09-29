@@ -31,7 +31,7 @@ jobs:
           mkdir -p _site/reports
           cp pages/index.html _site/index.html
           cp example/reference_results/reports/*.html _site/reports/
-          test "$(find _site/reports -maxdepth 1 -name '*.html' | wc -l)" -eq 8
+          test "$(find _site/reports -maxdepth 1 -name '*.html' | wc -l)" -eq 9
           touch _site/.nojekyll
 
       - name: Upload GitHub Pages artifact
