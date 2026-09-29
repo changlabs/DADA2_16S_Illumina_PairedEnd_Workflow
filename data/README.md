@@ -16,6 +16,8 @@ A clone-ready test dataset is maintained separately under [`example/`](../exampl
 
 The example contains 20 paired samples (19 longitudinal mouse-feces samples and one defined mock community) from the official DADA2 paired-end tutorial / mothur MiSeq SOP dataset. Filenames use descriptive IDs such as `Mouse-F3-Day-141` and `Mock-Community`; [`example/data/metadata.tsv`](../example/data/metadata.tsv) retains each source code in `OriginalSampleID` and otherwise follows the metadata layout documented below.
 
+An optional [`example/data/cell_count/cell_count.tsv`](../example/data/cell_count/cell_count.tsv) fixture provides synthetic, biologically plausible-scale values for exercising Steps 7 and 8. These are not measurements from the source study and must not be used for biological interpretation. The mock-community value is a computational placeholder because a fecal cell density is not defined for that sample. Run `Rscript example/run_example.R --include-qmp` to use this fixture.
+
 The source tutorial reads were distributed after primer removal. To test this workflow's Step 3, the bundled `fastq.gz` records physically contain a synthetic concrete 515F prefix on every R1 sequence and a synthetic concrete 806R prefix on every R2 sequence. Matching Phred-40 characters were added to the quality strings. The example runner configures the corresponding degenerate 515F/806R definitions, runs Cutadapt, and recovers the original primer-free reads. These added primer bases are a transparent test-fixture transformation, not original sequencer observations.
 
 After installing dependencies and reference databases, run the isolated example from the repository root:

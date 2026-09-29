@@ -137,6 +137,14 @@ After installing dependencies and downloading the taxonomy reference databases, 
 Rscript example/run_example.R
 ```
 
+To also exercise the optional copy-number and microbial-load branch with the bundled, explicitly synthetic cell-count fixture, install PICRUSt2 and run:
+
+``` bash
+Rscript example/run_example.R --include-qmp
+```
+
+The synthetic values are plausible-scale test inputs, not measurements from the tutorial study, and must not be used for biological interpretation.
+
 See the [example guide](example/README.md) for scope, renamed-sample mapping, provenance, and the required Kozich et al. (2013) dataset citation.
 
 ------------------------------------------------------------------------
@@ -378,6 +386,9 @@ DADA2_16S_Illumina_PairedEnd_Workflow/
 │   ├── run_example.R
 │   ├── data/
 │   │   ├── metadata.tsv
+│   │   ├── cell_count/
+│   │   │   ├── README.md
+│   │   │   └── cell_count.tsv
 │   │   └── fastq/
 │   ├── config/
 │   │   └── dada2_filter_parameters.xlsx

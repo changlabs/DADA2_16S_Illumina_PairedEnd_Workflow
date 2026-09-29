@@ -6,8 +6,9 @@ This directory contains a self-contained example profile for the workflow. It is
 
 - `data/fastq/`: 20 paired samples (40 gzip-compressed FASTQ files) with documented synthetic V4 primer prefixes.
 - `data/metadata.tsv`: the repository's normal metadata layout, plus `TimePeriod` and `OriginalSampleID` provenance columns.
+- `data/cell_count/cell_count.tsv`: clearly labelled synthetic microbial loads matched to all 20 samples, for testing the optional QMP branch.
 - `config/dada2_filter_parameters.xlsx`: tutorial-appropriate DADA2 settings (`truncLen = 240/160`, `maxEE = 2/2`, retained amplicon length 250–256 bp).
-- `reference_results/`: curated outputs from Steps 1, 3, 5, and 9, generated with GTDB r220, for inspection without running the workflow.
+- `reference_results/`: curated outputs from the extended Steps 1, 3, 5, 7, 8, and 9 run, for inspection without running the workflow.
 - `run_example.R`: recreates the core results under the ignored `example/run_results/` directory.
 
 Run from the repository root after installing the R dependencies and downloading the reference databases:
@@ -16,11 +17,25 @@ Run from the repository root after installing the R dependencies and downloading
 Rscript example/run_example.R
 ```
 
+To additionally test 16S copy-number correction and microbial-load scaling, install PICRUSt2 and run the opt-in extended mode:
+
+``` bash
+Rscript example/run_example.R --include-qmp
+```
+
+The extended mode runs Steps 7 and 8 between Steps 5 and 9. It is not the default because PICRUSt2 is a separate, comparatively heavy dependency.
+
 The runner uses `DADA2_DATA_DIR`, `DADA2_RESULTS_DIR`, and `DADA2_TAXONOMY_DATABASE` only inside its R process. Normal notebook runs remain unchanged and continue to use `data/`, `results/`, and both taxonomy databases by default.
 
 The official DADA2 tutorial files are already demultiplexed and have had barcodes, adapters, and primers removed. To make the bundled data exercise this workflow's trimming stage, the clone-facing copies have a concrete 515F sequence (`GTGCCAGCAGCCGCGGTAA`) prefixed to every R1 sequence and a concrete 806R sequence (`GGACTACAAGGGTATCTAAT`) prefixed to every R2 sequence. Matching high-quality (`I`, Phred 40) characters were prefixed to the quality strings. Step 3 is configured with the corresponding degenerate 515F/806R definitions and one Cutadapt removal round, so it removes those 5' prefixes and reproduces the original primer-free tutorial reads exactly. Opposite-primer read-through trimming is disabled for this synthetic fixture because no 3' primer sequence was added. This is a transparent test fixture transformation, not original sequencing data at the added primer positions.
 
-Steps 2, 6, 7, and 8 are optional and are not part of the compact reference run. Step 7 additionally needs PICRUSt2, and Step 8 needs independently measured microbial-load values that this dataset does not provide.
+Steps 2 and 6 remain outside the compact example run. Steps 7 and 8 are available through `--include-qmp`, using the synthetic cell-count fixture described below.
+
+## Synthetic microbial loads
+
+The source tutorial dataset does not contain cell counts. Values under [`data/cell_count/`](data/cell_count/) were therefore created only to test the workflow and are not observations from the Kozich et al. study. The 19 mouse-feces values range from `8.4e10` to `1.38e11` cells per gram of wet feces, a plausible conventional-mouse range informed by published murine intestinal/fecal measurements. They include modest day-to-day variation but no imposed early-versus-late trend.
+
+The mock community does not have a biologically meaningful fecal cell density. Its value is explicitly marked `SYNTHETIC_COMPUTATIONAL_PLACEHOLDER` and exists only because Step 8 requires a positive value for every abundance-table sample. Do not use any of these values for biological inference or method validation. See the [cell-count fixture notes](data/cell_count/README.md) for the assumptions and supporting references.
 
 ## Renamed samples
 

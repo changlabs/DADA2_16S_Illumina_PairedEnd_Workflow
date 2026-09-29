@@ -13,6 +13,18 @@ script_path <- normalizePath(sub("^--file=", "", script_argument[[1]]), mustWork
 project_root <- normalizePath(file.path(dirname(script_path), ".."), mustWork = TRUE)
 setwd(project_root)
 
+run_arguments <- commandArgs(trailingOnly = TRUE)
+supported_arguments <- "--include-qmp"
+unknown_arguments <- setdiff(run_arguments, supported_arguments)
+if (length(unknown_arguments)) {
+  stop(
+    "Unknown argument(s): ", paste(unknown_arguments, collapse = ", "), "\n",
+    "Supported optional argument: --include-qmp",
+    call. = FALSE
+  )
+}
+include_qmp <- "--include-qmp" %in% run_arguments
+
 data_root <- file.path(project_root, "example", "data")
 run_results <- file.path(project_root, "example", "run_results")
 reference_results <- file.path(project_root, "example", "reference_results")
@@ -127,10 +139,19 @@ render_step <- function(filename) {
 render_step("1_data_integrity_check.Rmd")
 render_step("3_cutadapt_primer_trimming.Rmd")
 render_step("5_dada2_pipeline.Rmd")
+if (include_qmp) {
+  message(
+    "\nExtended QMP mode requested. The bundled cell counts are synthetic test ",
+    "values and must not be interpreted as measurements from the source study."
+  )
+  render_step("7_copy_number_correction.Rmd")
+  render_step("8_microbial_load_correction.Rmd")
+}
 render_step("9_phyloseq_object.Rmd")
 
 message(
   "\nExample run complete.\n",
+  "Mode: ", if (include_qmp) "core + synthetic-cell-count QMP" else "core", "\n",
   "Generated results: ", run_results, "\n",
   "Bundled reference results: ", reference_results, "\n",
   "Compare the two trees without touching data/fastq or results/."
