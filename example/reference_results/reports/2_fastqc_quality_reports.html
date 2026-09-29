@@ -5402,9 +5402,14 @@ border-radius: 0px;
 
 
 
+<style id="reference-report-link-status">
+.reference-report-note { margin: 1rem auto; max-width: 1200px; padding: .8rem 1rem; border-left: 4px solid #2f6f73; background: #eef7f7; color: #243b3d; font-size: .95rem; }
+.reference-omitted { color: #5f6368; text-decoration: underline dotted; text-underline-offset: 2px; cursor: help; }
+</style>
 </head>
 
 <body>
+<aside class="reference-report-note" role="note"><strong>Compact reference report:</strong> Links remain active for bundled outputs and tracked workflow source files. Dotted labels identify runtime tools or reproducible files intentionally omitted from the compact bundle. Run <code>Rscript example/run_example.R</code> to recreate the complete local output tree under <code>example/run_results/</code>.</aside>
 
 
 <div class="container-fluid main-container">
@@ -5512,12 +5517,12 @@ downstream.</p>
 <p>Before running this notebook, ensure that:</p>
 <ol style="list-style-type: decimal">
 <li>FASTQ files (<code>.fastq</code>, <code>.fq</code>, and their
-gzip-compressed variants) are present in the <a href="../../data/fastq/">data/fastq/</a> input directory</li>
-<li>FastQC is installed in the <a href="../../tools/FastQC/">tools/FastQC/</a> R project directory by
-running the <a href="../../setup/install_required_tools.R">setup/install_required_tools.R</a>
+gzip-compressed variants) are present in the <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/tree/main/example/data/fastq">data/fastq/</a> input directory</li>
+<li>FastQC is installed in the <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">tools/FastQC/</span> R project directory by
+running the <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/setup/install_required_tools.R">setup/install_required_tools.R</a>
 script</li>
-<li>MultiQC is installed in the <a href="../../tools/multiqc/">tools/multiqc/</a> R project directory by
-running the <a href="../../setup/install_required_tools.R">setup/install_required_tools.R</a>
+<li>MultiQC is installed in the <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">tools/multiqc/</span> R project directory by
+running the <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/setup/install_required_tools.R">setup/install_required_tools.R</a>
 script</li>
 <li><strong>Step 1 (Data Integrity Check)</strong> has been completed
 successfully (<strong>optional</strong>)</li>
@@ -5543,7 +5548,7 @@ Excel for documentation</li>
 <div id="expected-input" class="section level2" number="1.4">
 <h2><span class="header-section-number">1.4</span> Expected Input</h2>
 <ul>
-<li><strong>Location</strong>: FASTQ files should be placed in the <a href="../../data/fastq/">data/fastq/</a> directory relative to your <a href="../../">project root</a></li>
+<li><strong>Location</strong>: FASTQ files should be placed in the <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/tree/main/example/data/fastq">data/fastq/</a> directory relative to your <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/tree/main/example">project root</a></li>
 <li><strong>Format</strong>: Standard FASTQ format (4-line records per
 read). <code>.fastq</code>, <code>.fq</code>, and their gzip-compressed
 variants are allowed, case-insensitively.</li>
@@ -5557,10 +5562,10 @@ collision-safe <code>Pair_Key</code> shared by the two mates.</li>
 <div id="expected-output" class="section level2" number="1.5">
 <h2><span class="header-section-number">1.5</span> Expected Output</h2>
 <ul>
-<li>Individual HTML reports for each FASTQ file in <a href="../../results/2_fastqc_quality_reports/FastQC/quality_reports/">results/2_fastqc_quality_reports/FastQC/quality_reports/</a></li>
-<li>A single aggregated MultiQC HTML report (<a href="../../results/2_fastqc_quality_reports/MultiQC/multiqc_report.html">multiqc_report.html</a>)
-in <a href="../../results/2_fastqc_quality_reports/MultiQC/">results/2_fastqc_quality_reports/MultiQC/</a></li>
-<li>Aggregated summary Excel file with basic statistics in <a href="../../results/2_fastqc_quality_reports/FastQC/fastqc_basic_statistics.xlsx">results/2_fastqc_quality_reports/FastQC/fastqc_basic_statistics.xlsx</a></li>
+<li>Individual HTML reports for each FASTQ file in <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">results/2_fastqc_quality_reports/FastQC/quality_reports/</span></li>
+<li>A single aggregated MultiQC HTML report (<a href="../2_fastqc_quality_reports/MultiQC/multiqc_report.html">multiqc_report.html</a>)
+in <a href="../2_fastqc_quality_reports/MultiQC">results/2_fastqc_quality_reports/MultiQC/</a></li>
+<li>Aggregated summary Excel file with basic statistics in <a href="../2_fastqc_quality_reports/FastQC/fastqc_basic_statistics.xlsx">results/2_fastqc_quality_reports/FastQC/fastqc_basic_statistics.xlsx</a></li>
 <li>Interactive summary tables in this notebook</li>
 </ul>
 </div>
@@ -5643,7 +5648,7 @@ Packages</h2>
 including <a href="https://cran.r-project.org/web/packages/fastqcr/readme/README.html">fastqcr</a>
 for parsing FastQC archives and <code>data.table</code>/<code>DT</code>
 for building and displaying the results tables below – plus the shared
-Excel, column-dictionary, and output-link helpers sourced from <a href="../functions">R/functions/</a>.</p>
+Excel, column-dictionary, and output-link helpers sourced from <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/tree/main/R/functions">R/functions/</a>.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># data.table: High-performance data manipulation</span></span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="co"># Provides fast operations for handling large QC result tables</span></span>
 <span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
@@ -5714,7 +5719,7 @@ Excel, column-dictionary, and output-link helpers sourced from <a href="../funct
 <h2><span class="header-section-number">3.1</span> Define Path
 Parameters</h2>
 <p>Set up the input and output directory paths. Using
-<code>here()</code> ensures paths are relative to the <a href="../../">project root</a>, making the script portable across
+<code>here()</code> ensures paths are relative to the <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/tree/main/example">project root</a>, making the script portable across
 different systems.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># Input folder containing raw FASTQ files to be analyzed</span></span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co"># This should be the same directory used in Step 1 (Data Integrity Check)</span></span>
@@ -5811,13 +5816,13 @@ executables installed via the Prerequisites step above.</p>
 <span id="cb3-55"><a href="#cb3-55" tabindex="-1"></a>    <span class="st">&quot;- FastQC path:&quot;</span>, fastqc_path, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
 <span id="cb3-56"><a href="#cb3-56" tabindex="-1"></a>    <span class="st">&quot;- MultiQC path:&quot;</span>, multiqc_path, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
 <pre><code>## FastQC / MultiQC Configuration:
-##  - Input folder: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/data/fastq
-##  - FastQC output folder: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/run_results/2_fastqc_quality_reports/FastQC/quality_reports
-##  - MultiQC output folder: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/run_results/2_fastqc_quality_reports/MultiQC
+##  - Input folder: PROJECT_ROOT/example/data/fastq
+##  - FastQC output folder: PROJECT_ROOT/example/run_results/2_fastqc_quality_reports/FastQC/quality_reports
+##  - MultiQC output folder: PROJECT_ROOT/example/run_results/2_fastqc_quality_reports/MultiQC
 ##  - Available CPU cores: 1
 ##  - Threads for FastQC: 1
-##  - FastQC path: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/tools/FastQC/fastqc
-##  - MultiQC path: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/tools/multiqc/venv/bin/multiqc</code></pre>
+##  - FastQC path: PROJECT_ROOT/tools/FastQC/fastqc
+##  - MultiQC path: PROJECT_ROOT/tools/multiqc/venv/bin/multiqc</code></pre>
 <hr />
 </div>
 </div>
@@ -5833,7 +5838,7 @@ Directory</h1>
 <span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>} <span class="cf">else</span> {</span>
 <span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;Using existing results directory:&quot;</span>, results_folder, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
 <span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>}</span></code></pre></div>
-<pre><code>## Using existing results directory: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/run_results</code></pre>
+<pre><code>## Using existing results directory: PROJECT_ROOT/example/run_results</code></pre>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># Create the FastQC-specific output folder</span></span>
 <span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co"># recurse = TRUE allows creation of nested directories</span></span>
 <span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">dir_exists</span>(output_folder)) {</span>
@@ -5843,7 +5848,7 @@ Directory</h1>
 <span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;Using existing FastQC output directory:&quot;</span>, output_folder, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
 <span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>      <span class="st">&quot;  Note: Existing reports may be overwritten.</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
 <span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>}</span></code></pre></div>
-<pre><code>## Using existing FastQC output directory: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/run_results/2_fastqc_quality_reports/FastQC/quality_reports
+<pre><code>## Using existing FastQC output directory: PROJECT_ROOT/example/run_results/2_fastqc_quality_reports/FastQC/quality_reports
 ##    Note: Existing reports may be overwritten.</code></pre>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># Create the MultiQC-specific output folder</span></span>
 <span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">dir_exists</span>(multiqc_output_folder)) {</span>
@@ -5853,7 +5858,7 @@ Directory</h1>
 <span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;Using existing MultiQC output directory:&quot;</span>, multiqc_output_folder, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
 <span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>      <span class="st">&quot;  Note: Existing report may be overwritten.</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
 <span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>}</span></code></pre></div>
-<pre><code>## Using existing MultiQC output directory: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/run_results/2_fastqc_quality_reports/MultiQC
+<pre><code>## Using existing MultiQC output directory: PROJECT_ROOT/example/run_results/2_fastqc_quality_reports/MultiQC
 ##    Note: Existing report may be overwritten.</code></pre>
 <hr />
 </div>
@@ -5887,7 +5892,7 @@ Files</h2>
 <span id="cb11-22"><a href="#cb11-22" tabindex="-1"></a>)</span></code></pre></div>
 <pre><code>## File discovery summary:
 ##  - FASTQ files found: 40
-##  - Input directory: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/data/fastq</code></pre>
+##  - Input directory: PROJECT_ROOT/example/data/fastq</code></pre>
 </div>
 <div id="file-inventory" class="section level2" number="5.2">
 <h2><span class="header-section-number">5.2</span> Create File
@@ -5985,7 +5990,7 @@ displayed during execution!</p>
 <pre><code>## Running FastQC analysis:
 ##  - Files to process: 40
 ##  - Parallel threads: 1
-##  - Output directory: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/run_results/2_fastqc_quality_reports/FastQC/quality_reports</code></pre>
+##  - Output directory: PROJECT_ROOT/example/run_results/2_fastqc_quality_reports/FastQC/quality_reports</code></pre>
 <pre><code>##
 ## Elapsed time: 0.65 minutes
 ##  FastQC analysis complete.</code></pre>
@@ -6019,7 +6024,7 @@ Reports</h2>
 <pre><code>## Report generation summary:
 ##  - HTML reports generated: 40
 ##  - ZIP archives generated: 40
-##  - Output location: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/run_results/2_fastqc_quality_reports/FastQC/quality_reports</code></pre>
+##  - Output location: PROJECT_ROOT/example/run_results/2_fastqc_quality_reports/FastQC/quality_reports</code></pre>
 </div>
 <div id="run-multiqc" class="section level2" number="6.3">
 <h2><span class="header-section-number">6.3</span> Run MultiQC</h2>
@@ -6069,9 +6074,9 @@ place.</p>
 <pre><code>##
 ## MultiQC report generated.
 ##    Elapsed time: 3.3 seconds
-##    Report: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/run_results/2_fastqc_quality_reports/MultiQC/multiqc_report.html</code></pre>
+##    Report: PROJECT_ROOT/example/run_results/2_fastqc_quality_reports/MultiQC/multiqc_report.html</code></pre>
 <ul>
-<li><a href="../../example/run_results/2_fastqc_quality_reports/MultiQC/multiqc_report.html">MultiQC
+<li><a href="../2_fastqc_quality_reports/MultiQC/multiqc_report.html">MultiQC
 aggregated report (HTML):
 example/run_results/2_fastqc_quality_reports/MultiQC/multiqc_report.html</a></li>
 </ul>
@@ -6331,9 +6336,9 @@ Statistics</h2>
 <span id="cb26-19"><a href="#cb26-19" tabindex="-1"></a>  <span class="at">rownames =</span> <span class="cn">FALSE</span>,</span>
 <span id="cb26-20"><a href="#cb26-20" tabindex="-1"></a>  <span class="at">overwrite =</span> <span class="cn">TRUE</span></span>
 <span id="cb26-21"><a href="#cb26-21" tabindex="-1"></a>)</span></code></pre></div>
-<pre><code>## Sheet FastQC_Basic_Statistics added successfully to the workbook: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/run_results/2_fastqc_quality_reports/FastQC/fastqc_basic_statistics.xlsx</code></pre>
+<pre><code>## Sheet FastQC_Basic_Statistics added successfully to the workbook: PROJECT_ROOT/example/run_results/2_fastqc_quality_reports/FastQC/fastqc_basic_statistics.xlsx</code></pre>
 <pre><code>## Basic statistics exported to:
-##    File: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/run_results/2_fastqc_quality_reports/FastQC/fastqc_basic_statistics.xlsx
+##    File: PROJECT_ROOT/example/run_results/2_fastqc_quality_reports/FastQC/fastqc_basic_statistics.xlsx
 ##    Sheet: FastQC_Basic_Statistics</code></pre>
 </div>
 <div id="column-dictionary" class="section level2" number="8.3">
@@ -6344,7 +6349,7 @@ written to <code>output_excel_path</code>, so the workbook documents its
 own columns without a hand-maintained description list that can drift
 out of sync with the real exported data.</p>
 <ul>
-<li><a href="../../example/run_results/2_fastqc_quality_reports/FastQC/fastqc_basic_statistics.xlsx">FastQC
+<li><a href="../2_fastqc_quality_reports/FastQC/fastqc_basic_statistics.xlsx">FastQC
 basic statistics report (Excel workbook):
 example/run_results/2_fastqc_quality_reports/FastQC/fastqc_basic_statistics.xlsx</a></li>
 </ul>
@@ -6365,8 +6370,8 @@ output.</p>
 <div id="report-links" class="section level2" number="8.5">
 <h2><span class="header-section-number">8.5</span> HTML Report
 Links</h2>
-<p>The following FastQC HTML reports are available in the <a href="../../results/2_fastqc_quality_reports/FastQC/quality_reports/">FastQC
-reports folder</a>, arranged in a table with each sample’s forward
+<p>The following FastQC HTML reports are available in the <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">FastQC
+reports folder</span>, arranged in a table with each sample’s forward
 report on the left and its reverse report on the right.</p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a><span class="co"># Extract the same collision-safe SampleID, Pair_Key, and terminal direction</span></span>
 <span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a><span class="co"># used by the Basic Statistics table, so biological identifiers containing</span></span>
@@ -6466,80 +6471,80 @@ report on the left and its reverse report on the right.</p>
 <h1><span class="header-section-number">9</span> Output File
 Summary</h1>
 <p>The tree below lists every file this notebook has written to its own
-output folder, <a href="../../results/2_fastqc_quality_reports/">results/2_fastqc_quality_reports/</a>,
+output folder, <a href="../2_fastqc_quality_reports">results/2_fastqc_quality_reports/</a>,
 as a clickable, portable link (relative to this notebook’s own location)
 with a short description – built live from what is actually on disk at
-knit time via the project’s shared <a href="../functions/render_output_tree_function.R">render_output_tree_function.R</a>
+knit time via the project’s shared <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/functions/render_output_tree_function.R">render_output_tree_function.R</a>
 helper, so it always matches this run’s real output rather than a
 hand-maintained list.</p>
 <pre>
 example/run_results/2_fastqc_quality_reports/
-├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/">FastQC/</a>                           # FastQC HTML reports (in quality_reports/) plus the summary workbook (folder)
-│   ├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/fastqc_basic_statistics.xlsx">fastqc_basic_statistics.xlsx</a>  # FastQC basic statistics (Excel workbook)
-│   └── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/">quality_reports/</a>              # Individual per-sample FastQC HTML reports, one pair per sample (folder)
-│       ├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mock-Community_S280_L001_R1_001_fastqc.html">Mock-Community_S280_L001_R1_001_fastqc.html</a>
-│       ├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mock-Community_S280_L001_R2_001_fastqc.html">Mock-Community_S280_L001_R2_001_fastqc.html</a>
-│       ├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-000_S188_L001_R1_001_fastqc.html">Mouse-F3-Day-000_S188_L001_R1_001_fastqc.html</a>
-│       ├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-000_S188_L001_R2_001_fastqc.html">Mouse-F3-Day-000_S188_L001_R2_001_fastqc.html</a>
-│       ├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-001_S189_L001_R1_001_fastqc.html">Mouse-F3-Day-001_S189_L001_R1_001_fastqc.html</a>
-│       ├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-001_S189_L001_R2_001_fastqc.html">Mouse-F3-Day-001_S189_L001_R2_001_fastqc.html</a>
-│       ├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-002_S190_L001_R1_001_fastqc.html">Mouse-F3-Day-002_S190_L001_R1_001_fastqc.html</a>
-│       ├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-002_S190_L001_R2_001_fastqc.html">Mouse-F3-Day-002_S190_L001_R2_001_fastqc.html</a>
-│       ├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-003_S191_L001_R1_001_fastqc.html">Mouse-F3-Day-003_S191_L001_R1_001_fastqc.html</a>
-│       ├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-003_S191_L001_R2_001_fastqc.html">Mouse-F3-Day-003_S191_L001_R2_001_fastqc.html</a>
-│       ├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-005_S193_L001_R1_001_fastqc.html">Mouse-F3-Day-005_S193_L001_R1_001_fastqc.html</a>
-│       ├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-005_S193_L001_R2_001_fastqc.html">Mouse-F3-Day-005_S193_L001_R2_001_fastqc.html</a>
-│       ├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-006_S194_L001_R1_001_fastqc.html">Mouse-F3-Day-006_S194_L001_R1_001_fastqc.html</a>
-│       ├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-006_S194_L001_R2_001_fastqc.html">Mouse-F3-Day-006_S194_L001_R2_001_fastqc.html</a>
-│       ├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-007_S195_L001_R1_001_fastqc.html">Mouse-F3-Day-007_S195_L001_R1_001_fastqc.html</a>
-│       ├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-007_S195_L001_R2_001_fastqc.html">Mouse-F3-Day-007_S195_L001_R2_001_fastqc.html</a>
-│       ├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-008_S196_L001_R1_001_fastqc.html">Mouse-F3-Day-008_S196_L001_R1_001_fastqc.html</a>
-│       ├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-008_S196_L001_R2_001_fastqc.html">Mouse-F3-Day-008_S196_L001_R2_001_fastqc.html</a>
-│       ├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-009_S197_L001_R1_001_fastqc.html">Mouse-F3-Day-009_S197_L001_R1_001_fastqc.html</a>
-│       ├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-009_S197_L001_R2_001_fastqc.html">Mouse-F3-Day-009_S197_L001_R2_001_fastqc.html</a>
-│       ├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-141_S207_L001_R1_001_fastqc.html">Mouse-F3-Day-141_S207_L001_R1_001_fastqc.html</a>
-│       ├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-141_S207_L001_R2_001_fastqc.html">Mouse-F3-Day-141_S207_L001_R2_001_fastqc.html</a>
-│       ├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-142_S208_L001_R1_001_fastqc.html">Mouse-F3-Day-142_S208_L001_R1_001_fastqc.html</a>
-│       ├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-142_S208_L001_R2_001_fastqc.html">Mouse-F3-Day-142_S208_L001_R2_001_fastqc.html</a>
-│       ├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-143_S209_L001_R1_001_fastqc.html">Mouse-F3-Day-143_S209_L001_R1_001_fastqc.html</a>
-│       ├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-143_S209_L001_R2_001_fastqc.html">Mouse-F3-Day-143_S209_L001_R2_001_fastqc.html</a>
-│       ├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-144_S210_L001_R1_001_fastqc.html">Mouse-F3-Day-144_S210_L001_R1_001_fastqc.html</a>
-│       ├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-144_S210_L001_R2_001_fastqc.html">Mouse-F3-Day-144_S210_L001_R2_001_fastqc.html</a>
-│       ├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-145_S211_L001_R1_001_fastqc.html">Mouse-F3-Day-145_S211_L001_R1_001_fastqc.html</a>
-│       ├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-145_S211_L001_R2_001_fastqc.html">Mouse-F3-Day-145_S211_L001_R2_001_fastqc.html</a>
-│       ├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-146_S212_L001_R1_001_fastqc.html">Mouse-F3-Day-146_S212_L001_R1_001_fastqc.html</a>
-│       ├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-146_S212_L001_R2_001_fastqc.html">Mouse-F3-Day-146_S212_L001_R2_001_fastqc.html</a>
-│       ├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-147_S213_L001_R1_001_fastqc.html">Mouse-F3-Day-147_S213_L001_R1_001_fastqc.html</a>
-│       ├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-147_S213_L001_R2_001_fastqc.html">Mouse-F3-Day-147_S213_L001_R2_001_fastqc.html</a>
-│       ├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-148_S214_L001_R1_001_fastqc.html">Mouse-F3-Day-148_S214_L001_R1_001_fastqc.html</a>
-│       ├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-148_S214_L001_R2_001_fastqc.html">Mouse-F3-Day-148_S214_L001_R2_001_fastqc.html</a>
-│       ├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-149_S215_L001_R1_001_fastqc.html">Mouse-F3-Day-149_S215_L001_R1_001_fastqc.html</a>
-│       ├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-149_S215_L001_R2_001_fastqc.html">Mouse-F3-Day-149_S215_L001_R2_001_fastqc.html</a>
-│       ├── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-150_S216_L001_R1_001_fastqc.html">Mouse-F3-Day-150_S216_L001_R1_001_fastqc.html</a>
-│       └── <a href="../../example/run_results/2_fastqc_quality_reports/FastQC/quality_reports/Mouse-F3-Day-150_S216_L001_R2_001_fastqc.html">Mouse-F3-Day-150_S216_L001_R2_001_fastqc.html</a>
-└── <a href="../../example/run_results/2_fastqc_quality_reports/MultiQC/">MultiQC/</a>                          # MultiQC aggregated report across all samples (folder)
-    ├── <a href="../../example/run_results/2_fastqc_quality_reports/MultiQC/multiqc_report_data/">multiqc_report_data/</a>
-    │   ├── <a href="../../example/run_results/2_fastqc_quality_reports/MultiQC/multiqc_report_data/fastqc_overrepresented_sequences_plot.txt">fastqc_overrepresented_sequences_plot.txt</a>
-    │   ├── <a href="../../example/run_results/2_fastqc_quality_reports/MultiQC/multiqc_report_data/fastqc_per_base_n_content_plot.txt">fastqc_per_base_n_content_plot.txt</a>
-    │   ├── <a href="../../example/run_results/2_fastqc_quality_reports/MultiQC/multiqc_report_data/fastqc_per_base_sequence_quality_plot.txt">fastqc_per_base_sequence_quality_plot.txt</a>
-    │   ├── <a href="../../example/run_results/2_fastqc_quality_reports/MultiQC/multiqc_report_data/fastqc_per_sequence_gc_content_plot_Counts.txt">fastqc_per_sequence_gc_content_plot_Counts.txt</a>
-    │   ├── <a href="../../example/run_results/2_fastqc_quality_reports/MultiQC/multiqc_report_data/fastqc_per_sequence_gc_content_plot_Percentages.txt">fastqc_per_sequence_gc_content_plot_Percentages.txt</a>
-    │   ├── <a href="../../example/run_results/2_fastqc_quality_reports/MultiQC/multiqc_report_data/fastqc_per_sequence_quality_scores_plot.txt">fastqc_per_sequence_quality_scores_plot.txt</a>
-    │   ├── <a href="../../example/run_results/2_fastqc_quality_reports/MultiQC/multiqc_report_data/fastqc_sequence_counts_plot.txt">fastqc_sequence_counts_plot.txt</a>
-    │   ├── <a href="../../example/run_results/2_fastqc_quality_reports/MultiQC/multiqc_report_data/fastqc_sequence_duplication_levels_plot.txt">fastqc_sequence_duplication_levels_plot.txt</a>
-    │   ├── <a href="../../example/run_results/2_fastqc_quality_reports/MultiQC/multiqc_report_data/fastqc_sequence_length_distribution_plot.txt">fastqc_sequence_length_distribution_plot.txt</a>
-    │   ├── <a href="../../example/run_results/2_fastqc_quality_reports/MultiQC/multiqc_report_data/fastqc_top_overrepresented_sequences_table.txt">fastqc_top_overrepresented_sequences_table.txt</a>
-    │   ├── <a href="../../example/run_results/2_fastqc_quality_reports/MultiQC/multiqc_report_data/fastqc-status-check-heatmap.txt">fastqc-status-check-heatmap.txt</a>
-    │   ├── <a href="../../example/run_results/2_fastqc_quality_reports/MultiQC/multiqc_report_data/llms-full.txt">llms-full.txt</a>
-    │   ├── <a href="../../example/run_results/2_fastqc_quality_reports/MultiQC/multiqc_report_data/multiqc_citations.txt">multiqc_citations.txt</a>
-    │   ├── <a href="../../example/run_results/2_fastqc_quality_reports/MultiQC/multiqc_report_data/multiqc_data.json">multiqc_data.json</a>
-    │   ├── <a href="../../example/run_results/2_fastqc_quality_reports/MultiQC/multiqc_report_data/multiqc_fastqc.txt">multiqc_fastqc.txt</a>
-    │   ├── <a href="../../example/run_results/2_fastqc_quality_reports/MultiQC/multiqc_report_data/multiqc_general_stats.txt">multiqc_general_stats.txt</a>
-    │   ├── <a href="../../example/run_results/2_fastqc_quality_reports/MultiQC/multiqc_report_data/multiqc_software_versions.txt">multiqc_software_versions.txt</a>
-    │   ├── <a href="../../example/run_results/2_fastqc_quality_reports/MultiQC/multiqc_report_data/multiqc_sources.txt">multiqc_sources.txt</a>
-    │   ├── <a href="../../example/run_results/2_fastqc_quality_reports/MultiQC/multiqc_report_data/multiqc.log">multiqc.log</a>
-    │   └── <a href="../../example/run_results/2_fastqc_quality_reports/MultiQC/multiqc_report_data/multiqc.parquet">multiqc.parquet</a>
-    └── <a href="../../example/run_results/2_fastqc_quality_reports/MultiQC/multiqc_report.html">multiqc_report.html</a>
+├── <a href="../2_fastqc_quality_reports/FastQC">FastQC/</a>                           # FastQC HTML reports (in quality_reports/) plus the summary workbook (folder)
+│   ├── <a href="../2_fastqc_quality_reports/FastQC/fastqc_basic_statistics.xlsx">fastqc_basic_statistics.xlsx</a>  # FastQC basic statistics (Excel workbook)
+│   └── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">quality_reports/</span>              # Individual per-sample FastQC HTML reports, one pair per sample (folder)
+│       ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mock-Community_S280_L001_R1_001_fastqc.html</span>
+│       ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mock-Community_S280_L001_R2_001_fastqc.html</span>
+│       ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-000_S188_L001_R1_001_fastqc.html</span>
+│       ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-000_S188_L001_R2_001_fastqc.html</span>
+│       ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-001_S189_L001_R1_001_fastqc.html</span>
+│       ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-001_S189_L001_R2_001_fastqc.html</span>
+│       ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-002_S190_L001_R1_001_fastqc.html</span>
+│       ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-002_S190_L001_R2_001_fastqc.html</span>
+│       ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-003_S191_L001_R1_001_fastqc.html</span>
+│       ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-003_S191_L001_R2_001_fastqc.html</span>
+│       ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-005_S193_L001_R1_001_fastqc.html</span>
+│       ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-005_S193_L001_R2_001_fastqc.html</span>
+│       ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-006_S194_L001_R1_001_fastqc.html</span>
+│       ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-006_S194_L001_R2_001_fastqc.html</span>
+│       ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-007_S195_L001_R1_001_fastqc.html</span>
+│       ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-007_S195_L001_R2_001_fastqc.html</span>
+│       ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-008_S196_L001_R1_001_fastqc.html</span>
+│       ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-008_S196_L001_R2_001_fastqc.html</span>
+│       ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-009_S197_L001_R1_001_fastqc.html</span>
+│       ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-009_S197_L001_R2_001_fastqc.html</span>
+│       ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-141_S207_L001_R1_001_fastqc.html</span>
+│       ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-141_S207_L001_R2_001_fastqc.html</span>
+│       ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-142_S208_L001_R1_001_fastqc.html</span>
+│       ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-142_S208_L001_R2_001_fastqc.html</span>
+│       ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-143_S209_L001_R1_001_fastqc.html</span>
+│       ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-143_S209_L001_R2_001_fastqc.html</span>
+│       ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-144_S210_L001_R1_001_fastqc.html</span>
+│       ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-144_S210_L001_R2_001_fastqc.html</span>
+│       ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-145_S211_L001_R1_001_fastqc.html</span>
+│       ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-145_S211_L001_R2_001_fastqc.html</span>
+│       ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-146_S212_L001_R1_001_fastqc.html</span>
+│       ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-146_S212_L001_R2_001_fastqc.html</span>
+│       ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-147_S213_L001_R1_001_fastqc.html</span>
+│       ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-147_S213_L001_R2_001_fastqc.html</span>
+│       ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-148_S214_L001_R1_001_fastqc.html</span>
+│       ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-148_S214_L001_R2_001_fastqc.html</span>
+│       ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-149_S215_L001_R1_001_fastqc.html</span>
+│       ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-149_S215_L001_R2_001_fastqc.html</span>
+│       ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-150_S216_L001_R1_001_fastqc.html</span>
+│       └── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-150_S216_L001_R2_001_fastqc.html</span>
+└── <a href="../2_fastqc_quality_reports/MultiQC">MultiQC/</a>                          # MultiQC aggregated report across all samples (folder)
+    ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">multiqc_report_data/</span>
+    │   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">fastqc_overrepresented_sequences_plot.txt</span>
+    │   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">fastqc_per_base_n_content_plot.txt</span>
+    │   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">fastqc_per_base_sequence_quality_plot.txt</span>
+    │   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">fastqc_per_sequence_gc_content_plot_Counts.txt</span>
+    │   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">fastqc_per_sequence_gc_content_plot_Percentages.txt</span>
+    │   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">fastqc_per_sequence_quality_scores_plot.txt</span>
+    │   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">fastqc_sequence_counts_plot.txt</span>
+    │   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">fastqc_sequence_duplication_levels_plot.txt</span>
+    │   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">fastqc_sequence_length_distribution_plot.txt</span>
+    │   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">fastqc_top_overrepresented_sequences_table.txt</span>
+    │   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">fastqc-status-check-heatmap.txt</span>
+    │   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">llms-full.txt</span>
+    │   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">multiqc_citations.txt</span>
+    │   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">multiqc_data.json</span>
+    │   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">multiqc_fastqc.txt</span>
+    │   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">multiqc_general_stats.txt</span>
+    │   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">multiqc_software_versions.txt</span>
+    │   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">multiqc_sources.txt</span>
+    │   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">multiqc.log</span>
+    │   └── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">multiqc.parquet</span>
+    └── <a href="../2_fastqc_quality_reports/MultiQC/multiqc_report.html">multiqc_report.html</a>
 </pre>
 <hr />
 </div>
@@ -6549,7 +6554,7 @@ Step</h1>
 <p>The FastQC and MultiQC reports above are diagnostic only – nothing
 downstream reads them programmatically – so once you have reviewed them
 (paying particular attention to per-base quality, adapter content, and
-any sample that stands out from the rest), proceed to <a href="3_cutadapt_primer_trimming.md">Step 3 — Cutadapt Primer
+any sample that stands out from the rest), proceed to <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/3_cutadapt_primer_trimming.md">Step 3 — Cutadapt Primer
 Trimming</a>, which lists this notebook as an optional but recommended
 prerequisite. Reviewing quality here first lets you set informed
 trimming parameters in Step 3 and gives you a pre-trimming baseline to
@@ -6644,10 +6649,10 @@ notebook.</li>
 <div id="related" class="section level2" number="12.2">
 <h2><span class="header-section-number">12.2</span> Related</h2>
 <ul>
-<li><a href="1_data_integrity_check.md">Step 1 — Data Integrity
+<li><a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/1_data_integrity_check.md">Step 1 — Data Integrity
 Check</a> — optional prerequisite; confirms FASTQ file integrity before
 quality is assessed here.</li>
-<li><a href="3_cutadapt_primer_trimming.md">Step 3 — Cutadapt Primer
+<li><a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/3_cutadapt_primer_trimming.md">Step 3 — Cutadapt Primer
 Trimming</a> — this notebook’s recommended next step.</li>
 </ul>
 <hr />

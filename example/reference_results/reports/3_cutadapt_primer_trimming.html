@@ -5402,9 +5402,14 @@ border-radius: 0px;
 
 
 
+<style id="reference-report-link-status">
+.reference-report-note { margin: 1rem auto; max-width: 1200px; padding: .8rem 1rem; border-left: 4px solid #2f6f73; background: #eef7f7; color: #243b3d; font-size: .95rem; }
+.reference-omitted { color: #5f6368; text-decoration: underline dotted; text-underline-offset: 2px; cursor: help; }
+</style>
 </head>
 
 <body>
+<aside class="reference-report-note" role="note"><strong>Compact reference report:</strong> Links remain active for bundled outputs and tracked workflow source files. Dotted labels identify runtime tools or reproducible files intentionally omitted from the compact bundle. Run <code>Rscript example/run_example.R</code> to recreate the complete local output tree under <code>example/run_results/</code>.</aside>
 
 
 <div class="container-fluid main-container">
@@ -5509,7 +5514,7 @@ widely-used tool for finding and removing adapter sequences, primers,
 and other unwanted sequences from high-throughput sequencing reads. It
 produces a detailed, auditable account of primer content before and
 after trimming. Length filtering, N-filtering, and quality filtering are
-handled downstream in the <a href="5_dada2_pipeline.md">DADA2 pipeline
+handled downstream in the <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/5_dada2_pipeline.md">DADA2 pipeline
 (Step 5)</a>.</p>
 <p>Primer sequences must be removed before downstream analysis
 because:</p>
@@ -5530,14 +5535,14 @@ interfere with database matching</li>
 <p>Before running this notebook, ensure that:</p>
 <ol style="list-style-type: decimal">
 <li>FASTQ files (<code>.fastq</code>, <code>.fq</code>, and their
-gzip-compressed variants, case-insensitively) are present in the <a href="../../data/fastq/">data/fastq/</a> directory</li>
-<li><strong>Cutadapt</strong> is installed in the <a href="../../tools/cutadapt/">tools/cutadapt/</a> R project directory by
-running the <a href="../../setup/install_required_tools.R">setup/install_required_tools.R</a>
+gzip-compressed variants, case-insensitively) are present in the <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/tree/main/example/data/fastq">data/fastq/</a> directory</li>
+<li><strong>Cutadapt</strong> is installed in the <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">tools/cutadapt/</span> R project directory by
+running the <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/setup/install_required_tools.R">setup/install_required_tools.R</a>
 script</li>
-<li><strong><a href="1_data_integrity_check.md">Step 1 (Data Integrity
+<li><strong><a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/1_data_integrity_check.md">Step 1 (Data Integrity
 Check)</a></strong> has been completed successfully
 (<strong>optional</strong>)</li>
-<li><strong><a href="2_fastqc_quality_reports.md">Step 2 (FastQC Quality
+<li><strong><a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/2_fastqc_quality_reports.md">Step 2 (FastQC Quality
 Reports)</a></strong> has been completed successfully
 (<strong>optional</strong>)</li>
 </ol>
@@ -5561,13 +5566,13 @@ Excel workbook</li>
 </ol>
 <p>This notebook does <strong>primer trimming only</strong>. Length
 filtering (removing reads shorter than 100 bp), N-filtering, and quality
-filtering are all handled downstream in the <a href="5_dada2_pipeline.md">DADA2 pipeline (Step 5)</a>, where the read
+filtering are all handled downstream in the <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/5_dada2_pipeline.md">DADA2 pipeline (Step 5)</a>, where the read
 losses at each stage are tracked together.</p>
 </div>
 <div id="expected-input" class="section level2" number="1.4">
 <h2><span class="header-section-number">1.4</span> Expected Input</h2>
 <ul>
-<li><strong>Location</strong>: FASTQ files should be placed in the <a href="../../data/fastq/">data/fastq/</a> directory relative to your <a href="../../">project root</a></li>
+<li><strong>Location</strong>: FASTQ files should be placed in the <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/tree/main/example/data/fastq">data/fastq/</a> directory relative to your <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/tree/main/example">project root</a></li>
 <li><strong>Naming Convention</strong>: Paired files must follow a
 consistent naming pattern, for example:
 <ul>
@@ -5589,16 +5594,16 @@ read)</li>
 <div id="expected-output" class="section level2" number="1.5">
 <h2><span class="header-section-number">1.5</span> Expected Output</h2>
 <ul>
-<li>Primer-trimmed reads in <a href="../../results/3_cutadapt_primer_trimming/primer_trimmed_reads/">results/3_cutadapt_primer_trimming/primer_trimmed_reads/</a>
-(input to the <a href="4_dada2_parameter_selection.md">Step 4</a> and <a href="5_dada2_pipeline.md">Step 5</a>)</li>
-<li>Cutadapt log files for each sample in <a href="../../results/3_cutadapt_primer_trimming/cutadapt_logs/">results/3_cutadapt_primer_trimming/cutadapt_logs/</a></li>
-<li>Summary Excel file (<a href="../../results/3_cutadapt_primer_trimming/primer_trimming_summary.xlsx">primer_trimming_summary.xlsx</a>)
+<li>Primer-trimmed reads in <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">results/3_cutadapt_primer_trimming/primer_trimmed_reads/</span>
+(input to the <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/4_dada2_parameter_selection.md">Step 4</a> and <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/5_dada2_pipeline.md">Step 5</a>)</li>
+<li>Cutadapt log files for each sample in <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">results/3_cutadapt_primer_trimming/cutadapt_logs/</span></li>
+<li>Summary Excel file (<a href="../3_cutadapt_primer_trimming/primer_trimming_summary.xlsx">primer_trimming_summary.xlsx</a>)
 with per-sample primer-hit counts before and after trimming</li>
 </ul>
 <div class="alert alert-warning">
-<p><strong>Downstream note</strong>: The FASTQ files in <a href="../../results/3_cutadapt_primer_trimming/primer_trimmed_reads/">primer_trimmed_reads/</a>
+<p><strong>Downstream note</strong>: The FASTQ files in <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">primer_trimmed_reads/</span>
 are primer-trimmed only. Length filtering (&lt;100 bp), N-filtering, and
-quality filtering are performed in the <a href="5_dada2_pipeline.md">DADA2 pipeline (Step 5)</a>, which takes this
+quality filtering are performed in the <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/5_dada2_pipeline.md">DADA2 pipeline (Step 5)</a>, which takes this
 folder as its input.</p>
 </div>
 <hr />
@@ -5612,7 +5617,7 @@ Packages</h2>
 <p>The chunk below loads every R package this notebook depends on, plus
 three helper functions shared across the whole pipeline: Excel writing,
 column-dictionary documentation, and clickable output links (each
-sourced from <a href="../functions/">R/functions/</a>).</p>
+sourced from <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/tree/main/R/functions">R/functions/</a>).</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># Biostrings: Biological string manipulation (Bioconductor)</span></span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="co"># Provides functions for handling DNA/RNA sequences, generating orientations,</span></span>
 <span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="co"># and pattern counting (vcountPattern) for the custom primer-hit counter</span></span>
@@ -5681,7 +5686,7 @@ sourced from <a href="../functions/">R/functions/</a>).</p>
 <h2><span class="header-section-number">3.1</span> Define Path
 Parameters</h2>
 <p>Set up the input and output directory paths. Using
-<code>here()</code> ensures paths are relative to the <a href="../../">project root</a>, making the script portable across
+<code>here()</code> ensures paths are relative to the <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/tree/main/example">project root</a>, making the script portable across
 different systems.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># Input folder containing raw FASTQ files</span></span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co"># This should be the same directory used in Steps 1 and 2</span></span>
@@ -5862,7 +5867,7 @@ cutadapt execution.</p>
 ##  - Threads for processing: 1
 ##  - Primer anchor buffer (bp): 2
 ##  - FASTQ counting chunk size: 100000 reads
-##  - Cutadapt path: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/tools/cutadapt/venv/bin/cutadapt</code></pre>
+##  - Cutadapt path: PROJECT_ROOT/tools/cutadapt/venv/bin/cutadapt</code></pre>
 <hr />
 </div>
 </div>
@@ -5886,7 +5891,7 @@ Directories</h1>
 <span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a>} <span class="cf">else</span> {</span>
 <span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;Using existing output directory:&quot;</span>, output_folder, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
 <span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a>}</span></code></pre></div>
-<pre><code>## Using existing output directory: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/run_results/3_cutadapt_primer_trimming</code></pre>
+<pre><code>## Using existing output directory: PROJECT_ROOT/example/run_results/3_cutadapt_primer_trimming</code></pre>
 <hr />
 </div>
 <div id="define-helper-functions" class="section level1" number="5">
@@ -6138,7 +6143,7 @@ Files</h1>
 <span id="cb14-28"><a href="#cb14-28" tabindex="-1"></a>    <span class="st">&quot;- Reverse files found:&quot;</span>, <span class="fu">length</span>(rev_raw_paths), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
 <span id="cb14-29"><a href="#cb14-29" tabindex="-1"></a>    <span class="st">&quot;- Samples identified:&quot;</span>, <span class="fu">length</span>(sample_names), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
 <pre><code>## File Discovery Results:
-##  - Input directory: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/data/fastq
+##  - Input directory: PROJECT_ROOT/example/data/fastq
 ##  - Forward files found: 20
 ##  - Reverse files found: 20
 ##  - Samples identified: 20</code></pre>
@@ -6257,15 +6262,15 @@ Installation</h2>
 <span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a>    <span class="st">&quot;- Path:&quot;</span>, cutadapt_path, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
 <span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a>    <span class="st">&quot;- Version:&quot;</span>, cutadapt_version, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
 <pre><code>## Cutadapt Configuration:
-##  - Path: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/tools/cutadapt/venv/bin/cutadapt
+##  - Path: PROJECT_ROOT/tools/cutadapt/venv/bin/cutadapt
 ##  - Version: 5.2</code></pre>
 </div>
 <div id="execute-primer-trimming" class="section level2" number="9.2">
 <h2><span class="header-section-number">9.2</span> Execute Primer
 Trimming</h2>
 <p>Run Cutadapt on each sample to remove primer sequences from
-paired-end reads. The primer-trimmed reads are written to the <a href="../../results/3_cutadapt_primer_trimming/primer_trimmed_reads/">primer_trimmed_reads/</a>
-directory, which the <a href="5_dada2_pipeline.md">DADA2 pipeline (Step
+paired-end reads. The primer-trimmed reads are written to the <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">primer_trimmed_reads/</span>
+directory, which the <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/5_dada2_pipeline.md">DADA2 pipeline (Step
 5)</a> consumes.</p>
 <div class="alert alert-info">
 <p><strong>Note</strong>: Cutadapt is run with the following
@@ -6402,11 +6407,11 @@ limit while reserving two cores when available</li>
 <span id="cb29-22"><a href="#cb29-22" tabindex="-1"></a>rev_trimmed_paths <span class="ot">&lt;-</span> fs<span class="sc">::</span><span class="fu">path</span>(primer_trimmed_folder, <span class="fu">basename</span>(rev_raw_paths))</span></code></pre></div>
 <pre><code>##
 ## Cutadapt primer trimming complete.
-##  Log files saved to: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/run_results/3_cutadapt_primer_trimming/cutadapt_logs</code></pre>
+##  Log files saved to: PROJECT_ROOT/example/run_results/3_cutadapt_primer_trimming/cutadapt_logs</code></pre>
 <ul>
-<li><a href="../../example/run_results/3_cutadapt_primer_trimming/cutadapt_logs">Cutadapt
+<li><span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Cutadapt
 log files (folder):
-example/run_results/3_cutadapt_primer_trimming/cutadapt_logs</a></li>
+example/run_results/3_cutadapt_primer_trimming/cutadapt_logs</span></li>
 </ul>
 <hr />
 </div>
@@ -6517,11 +6522,11 @@ number of primer-bearing reads removed for each combination.</p>
 <span id="cb37-11"><a href="#cb37-11" tabindex="-1"></a>  <span class="at">rownames =</span> <span class="cn">FALSE</span>,</span>
 <span id="cb37-12"><a href="#cb37-12" tabindex="-1"></a>  <span class="at">overwrite =</span> <span class="cn">TRUE</span></span>
 <span id="cb37-13"><a href="#cb37-13" tabindex="-1"></a>)</span></code></pre></div>
-<pre><code>## Sheet Primer_Hit_Counts added successfully to the workbook: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/run_results/3_cutadapt_primer_trimming/primer_trimming_summary.xlsx</code></pre>
+<pre><code>## Sheet Primer_Hit_Counts added successfully to the workbook: PROJECT_ROOT/example/run_results/3_cutadapt_primer_trimming/primer_trimming_summary.xlsx</code></pre>
 <pre><code>## Added sheet: Primer_Hit_Counts</code></pre>
 <pre><code>##
 ## Results exported to:
-##  File: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/run_results/3_cutadapt_primer_trimming/primer_trimming_summary.xlsx</code></pre>
+##  File: PROJECT_ROOT/example/run_results/3_cutadapt_primer_trimming/primer_trimming_summary.xlsx</code></pre>
 </div>
 <div id="column-dictionary" class="section level2" number="11.2">
 <h2><span class="header-section-number">11.2</span> Document and Export
@@ -6531,7 +6536,7 @@ every column of every sheet just written to
 <code>output_excel_path</code>, so the workbook explains itself to
 collaborators.</p>
 <ul>
-<li><a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimming_summary.xlsx">Primer
+<li><a href="../3_cutadapt_primer_trimming/primer_trimming_summary.xlsx">Primer
 trimming summary (Excel workbook):
 example/run_results/3_cutadapt_primer_trimming/primer_trimming_summary.xlsx</a></li>
 </ul>
@@ -6542,77 +6547,77 @@ example/run_results/3_cutadapt_primer_trimming/primer_trimming_summary.xlsx</a><
 <h1><span class="header-section-number">12</span> Output File
 Summary</h1>
 <p>The tree below lists every file this notebook has written to its own
-output folder, <a href="../../results/3_cutadapt_primer_trimming/">results/3_cutadapt_primer_trimming/</a>,
+output folder, <a href="../3_cutadapt_primer_trimming">results/3_cutadapt_primer_trimming/</a>,
 as a clickable, portable link (relative to this notebook’s own location)
 with a short description – built live from what is actually on disk at
-knit time via the project’s shared <a href="../functions/render_output_tree_function.R">render_output_tree_function.R</a>
+knit time via the project’s shared <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/functions/render_output_tree_function.R">render_output_tree_function.R</a>
 helper, so it always matches this run’s real output rather than a
 hand-maintained list.</p>
 <pre>
 example/run_results/3_cutadapt_primer_trimming/
-├── <a href="../../example/run_results/3_cutadapt_primer_trimming/cutadapt_logs/">cutadapt_logs/</a>                # Cutadapt log files (folder)
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/cutadapt_logs/Mock-Community_cutadapt.log">Mock-Community_cutadapt.log</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/cutadapt_logs/Mouse-F3-Day-000_cutadapt.log">Mouse-F3-Day-000_cutadapt.log</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/cutadapt_logs/Mouse-F3-Day-001_cutadapt.log">Mouse-F3-Day-001_cutadapt.log</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/cutadapt_logs/Mouse-F3-Day-002_cutadapt.log">Mouse-F3-Day-002_cutadapt.log</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/cutadapt_logs/Mouse-F3-Day-003_cutadapt.log">Mouse-F3-Day-003_cutadapt.log</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/cutadapt_logs/Mouse-F3-Day-005_cutadapt.log">Mouse-F3-Day-005_cutadapt.log</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/cutadapt_logs/Mouse-F3-Day-006_cutadapt.log">Mouse-F3-Day-006_cutadapt.log</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/cutadapt_logs/Mouse-F3-Day-007_cutadapt.log">Mouse-F3-Day-007_cutadapt.log</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/cutadapt_logs/Mouse-F3-Day-008_cutadapt.log">Mouse-F3-Day-008_cutadapt.log</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/cutadapt_logs/Mouse-F3-Day-009_cutadapt.log">Mouse-F3-Day-009_cutadapt.log</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/cutadapt_logs/Mouse-F3-Day-141_cutadapt.log">Mouse-F3-Day-141_cutadapt.log</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/cutadapt_logs/Mouse-F3-Day-142_cutadapt.log">Mouse-F3-Day-142_cutadapt.log</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/cutadapt_logs/Mouse-F3-Day-143_cutadapt.log">Mouse-F3-Day-143_cutadapt.log</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/cutadapt_logs/Mouse-F3-Day-144_cutadapt.log">Mouse-F3-Day-144_cutadapt.log</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/cutadapt_logs/Mouse-F3-Day-145_cutadapt.log">Mouse-F3-Day-145_cutadapt.log</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/cutadapt_logs/Mouse-F3-Day-146_cutadapt.log">Mouse-F3-Day-146_cutadapt.log</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/cutadapt_logs/Mouse-F3-Day-147_cutadapt.log">Mouse-F3-Day-147_cutadapt.log</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/cutadapt_logs/Mouse-F3-Day-148_cutadapt.log">Mouse-F3-Day-148_cutadapt.log</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/cutadapt_logs/Mouse-F3-Day-149_cutadapt.log">Mouse-F3-Day-149_cutadapt.log</a>
-│   └── <a href="../../example/run_results/3_cutadapt_primer_trimming/cutadapt_logs/Mouse-F3-Day-150_cutadapt.log">Mouse-F3-Day-150_cutadapt.log</a>
-├── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/">primer_trimmed_reads/</a>         # Primer-trimmed FASTQ reads (folder, input to Steps 4 &amp; 5)
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/Mock-Community_S280_L001_R1_001.fastq.gz">Mock-Community_S280_L001_R1_001.fastq.gz</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/Mock-Community_S280_L001_R2_001.fastq.gz">Mock-Community_S280_L001_R2_001.fastq.gz</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/Mouse-F3-Day-000_S188_L001_R1_001.fastq.gz">Mouse-F3-Day-000_S188_L001_R1_001.fastq.gz</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/Mouse-F3-Day-000_S188_L001_R2_001.fastq.gz">Mouse-F3-Day-000_S188_L001_R2_001.fastq.gz</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/Mouse-F3-Day-001_S189_L001_R1_001.fastq.gz">Mouse-F3-Day-001_S189_L001_R1_001.fastq.gz</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/Mouse-F3-Day-001_S189_L001_R2_001.fastq.gz">Mouse-F3-Day-001_S189_L001_R2_001.fastq.gz</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/Mouse-F3-Day-002_S190_L001_R1_001.fastq.gz">Mouse-F3-Day-002_S190_L001_R1_001.fastq.gz</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/Mouse-F3-Day-002_S190_L001_R2_001.fastq.gz">Mouse-F3-Day-002_S190_L001_R2_001.fastq.gz</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/Mouse-F3-Day-003_S191_L001_R1_001.fastq.gz">Mouse-F3-Day-003_S191_L001_R1_001.fastq.gz</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/Mouse-F3-Day-003_S191_L001_R2_001.fastq.gz">Mouse-F3-Day-003_S191_L001_R2_001.fastq.gz</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/Mouse-F3-Day-005_S193_L001_R1_001.fastq.gz">Mouse-F3-Day-005_S193_L001_R1_001.fastq.gz</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/Mouse-F3-Day-005_S193_L001_R2_001.fastq.gz">Mouse-F3-Day-005_S193_L001_R2_001.fastq.gz</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/Mouse-F3-Day-006_S194_L001_R1_001.fastq.gz">Mouse-F3-Day-006_S194_L001_R1_001.fastq.gz</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/Mouse-F3-Day-006_S194_L001_R2_001.fastq.gz">Mouse-F3-Day-006_S194_L001_R2_001.fastq.gz</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/Mouse-F3-Day-007_S195_L001_R1_001.fastq.gz">Mouse-F3-Day-007_S195_L001_R1_001.fastq.gz</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/Mouse-F3-Day-007_S195_L001_R2_001.fastq.gz">Mouse-F3-Day-007_S195_L001_R2_001.fastq.gz</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/Mouse-F3-Day-008_S196_L001_R1_001.fastq.gz">Mouse-F3-Day-008_S196_L001_R1_001.fastq.gz</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/Mouse-F3-Day-008_S196_L001_R2_001.fastq.gz">Mouse-F3-Day-008_S196_L001_R2_001.fastq.gz</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/Mouse-F3-Day-009_S197_L001_R1_001.fastq.gz">Mouse-F3-Day-009_S197_L001_R1_001.fastq.gz</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/Mouse-F3-Day-009_S197_L001_R2_001.fastq.gz">Mouse-F3-Day-009_S197_L001_R2_001.fastq.gz</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/Mouse-F3-Day-141_S207_L001_R1_001.fastq.gz">Mouse-F3-Day-141_S207_L001_R1_001.fastq.gz</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/Mouse-F3-Day-141_S207_L001_R2_001.fastq.gz">Mouse-F3-Day-141_S207_L001_R2_001.fastq.gz</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/Mouse-F3-Day-142_S208_L001_R1_001.fastq.gz">Mouse-F3-Day-142_S208_L001_R1_001.fastq.gz</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/Mouse-F3-Day-142_S208_L001_R2_001.fastq.gz">Mouse-F3-Day-142_S208_L001_R2_001.fastq.gz</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/Mouse-F3-Day-143_S209_L001_R1_001.fastq.gz">Mouse-F3-Day-143_S209_L001_R1_001.fastq.gz</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/Mouse-F3-Day-143_S209_L001_R2_001.fastq.gz">Mouse-F3-Day-143_S209_L001_R2_001.fastq.gz</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/Mouse-F3-Day-144_S210_L001_R1_001.fastq.gz">Mouse-F3-Day-144_S210_L001_R1_001.fastq.gz</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/Mouse-F3-Day-144_S210_L001_R2_001.fastq.gz">Mouse-F3-Day-144_S210_L001_R2_001.fastq.gz</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/Mouse-F3-Day-145_S211_L001_R1_001.fastq.gz">Mouse-F3-Day-145_S211_L001_R1_001.fastq.gz</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/Mouse-F3-Day-145_S211_L001_R2_001.fastq.gz">Mouse-F3-Day-145_S211_L001_R2_001.fastq.gz</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/Mouse-F3-Day-146_S212_L001_R1_001.fastq.gz">Mouse-F3-Day-146_S212_L001_R1_001.fastq.gz</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/Mouse-F3-Day-146_S212_L001_R2_001.fastq.gz">Mouse-F3-Day-146_S212_L001_R2_001.fastq.gz</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/Mouse-F3-Day-147_S213_L001_R1_001.fastq.gz">Mouse-F3-Day-147_S213_L001_R1_001.fastq.gz</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/Mouse-F3-Day-147_S213_L001_R2_001.fastq.gz">Mouse-F3-Day-147_S213_L001_R2_001.fastq.gz</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/Mouse-F3-Day-148_S214_L001_R1_001.fastq.gz">Mouse-F3-Day-148_S214_L001_R1_001.fastq.gz</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/Mouse-F3-Day-148_S214_L001_R2_001.fastq.gz">Mouse-F3-Day-148_S214_L001_R2_001.fastq.gz</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/Mouse-F3-Day-149_S215_L001_R1_001.fastq.gz">Mouse-F3-Day-149_S215_L001_R1_001.fastq.gz</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/Mouse-F3-Day-149_S215_L001_R2_001.fastq.gz">Mouse-F3-Day-149_S215_L001_R2_001.fastq.gz</a>
-│   ├── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/Mouse-F3-Day-150_S216_L001_R1_001.fastq.gz">Mouse-F3-Day-150_S216_L001_R1_001.fastq.gz</a>
-│   └── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimmed_reads/Mouse-F3-Day-150_S216_L001_R2_001.fastq.gz">Mouse-F3-Day-150_S216_L001_R2_001.fastq.gz</a>
-└── <a href="../../example/run_results/3_cutadapt_primer_trimming/primer_trimming_summary.xlsx">primer_trimming_summary.xlsx</a>  # Primer trimming summary (before/after primer-hit counts, Excel workbook)
+├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">cutadapt_logs/</span>                # Cutadapt log files (folder)
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mock-Community_cutadapt.log</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-000_cutadapt.log</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-001_cutadapt.log</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-002_cutadapt.log</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-003_cutadapt.log</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-005_cutadapt.log</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-006_cutadapt.log</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-007_cutadapt.log</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-008_cutadapt.log</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-009_cutadapt.log</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-141_cutadapt.log</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-142_cutadapt.log</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-143_cutadapt.log</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-144_cutadapt.log</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-145_cutadapt.log</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-146_cutadapt.log</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-147_cutadapt.log</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-148_cutadapt.log</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-149_cutadapt.log</span>
+│   └── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-150_cutadapt.log</span>
+├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">primer_trimmed_reads/</span>         # Primer-trimmed FASTQ reads (folder, input to Steps 4 &amp; 5)
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mock-Community_S280_L001_R1_001.fastq.gz</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mock-Community_S280_L001_R2_001.fastq.gz</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-000_S188_L001_R1_001.fastq.gz</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-000_S188_L001_R2_001.fastq.gz</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-001_S189_L001_R1_001.fastq.gz</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-001_S189_L001_R2_001.fastq.gz</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-002_S190_L001_R1_001.fastq.gz</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-002_S190_L001_R2_001.fastq.gz</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-003_S191_L001_R1_001.fastq.gz</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-003_S191_L001_R2_001.fastq.gz</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-005_S193_L001_R1_001.fastq.gz</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-005_S193_L001_R2_001.fastq.gz</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-006_S194_L001_R1_001.fastq.gz</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-006_S194_L001_R2_001.fastq.gz</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-007_S195_L001_R1_001.fastq.gz</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-007_S195_L001_R2_001.fastq.gz</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-008_S196_L001_R1_001.fastq.gz</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-008_S196_L001_R2_001.fastq.gz</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-009_S197_L001_R1_001.fastq.gz</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-009_S197_L001_R2_001.fastq.gz</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-141_S207_L001_R1_001.fastq.gz</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-141_S207_L001_R2_001.fastq.gz</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-142_S208_L001_R1_001.fastq.gz</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-142_S208_L001_R2_001.fastq.gz</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-143_S209_L001_R1_001.fastq.gz</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-143_S209_L001_R2_001.fastq.gz</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-144_S210_L001_R1_001.fastq.gz</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-144_S210_L001_R2_001.fastq.gz</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-145_S211_L001_R1_001.fastq.gz</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-145_S211_L001_R2_001.fastq.gz</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-146_S212_L001_R1_001.fastq.gz</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-146_S212_L001_R2_001.fastq.gz</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-147_S213_L001_R1_001.fastq.gz</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-147_S213_L001_R2_001.fastq.gz</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-148_S214_L001_R1_001.fastq.gz</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-148_S214_L001_R2_001.fastq.gz</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-149_S215_L001_R1_001.fastq.gz</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-149_S215_L001_R2_001.fastq.gz</span>
+│   ├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-150_S216_L001_R1_001.fastq.gz</span>
+│   └── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">Mouse-F3-Day-150_S216_L001_R2_001.fastq.gz</span>
+└── <a href="../3_cutadapt_primer_trimming/primer_trimming_summary.xlsx">primer_trimming_summary.xlsx</a>  # Primer trimming summary (before/after primer-hit counts, Excel workbook)
 </pre>
 <hr />
 </div>
@@ -6620,11 +6625,11 @@ example/run_results/3_cutadapt_primer_trimming/
 <h1><span class="header-section-number">13</span> Recommended Next
 Step</h1>
 <p>The primer-trimmed FASTQ files and per-sample primer-hit diagnostics
-exported above are ready for the next stages. First use the <a href="4_dada2_parameter_selection.md">Step 4 — DADA2 Parameter
+exported above are ready for the next stages. First use the <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/4_dada2_parameter_selection.md">Step 4 — DADA2 Parameter
 Explorer</a> to visualize the amplified target, inspect read quality and
 retention, validate representative samples if needed, and save filtering
-parameters. Then proceed to <a href="5_dada2_pipeline.md">Step 5 — DADA2
-Pipeline</a>, which reads this notebook’s <a href="../../results/3_cutadapt_primer_trimming/primer_trimmed_reads">primer_trimmed_reads/</a>
+parameters. Then proceed to <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/5_dada2_pipeline.md">Step 5 — DADA2
+Pipeline</a>, which reads this notebook’s <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">primer_trimmed_reads/</span>
 folder and performs length filtering, N-filtering, quality filtering,
 denoising, merging, chimera removal, ASV table construction, and
 taxonomy assignment.</p>
@@ -6724,16 +6729,16 @@ primer-hit counter.</li>
 <div id="related" class="section level2" number="15.2">
 <h2><span class="header-section-number">15.2</span> Related</h2>
 <ul>
-<li><a href="1_data_integrity_check.md">Step 1 — Data Integrity
+<li><a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/1_data_integrity_check.md">Step 1 — Data Integrity
 Check</a> — optional prerequisite; validates FASTQ files before this
 notebook runs.</li>
-<li><a href="2_fastqc_quality_reports.md">Step 2 — FastQC Quality
+<li><a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/2_fastqc_quality_reports.md">Step 2 — FastQC Quality
 Reports</a> — optional prerequisite; read-quality inspection before
 trimming.</li>
-<li><a href="4_dada2_parameter_selection.md">Step 4 — DADA2 Parameter
+<li><a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/4_dada2_parameter_selection.md">Step 4 — DADA2 Parameter
 Explorer</a> — optional prerequisite; visualize the amplified target,
 inspect read quality and retention and save filtering parameters</li>
-<li><a href="5_dada2_pipeline.md">Step 5 — DADA2 Pipeline</a> — this
+<li><a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/5_dada2_pipeline.md">Step 5 — DADA2 Pipeline</a> — this
 notebook’s recommended next step; consumes the primer-trimmed reads
 produced here.</li>
 </ul>
@@ -6782,7 +6787,7 @@ fully contained in the read</li>
 </ul>
 <p><strong>Actions</strong>:</p>
 <ul>
-<li>Read the cutadapt logs (<a href="../../results/3_cutadapt_primer_trimming/cutadapt_logs/"><code>cutadapt_logs/</code></a>):
+<li>Read the cutadapt logs (<span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle."><code>cutadapt_logs/</code></span>):
 the “=== Summary ===” and per-adapter “Trimmed: N times” lines are
 cutadapt’s own error-tolerant tally. If cutadapt reports it trimmed the
 primers but the anchored count is still high, the primer sequence or
@@ -6850,7 +6855,7 @@ matching</h3>
 <p><code>Primer_Hit_Counts</code> uses an anchored, exact
 (zero-mismatch) IUPAC search, so a read whose primer region carries a
 sequencing error may not be counted; the <code>Hits_Before</code> values
-are therefore a conservative lower bound. The cutadapt logs (<a href="../../results/3_cutadapt_primer_trimming/cutadapt_logs/"><code>cutadapt_logs/</code></a>)
+are therefore a conservative lower bound. The cutadapt logs (<span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle."><code>cutadapt_logs/</code></span>)
 hold cutadapt’s own error-tolerant tally for comparison.</p>
 </div>
 </div>

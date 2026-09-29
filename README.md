@@ -161,7 +161,7 @@ Open the R-project file `DADA2_16S_Illumina_PairedEnd_Workflow.Rproj` by double-
 
 ### 3. Install R Dependencies
 
-Open [`setup/install_R_dependencies.R`](setup/install_R_dependencies.R) in RStudio and run it with **Source**. This installs all required CRAN and [Bioconductor](https://bioconductor.org/) packages, including [`dada2`](https://benjjneb.github.io/dada2/), [`DECIPHER`](http://www2.decipher.codes/), [`phyloseq`](https://joey711.github.io/phyloseq/), [`Biostrings`](https://bioconductor.org/packages/release/bioc/html/Biostrings.html), [`ShortRead`](https://bioconductor.org/packages/release/bioc/html/ShortRead.html), [`ape`](https://cran.r-project.org/package=ape), [`phangorn`](https://cran.r-project.org/package=phangorn), [`data.table`](https://cran.r-project.org/package=data.table), [`openxlsx`](https://cran.r-project.org/package=openxlsx), and the Shiny packages needed for the DADA2 Parameter Explorer.
+Open [`setup/install_R_dependencies.R`](setup/install_R_dependencies.R) in RStudio and run it with **Source**. This installs all required CRAN and [Bioconductor](https://bioconductor.org/) packages, including [`dada2`](https://benjjneb.github.io/dada2/), [`DECIPHER`](https://www2.decipher.codes/), [`phyloseq`](https://joey711.github.io/phyloseq/), [`Biostrings`](https://bioconductor.org/packages/release/bioc/html/Biostrings.html), [`ShortRead`](https://bioconductor.org/packages/release/bioc/html/ShortRead.html), [`ape`](https://cran.r-project.org/package=ape), [`phangorn`](https://cran.r-project.org/package=phangorn), [`data.table`](https://cran.r-project.org/package=data.table), [`openxlsx`](https://cran.r-project.org/package=openxlsx), and the Shiny packages needed for the DADA2 Parameter Explorer.
 
 This package set covers all notebooks, including optional Steps 6–9. Step 7 additionally requires the external PICRUSt2 installation described below, but none of the optional notebooks needs a separate R-package installation step.
 
@@ -286,7 +286,7 @@ Select the taxonomy database(s) in the configuration section (`"SILVA"`, `"GTDB"
 
 ### Step 6 — [Phylogenetic Tree](R/notebooks/6_phylogenetic_tree.md) *(optional)*
 
-Open [`6_phylogenetic_tree.Rmd`](R/notebooks/6_phylogenetic_tree.Rmd) and run as-is. Performs multiple sequence alignment with [DECIPHER](http://www2.decipher.codes/) and constructs a maximum-likelihood phylogenetic tree using [FastTree](https://morgannprice.github.io/fasttree/). Runs directly off Step 5's output — does not depend on, and is not blocked by, Steps 7 or 8.
+Open [`6_phylogenetic_tree.Rmd`](R/notebooks/6_phylogenetic_tree.Rmd) and run as-is. Performs multiple sequence alignment with [DECIPHER](https://www2.decipher.codes/) and constructs a maximum-likelihood phylogenetic tree using [FastTree](https://morgannprice.github.io/fasttree/). Runs directly off Step 5's output — does not depend on, and is not blocked by, Steps 7 or 8.
 
 ### Step 7 — [16S Copy Number Correction](R/notebooks/7_copy_number_correction.md) *(optional)*
 

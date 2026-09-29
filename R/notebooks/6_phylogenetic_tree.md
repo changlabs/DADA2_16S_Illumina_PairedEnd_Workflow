@@ -129,10 +129,10 @@ does not branch directly from Step 5; it follows Step 7 because it
 requires Step 7’s copy-number-corrected abundance table. This notebook
 constructs a phylogenetic tree from the ASV sequences generated in Step
 5: sequences are first aligned with
-[DECIPHER](http://www2.decipher.codes/)’s profile-to-profile multiple
+[DECIPHER](https://www2.decipher.codes/)’s profile-to-profile multiple
 sequence alignment algorithm, then used to infer an
 approximately-maximum-likelihood tree with
-[FastTree](http://www.microbesonline.org/fasttree/#Install) under the
+[FastTree](https://morgannprice.github.io/fasttree/) under the
 GTR+CAT substitution model.
 
 This step is optional in the sense that [Step 9 (Phyloseq
@@ -167,7 +167,7 @@ Before running this notebook, ensure that:
     [tools/fasttree/FastTree](../../tools/fasttree/FastTree) by running
     [setup/install_required_tools.R](../../setup/install_required_tools.R)
     on Linux.
-4.  **[DECIPHER](http://www2.decipher.codes/)** package is installed
+4.  **[DECIPHER](https://www2.decipher.codes/)** package is installed
     from Bioconductor.
 
 ## What This Notebook Does

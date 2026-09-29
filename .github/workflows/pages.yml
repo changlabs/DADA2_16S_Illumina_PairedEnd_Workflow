@@ -19,10 +19,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Configure GitHub Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
         with:
           enablement: true
 
@@ -31,11 +31,15 @@ jobs:
           mkdir -p _site/reports
           cp pages/index.html _site/index.html
           cp example/reference_results/reports/*.html _site/reports/
+          find example/reference_results -mindepth 1 -maxdepth 1 \
+            ! -name reports ! -name README.md ! -name .DS_Store \
+            -exec cp -R {} _site/ \;
+          find _site -name .DS_Store -delete
           test "$(find _site/reports -maxdepth 1 -name '*.html' | wc -l)" -eq 9
           touch _site/.nojekyll
 
       - name: Upload GitHub Pages artifact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v5
         with:
           path: _site
 
@@ -48,4 +52,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

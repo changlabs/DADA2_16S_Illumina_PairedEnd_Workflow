@@ -2902,9 +2902,14 @@ border-radius: 0px;
 
 
 
+<style id="reference-report-link-status">
+.reference-report-note { margin: 1rem auto; max-width: 1200px; padding: .8rem 1rem; border-left: 4px solid #2f6f73; background: #eef7f7; color: #243b3d; font-size: .95rem; }
+.reference-omitted { color: #5f6368; text-decoration: underline dotted; text-underline-offset: 2px; cursor: help; }
+</style>
 </head>
 
 <body>
+<aside class="reference-report-note" role="note"><strong>Compact reference report:</strong> Links remain active for bundled outputs and tracked workflow source files. Dotted labels identify runtime tools or reproducible files intentionally omitted from the compact bundle. Run <code>Rscript example/run_example.R</code> to recreate the complete local output tree under <code>example/run_results/</code>.</aside>
 
 
 <div class="container-fluid main-container">
@@ -3043,12 +3048,12 @@ text-align: left;
 </style>
 <p><strong>This app is Step 4</strong> of the paired-end Illumina 16S
 rRNA sequencing workflow.</p>
-<p><strong>App:</strong> <a href="../shiny/dada2_parameter_selection_app.R">R/shiny/dada2_parameter_selection_app.R</a><br />
-<strong>Guide:</strong> <a href="4_dada2_parameter_selection.md">R/notebooks/4_dada2_parameter_selection.md</a>
+<p><strong>App:</strong> <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/shiny/dada2_parameter_selection_app.R">R/shiny/dada2_parameter_selection_app.R</a><br />
+<strong>Guide:</strong> <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/4_dada2_parameter_selection.md">R/notebooks/4_dada2_parameter_selection.md</a>
 (this file)<br />
-<strong>Use after:</strong> <a href="3_cutadapt_primer_trimming.md">Step
+<strong>Use after:</strong> <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/3_cutadapt_primer_trimming.md">Step
 3 — Primer Trimming</a><br />
-<strong>Use before:</strong> <a href="5_dada2_pipeline.md">Step 5 —
+<strong>Use before:</strong> <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/5_dada2_pipeline.md">Step 5 —
 DADA2 Pipeline</a></p>
 <hr />
 <div id="launch-the-app" class="section level1" number="1">
@@ -3059,7 +3064,7 @@ knitting.</strong> A Shiny app continues running until it is stopped, so
 evaluating <code>runApp()</code> during a normal Knit would prevent the
 document from finishing.</p>
 </div>
-<p>From the <a href="../../">project root</a>, the R command is:</p>
+<p>From the <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/tree/main/example">project root</a>, the R command is:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>shiny<span class="sc">::</span><span class="fu">runApp</span>(<span class="st">&quot;R/shiny/dada2_parameter_selection_app.R&quot;</span>)</span></code></pre></div>
 <p>Stop the app with the <strong>Stop</strong> button in RStudio or
 <code>Ctrl+C</code> in the terminal.</p>
@@ -3068,9 +3073,9 @@ document from finishing.</p>
 <div id="purpose-and-scope" class="section level1" number="2">
 <h1><span class="header-section-number">2</span> Purpose and Scope</h1>
 <p>The DADA2 Parameter Explorer visualizes the amplified target,
-evaluates quality-filter settings on the actual <a href="../../results/3_cutadapt_primer_trimming/primer_trimmed_reads/">primer-trimmed
-FASTQ files</a>, optionally checks those settings with the real DADA2
-workflow, and saves a reproducible parameter workbook for <a href="5_dada2_pipeline.md">Step 5</a>.</p>
+evaluates quality-filter settings on the actual <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">primer-trimmed
+FASTQ files</span>, optionally checks those settings with the real DADA2
+workflow, and saves a reproducible parameter workbook for <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/5_dada2_pipeline.md">Step 5</a>.</p>
 <p>The four tabs form one workflow:</p>
 <div class="tab-column-table">
 <table>
@@ -3108,7 +3113,7 @@ estimate?</td>
 <tr class="even">
 <td><strong>Export</strong></td>
 <td>Are the recorded values ready for the next pipeline step?</td>
-<td><a href="../../results/4_dada2_parameter_selection/dada2_filter_parameters.xlsx">dada2_filter_parameters.xlsx</a></td>
+<td><a href="../4_dada2_parameter_selection/dada2_filter_parameters.xlsx">dada2_filter_parameters.xlsx</a></td>
 </tr>
 </tbody>
 </table>
@@ -3125,7 +3130,7 @@ the workflow markers at the top of the app:</p>
 <h1><span class="header-section-number">3</span> Before You Start</h1>
 <p>Have the following information available:</p>
 <ol style="list-style-type: decimal">
-<li>Primer-trimmed, paired FASTQ files from <a href="3_cutadapt_primer_trimming.md">Step 3</a>.</li>
+<li>Primer-trimmed, paired FASTQ files from <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/3_cutadapt_primer_trimming.md">Step 3</a>.</li>
 <li>The sequencing kit or nominal read length.</li>
 <li>The forward/reverse filename suffix used by the files.</li>
 <li>The primer pair used in the laboratory, or verified binding
@@ -3135,7 +3140,7 @@ database.</li>
 range.</li>
 </ol>
 <p>By default, the app looks in:</p>
-<p><a href="../../results/3_cutadapt_primer_trimming/primer_trimmed_reads/">results/3_cutadapt_primer_trimming/primer_trimmed_reads</a></p>
+<p><span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">results/3_cutadapt_primer_trimming/primer_trimmed_reads</span></p>
 <p>It expects a forward and reverse file for every sample. The folder
 and suffix can be changed in the <strong>Select</strong> tab.</p>
 <div class="alert alert-info">
@@ -3211,7 +3216,7 @@ Conventions</h2>
 </ul>
 <p>The target Min/Max values are <strong>not adapters, primers, or the
 complete primer-to-primer product</strong>. They describe the
-primer-trimmed biological insert that reaches DADA2 after <a href="3_cutadapt_primer_trimming.md">Step 3</a>.</p>
+primer-trimmed biological insert that reaches DADA2 after <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/3_cutadapt_primer_trimming.md">Step 3</a>.</p>
 </div>
 <div id="what-is-acceptable" class="section level2" number="4.4">
 <h2><span class="header-section-number">4.4</span> What Is
@@ -3992,22 +3997,22 @@ workbook always carries data-derived retention estimates.</p>
 Parameters</h2>
 <p>Click <strong>Save parameters</strong>. The app exports the table
 to:</p>
-<p><a href="../../results/4_dada2_parameter_selection/dada2_filter_parameters.xlsx">results/4_dada2_parameter_selection/dada2_filter_parameters.xlsx</a></p>
+<p><a href="../4_dada2_parameter_selection/dada2_filter_parameters.xlsx">results/4_dada2_parameter_selection/dada2_filter_parameters.xlsx</a></p>
 <p>The workbook contains:</p>
 <ol style="list-style-type: decimal">
 <li><strong>Info</strong> — input, assay, estimates, platform, and run
 context. This opens first so the workbook is self-explanatory.</li>
 <li><strong>Parameters</strong> — the user-selected numeric
-configuration read by <a href="5_dada2_pipeline.md">Step 5</a>.
+configuration read by <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/5_dada2_pipeline.md">Step 5</a>.
 <code>truncQ</code> is intentionally absent from this sheet because it
 remains fixed at 2 in Step 5.</li>
 <li><strong>Column_Dictionary</strong> — definitions for the columns in
 both data sheets.</li>
 </ol>
-<p>Saving again intentionally overwrites the same <a href="4_dada2_parameter_selection.md">Step 4</a> workbook with the
-current reviewed settings. <a href="5_dada2_pipeline.md">Step 5</a>
+<p>Saving again intentionally overwrites the same <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/4_dada2_parameter_selection.md">Step 4</a> workbook with the
+current reviewed settings. <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/5_dada2_pipeline.md">Step 5</a>
 auto-detects this path and gives the saved values priority. If this
-workbook is absent, <a href="5_dada2_pipeline.md">Step 5</a> instead
+workbook is absent, <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/5_dada2_pipeline.md">Step 5</a> instead
 uses the fallback values shown near the top of its configuration; those
 values should be reviewed for the current dataset before the pipeline is
 run.</p>
@@ -4157,7 +4162,7 @@ Techniques in Bacterial Systematics</em>.</li>
 </div>
 <div id="next-step" class="section level1" number="11">
 <h1><span class="header-section-number">11</span> Next Step</h1>
-<p>After the workbook has been saved and reviewed, continue with <a href="5_dada2_pipeline.md">Step 5 — DADA2 Pipeline</a>.</p>
+<p>After the workbook has been saved and reviewed, continue with <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/5_dada2_pipeline.md">Step 5 — DADA2 Pipeline</a>.</p>
 </div>
 
 

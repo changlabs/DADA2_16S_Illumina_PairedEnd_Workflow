@@ -107,7 +107,7 @@ th, td {
 
 ## Purpose
 
-This notebook is **Step 6** of the 16S rRNA sequencing data processing pipeline. Like [Step 7](7_copy_number_correction.md), it branches directly from [Step 5](5_dada2_pipeline.md) and is independent of the copy-number-correction branch. [Step 8](8_microbial_load_correction.md) does not branch directly from Step 5; it follows Step 7 because it requires Step 7's copy-number-corrected abundance table. This notebook constructs a phylogenetic tree from the ASV sequences generated in Step 5: sequences are first aligned with [DECIPHER](http://www2.decipher.codes/)'s profile-to-profile multiple sequence alignment algorithm, then used to infer an approximately-maximum-likelihood tree with [FastTree](http://www.microbesonline.org/fasttree/#Install) under the GTR+CAT substitution model.
+This notebook is **Step 6** of the 16S rRNA sequencing data processing pipeline. Like [Step 7](7_copy_number_correction.md), it branches directly from [Step 5](5_dada2_pipeline.md) and is independent of the copy-number-correction branch. [Step 8](8_microbial_load_correction.md) does not branch directly from Step 5; it follows Step 7 because it requires Step 7's copy-number-corrected abundance table. This notebook constructs a phylogenetic tree from the ASV sequences generated in Step 5: sequences are first aligned with [DECIPHER](https://www2.decipher.codes/)'s profile-to-profile multiple sequence alignment algorithm, then used to infer an approximately-maximum-likelihood tree with [FastTree](https://morgannprice.github.io/fasttree/) under the GTR+CAT substitution model.
 
 This step is optional in the sense that [Step 9 (Phyloseq Object)](9_phyloseq_object.md) runs without it, falling back gracefully if no tree is found -- but it is a prerequisite for any downstream analysis that incorporates evolutionary relationships between ASVs. Phylogenetic trees are important for microbiome analyses because:
 
@@ -123,7 +123,7 @@ Before running this notebook, ensure that:
 1.  **Step 5 (DADA2 Pipeline)** has been completed successfully.
 2.  The ASV sequences file [asv_sequences.csv](../../results/5_dada2_pipeline/asv_sequences.csv) is present in [results/5_dada2_pipeline/](../../results/5_dada2_pipeline/).
 3.  The project-local **FastTree** executable is installed at [tools/fasttree/FastTree](../../tools/fasttree/FastTree) by running [setup/install_required_tools.R](../../setup/install_required_tools.R) on Linux.
-4.  **[DECIPHER](http://www2.decipher.codes/)** package is installed from Bioconductor.
+4.  **[DECIPHER](https://www2.decipher.codes/)** package is installed from Bioconductor.
 
 ## What This Notebook Does
 

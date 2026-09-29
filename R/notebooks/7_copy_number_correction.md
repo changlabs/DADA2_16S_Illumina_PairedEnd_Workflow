@@ -787,7 +787,7 @@ run_and_verify_step <- function(step_label, command_args, log_path, expected_out
 ## Phylogenetic Placement
 
 Places every ASV into PICRUSt2’s reference tree using
-[EPA-NG](http://github.com/pierrebarbera/epa-ng).
+[EPA-NG](https://github.com/pierrebarbera/epa-ng).
 
 ``` r
 placement_checkpoint <- if (!save_intermediate_files) {

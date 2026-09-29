@@ -5402,9 +5402,14 @@ border-radius: 0px;
 
 
 
+<style id="reference-report-link-status">
+.reference-report-note { margin: 1rem auto; max-width: 1200px; padding: .8rem 1rem; border-left: 4px solid #2f6f73; background: #eef7f7; color: #243b3d; font-size: .95rem; }
+.reference-omitted { color: #5f6368; text-decoration: underline dotted; text-underline-offset: 2px; cursor: help; }
+</style>
 </head>
 
 <body>
+<aside class="reference-report-note" role="note"><strong>Compact reference report:</strong> Links remain active for bundled outputs and tracked workflow source files. Dotted labels identify runtime tools or reproducible files intentionally omitted from the compact bundle. Run <code>Rscript example/run_example.R</code> to recreate the complete local output tree under <code>example/run_results/</code>.</aside>
 
 
 <div class="container-fluid main-container">
@@ -5506,7 +5511,7 @@ font-size: 14px;
 <h2><span class="header-section-number">1.1</span> Purpose</h2>
 <p>This notebook is <strong>Step 8</strong> of the 16S rRNA sequencing
 data processing pipeline, and is <strong>entirely optional</strong>. It
-converts the copy-number-corrected ASV abundance table from <a href="7_copy_number_correction.md">Step 7</a> into an <em>absolute</em>,
+converts the copy-number-corrected ASV abundance table from <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/7_copy_number_correction.md">Step 7</a> into an <em>absolute</em>,
 cell-count-scaled <strong>Quantitative Microbiome Profile
 (QMP)</strong>, following the method of <a href="https://doi.org/10.1038/nature24460">Vandeputte et al. (2017),
 <em>Quantitative microbiome profiling links gut community variation to
@@ -5548,16 +5553,16 @@ comparable.</p>
 <p>Before running this notebook, ensure that:</p>
 <ol style="list-style-type: decimal">
 <li><strong>Step 7 (Copy Number Correction)</strong> has been completed
-successfully, producing <a href="../../results/7_copy_number_correction/copy_number_corrected_asv_count_table.csv">copy_number_corrected_asv_count_table.csv</a>
-in <a href="../../results/7_copy_number_correction/">results/7_copy_number_correction/</a>.
+successfully, producing <a href="../7_copy_number_correction/copy_number_corrected_asv_count_table.csv">copy_number_corrected_asv_count_table.csv</a>
+in <a href="../7_copy_number_correction">results/7_copy_number_correction/</a>.
 QMP specifically requires a <strong>copy-number-corrected</strong> table
-as input (Vandeputte et al. 2017) — do not use Step 5’s raw <a href="../../results/5_dada2_pipeline/asv_count_table.csv">asv_count_table.csv</a>
+as input (Vandeputte et al. 2017) — do not use Step 5’s raw <a href="../5_dada2_pipeline/asv_count_table.csv">asv_count_table.csv</a>
 here!</li>
 <li>You have an independent <strong>microbial load measurement</strong>
 (cells per gram or per mL) for every sample in your study, prepared as a
 TSV file (see <a href="#cell-count-format">Cell Count File Format</a>
 below).</li>
-<li>Required R packages are installed — run <a href="../../setup/install_R_dependencies.R">setup/install_R_dependencies.R</a>
+<li>Required R packages are installed — run <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/setup/install_R_dependencies.R">setup/install_R_dependencies.R</a>
 once per R environment if you have not already done so (this notebook
 additionally requires <a href="https://joey711.github.io/phyloseq/">phyloseq</a>, already a
 dependency of this workflow for Step 9).</li>
@@ -5600,7 +5605,7 @@ positive number. The unit itself does not matter to the calculation
 below as long as it is used consistently across all samples — the output
 table will be expressed in that same unit.</li>
 </ul>
-<p>The project cell-count file is <a href="../../data/cell_count/cell_count.tsv">data/cell_count/cell_count.tsv</a>,
+<p>The project cell-count file is <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/example/data/cell_count/cell_count.tsv">data/cell_count/cell_count.tsv</a>,
 which is also this notebook’s default expected input path. Replace its
 values for a different dataset, or edit <code>cell_counts_path</code> in
 <a href="#adjust-run-parameters">Configuration</a> if you keep the file
@@ -5640,9 +5645,9 @@ summary (per-sample sampling depth diagnostics) with a trailing
 <div id="expected-input" class="section level2" number="1.5">
 <h2><span class="header-section-number">1.5</span> Expected Input</h2>
 <ul>
-<li><a href="../../results/7_copy_number_correction/copy_number_corrected_asv_count_table.csv">results/7_copy_number_correction/copy_number_corrected_asv_count_table.csv</a>
+<li><a href="../7_copy_number_correction/copy_number_corrected_asv_count_table.csv">results/7_copy_number_correction/copy_number_corrected_asv_count_table.csv</a>
 — copy-number-corrected, sample x ASV abundance table from Step 7.</li>
-<li><a href="../../data/cell_count/cell_count.tsv">data/cell_count/cell_count.tsv</a>
+<li><a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/example/data/cell_count/cell_count.tsv">data/cell_count/cell_count.tsv</a>
 (default path; user-provided) — one row per sample,
 <code>SampleID</code> + <code>Cell_Count</code> columns.</li>
 </ul>
@@ -5650,10 +5655,10 @@ summary (per-sample sampling depth diagnostics) with a trailing
 <div id="expected-output" class="section level2" number="1.6">
 <h2><span class="header-section-number">1.6</span> Expected Output</h2>
 <ul>
-<li><a href="../../results/8_microbial_load_correction/microbial_load_corrected_abundance_table.csv">results/8_microbial_load_correction/microbial_load_corrected_abundance_table.csv</a>
+<li><a href="../8_microbial_load_correction/microbial_load_corrected_abundance_table.csv">results/8_microbial_load_correction/microbial_load_corrected_abundance_table.csv</a>
 — the final Quantitative Microbiome Profile: sample x ASV absolute
 abundances.</li>
-<li><a href="../../results/8_microbial_load_correction/microbial_load_correction_summary.xlsx">results/8_microbial_load_correction/microbial_load_correction_summary.xlsx</a>
+<li><a href="../8_microbial_load_correction/microbial_load_correction_summary.xlsx">results/8_microbial_load_correction/microbial_load_correction_summary.xlsx</a>
 — <code>Run_Provenance</code> (inputs, checksums, seed, threshold, and
 software version), <code>Sampling_Depth_Summary</code> (per-sample
 diagnostics), and a trailing <code>Column_Dictionary</code> sheet.</li>
@@ -5665,8 +5670,8 @@ diagnostics), and a trailing <code>Column_Dictionary</code> sheet.</li>
 <h1><span class="header-section-number">2</span> Environment Setup</h1>
 <div class="alert alert-info">
 <p><strong>Before running this notebook</strong>: install the required R
-packages by running <a href="../../setup/install_R_dependencies.R">setup/install_R_dependencies.R</a>.
-Complete <a href="7_copy_number_correction.md">Step 7</a> and prepare
+packages by running <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/setup/install_R_dependencies.R">setup/install_R_dependencies.R</a>.
+Complete <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/7_copy_number_correction.md">Step 7</a> and prepare
 your cell-count TSV file (see <a href="#cell-count-format">Cell Count
 File Format</a>) before running.</p>
 </div>
@@ -5676,7 +5681,7 @@ Packages</h2>
 <p>The chunk below loads every R package this notebook depends on, plus
 three helper functions shared across the whole pipeline: Excel writing,
 column-dictionary documentation, and clickable output links (each
-sourced from <a href="../functions/">R/functions/</a>).</p>
+sourced from <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/tree/main/R/functions">R/functions/</a>).</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># here: Project-relative file paths</span></span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(here)</span>
 <span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a></span>
@@ -5760,13 +5765,13 @@ different (but still reproducible) random subsample.</p>
 <span id="cb2-30"><a href="#cb2-30" tabindex="-1"></a>  <span class="st">&quot;- Rarefaction seed:&quot;</span>, microbial_load_rarefaction_seed, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span></span>
 <span id="cb2-31"><a href="#cb2-31" tabindex="-1"></a>)</span></code></pre></div>
 <pre><code>## Configuration:
-##  - Cell count file: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/data/cell_count/cell_count.tsv
+##  - Cell count file: PROJECT_ROOT/example/data/cell_count/cell_count.tsv
 ##  - Rarefaction seed: 711</code></pre>
 </div>
 <div id="define-paths" class="section level2" number="3.2">
 <h2><span class="header-section-number">3.2</span> Define Path
 Parameters</h2>
-<p>This chunk resolves every input and output path relative to the <a href="../../">project root</a> via <code>here()</code>, creates this
+<p>This chunk resolves every input and output path relative to the <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/tree/main/example">project root</a> via <code>here()</code>, creates this
 step’s own output folder if it does not already exist, and fails fast
 with an informative error if either Step 7’s output or the cell count
 file cannot be found – so a missing prerequisite is caught immediately,
@@ -5827,9 +5832,9 @@ before any computation begins.</p>
 <span id="cb4-54"><a href="#cb4-54" tabindex="-1"></a>  <span class="st">&quot;- Output folder:&quot;</span>, output_folder, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span></span>
 <span id="cb4-55"><a href="#cb4-55" tabindex="-1"></a>)</span></code></pre></div>
 <pre><code>## Path Configuration:
-##  - Input corrected ASV table: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/run_results/7_copy_number_correction/copy_number_corrected_asv_count_table.csv
-##  - Input cell count file: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/data/cell_count/cell_count.tsv
-##  - Output folder: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/run_results/8_microbial_load_correction</code></pre>
+##  - Input corrected ASV table: PROJECT_ROOT/example/run_results/7_copy_number_correction/copy_number_corrected_asv_count_table.csv
+##  - Input cell count file: PROJECT_ROOT/example/data/cell_count/cell_count.tsv
+##  - Output folder: PROJECT_ROOT/example/run_results/8_microbial_load_correction</code></pre>
 <hr />
 </div>
 </div>
@@ -6243,7 +6248,7 @@ absolute Quantitative Microbiome Profile.</p>
 <div id="export-csv" class="section level2" number="5.3">
 <h2><span class="header-section-number">5.3</span> Export the
 Microbial-Load-Corrected Table (CSV)</h2>
-<p>This chunk writes the final QMP abundance table to <a href="../../results/8_microbial_load_correction/">results/8_microbial_load_correction/</a>
+<p>This chunk writes the final QMP abundance table to <a href="../8_microbial_load_correction">results/8_microbial_load_correction/</a>
 as CSV, using the same sample order and ASV columns established above;
 the exported file is linked immediately below via
 <code>render_output_links()</code>.</p>
@@ -6261,10 +6266,10 @@ the exported file is linked immediately below via
 <span id="cb20-12"><a href="#cb20-12" tabindex="-1"></a>  <span class="st">&quot;(&quot;</span>, <span class="fu">nrow</span>(microbial_load_corrected_abundance_table_export), <span class="st">&quot;samples x&quot;</span>, <span class="fu">ncol</span>(microbial_load_corrected_abundance_matrix), <span class="st">&quot;ASVs )</span><span class="sc">\n</span><span class="st">&quot;</span></span>
 <span id="cb20-13"><a href="#cb20-13" tabindex="-1"></a>)</span></code></pre></div>
 <pre><code>## Quantitative Microbiome Profile written to:
-##  /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/run_results/8_microbial_load_correction/microbial_load_corrected_abundance_table.csv
+##  PROJECT_ROOT/example/run_results/8_microbial_load_correction/microbial_load_corrected_abundance_table.csv
 ##  ( 20 samples x 232 ASVs )</code></pre>
 <ul>
-<li><a href="../../example/run_results/8_microbial_load_correction/microbial_load_corrected_abundance_table.csv">Microbial-load-corrected
+<li><a href="../8_microbial_load_correction/microbial_load_corrected_abundance_table.csv">Microbial-load-corrected
 (QMP) abundance table (CSV):
 example/run_results/8_microbial_load_correction/microbial_load_corrected_abundance_table.csv</a></li>
 </ul>
@@ -6309,24 +6314,24 @@ table is written to the Excel workbook next.</p>
 <h2><span class="header-section-number">7.1</span> Write Summary
 Sheet</h2>
 <p>This chunk writes the sampling depth summary above to the output
-workbook using the project’s shared Excel-writing helper, <a href="../functions/add_sheet_to_excel_function.R">add_sheet_to_excel_function.R</a>.</p>
-<pre><code>## Sheet Run_Provenance added successfully to the workbook: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/run_results/8_microbial_load_correction/microbial_load_correction_summary.xlsx</code></pre>
-<pre><code>## Sheet Sampling_Depth_Summary added successfully to the workbook: /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/run_results/8_microbial_load_correction/microbial_load_correction_summary.xlsx</code></pre>
+workbook using the project’s shared Excel-writing helper, <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/functions/add_sheet_to_excel_function.R">add_sheet_to_excel_function.R</a>.</p>
+<pre><code>## Sheet Run_Provenance added successfully to the workbook: PROJECT_ROOT/example/run_results/8_microbial_load_correction/microbial_load_correction_summary.xlsx</code></pre>
+<pre><code>## Sheet Sampling_Depth_Summary added successfully to the workbook: PROJECT_ROOT/example/run_results/8_microbial_load_correction/microbial_load_correction_summary.xlsx</code></pre>
 <pre><code>## Sampling depth summary written to:
-##  /Users/amro/Documents/workflows/DADA2_16S_Illumina_PairedEnd_Workflow/example/run_results/8_microbial_load_correction/microbial_load_correction_summary.xlsx</code></pre>
+##  PROJECT_ROOT/example/run_results/8_microbial_load_correction/microbial_load_correction_summary.xlsx</code></pre>
 </div>
 <div id="column-dictionary" class="section level2" number="7.2">
 <h2><span class="header-section-number">7.2</span> Document and Export
 Column Dictionary</h2>
 <p>This chunk documents every column of the provenance and
 sampling-depth sheets in a trailing <code>Column_Dictionary</code>
-sheet, using the project’s shared <a href="../functions/build_column_dictionary_function.R">build_column_dictionary_function.R</a>
+sheet, using the project’s shared <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/functions/build_column_dictionary_function.R">build_column_dictionary_function.R</a>
 helper – this project’s standard convention of shipping a data
 dictionary alongside every exported workbook. The chunk’s own code and
 output are hidden from the rendered report (<code>include=FALSE</code>),
 since only the resulting workbook matters to the reader.</p>
 <ul>
-<li><a href="../../example/run_results/8_microbial_load_correction/microbial_load_correction_summary.xlsx">Sampling
+<li><a href="../8_microbial_load_correction/microbial_load_correction_summary.xlsx">Sampling
 depth summary workbook (Excel):
 example/run_results/8_microbial_load_correction/microbial_load_correction_summary.xlsx</a></li>
 </ul>
@@ -6342,10 +6347,10 @@ result is restored only from a checkpoint whose input checksums,
 parameters, and phyloseq version match exactly.</p>
 <pre>
 example/run_results/8_microbial_load_correction/
-├── <a href="../../example/run_results/8_microbial_load_correction/checkpoints/">checkpoints/</a>
-│   └── <a href="../../example/run_results/8_microbial_load_correction/checkpoints/checkpoint_qmp.rds">checkpoint_qmp.rds</a>                        # Validated stochastic QMP checkpoint (RDS)
-├── <a href="../../example/run_results/8_microbial_load_correction/microbial_load_corrected_abundance_table.csv">microbial_load_corrected_abundance_table.csv</a>  # Quantitative Microbiome Profile (CSV)
-└── <a href="../../example/run_results/8_microbial_load_correction/microbial_load_correction_summary.xlsx">microbial_load_correction_summary.xlsx</a>        # Sampling depth and provenance workbook (Excel)
+├── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">checkpoints/</span>
+│   └── <span class="reference-omitted" title="Created or installed by a complete local example run; intentionally omitted from the compact reference bundle.">checkpoint_qmp.rds</span>                        # Validated stochastic QMP checkpoint (RDS)
+├── <a href="../8_microbial_load_correction/microbial_load_corrected_abundance_table.csv">microbial_load_corrected_abundance_table.csv</a>  # Quantitative Microbiome Profile (CSV)
+└── <a href="../8_microbial_load_correction/microbial_load_correction_summary.xlsx">microbial_load_correction_summary.xlsx</a>        # Sampling depth and provenance workbook (Excel)
 </pre>
 <hr />
 </div>
@@ -6353,8 +6358,8 @@ example/run_results/8_microbial_load_correction/
 <h1><span class="header-section-number">9</span> Recommended Next
 Step</h1>
 <p>The Quantitative Microbiome Profile exported above is ready to be
-incorporated into the rest of the pipeline. Proceed to <a href="9_phyloseq_object.md">Step 9 — Phyloseq Object Assembly</a>, which
-automatically detects and imports this notebook’s output (<a href="../../results/8_microbial_load_correction/microbial_load_corrected_abundance_table.csv">results/8_microbial_load_correction/microbial_load_corrected_abundance_table.csv</a>)
+incorporated into the rest of the pipeline. Proceed to <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/9_phyloseq_object.md">Step 9 — Phyloseq Object Assembly</a>, which
+automatically detects and imports this notebook’s output (<a href="../8_microbial_load_correction/microbial_load_corrected_abundance_table.csv">results/8_microbial_load_correction/microbial_load_corrected_abundance_table.csv</a>)
 if present – alongside the outputs of Steps 5-7 – to build the final,
 annotated <code>phyloseq</code> object(s) used for downstream
 statistical analysis and visualization. If you skipped this notebook,
@@ -6460,9 +6465,9 @@ Data. <em>PLoS ONE</em>, 8(4):e61217. (provides
 <div id="related" class="section level2" number="11.2">
 <h2><span class="header-section-number">11.2</span> Related</h2>
 <ul>
-<li><a href="7_copy_number_correction.md">Step 7 — 16S rRNA Gene Copy
+<li><a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/7_copy_number_correction.md">Step 7 — 16S rRNA Gene Copy
 Number Correction</a> — this notebook’s required input.</li>
-<li><a href="9_phyloseq_object.md">Step 9 — Phyloseq Object Assembly</a>
+<li><a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/9_phyloseq_object.md">Step 9 — Phyloseq Object Assembly</a>
 — this notebook’s recommended next step.</li>
 </ul>
 <hr />
@@ -6489,7 +6494,7 @@ ignored.</p>
 <p><strong>Actions</strong>:</p>
 <ul>
 <li>Compare the identifiers listed in the error message directly against
-<a href="../../results/5_dada2_pipeline/asv_count_table.csv">results/5_dada2_pipeline/asv_count_table.csv</a>’s
+<a href="../5_dada2_pipeline/asv_count_table.csv">results/5_dada2_pipeline/asv_count_table.csv</a>’s
 <code>SampleID</code> column.</li>
 <li>Re-save the cell count TSV with <code>SampleID</code> explicitly
 formatted as text if your spreadsheet program is altering
@@ -6500,11 +6505,11 @@ numeric-looking identifiers.</li>
 <h3><span class="header-section-number">12.1.2</span>
 <code>package &#39;phyloseq&#39; not found</code></h3>
 <p><strong>Cause</strong>: <code>phyloseq</code> is a Bioconductor
-package installed by <a href="../../setup/install_R_dependencies.R">setup/install_R_dependencies.R</a>,
+package installed by <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/setup/install_R_dependencies.R">setup/install_R_dependencies.R</a>,
 shared with Step 9.</p>
 <p><strong>Actions</strong>:</p>
 <ul>
-<li>Run <a href="../../setup/install_R_dependencies.R">setup/install_R_dependencies.R</a>
+<li>Run <a href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/setup/install_R_dependencies.R">setup/install_R_dependencies.R</a>
 if you have not already done so.</li>
 </ul>
 </div>
