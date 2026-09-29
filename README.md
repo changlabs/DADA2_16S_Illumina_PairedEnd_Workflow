@@ -10,6 +10,7 @@ A reproducible R-based pipeline for processing **Illumina paired-end** 16S rRNA 
 
 - [Key Features](#key-features)
 - [Pipeline Overview](#pipeline-overview)
+- [Bundled Example Dataset](#bundled-example-dataset)
 - [Quick Start](#quick-start)
 - [Setup](#setup)
   - [1. Clone the Repository](#1-clone-the-repository)
@@ -123,6 +124,20 @@ A reproducible R-based pipeline for processing **Illumina paired-end** 16S rRNA 
 ```
 
 Step 4 is optional but recommended. Its DADA2 Parameter Explorer Shiny app is run interactively, while the accompanying RMarkdown guide can be used as a reference document. The app visualizes the amplified target and primer coordinates, helps you inspect quality and retention while choosing `truncLen`/`maxEE`, and keeps `truncQ` fixed at 2 before Step 5. Steps 6 and 7 are independent optional branches off Step 5. Step 8 follows Step 7 because microbial load correction requires the copy-number-corrected table; the tree from Step 6 is independent of both. Step 9 runs last, validates the provenance of optional corrected inputs, and builds every valid taxonomy-database x abundance-source combination.
+
+------------------------------------------------------------------------
+
+## Bundled Example Dataset
+
+The repository includes the 20-sample paired-end dataset used by the official DADA2 tutorial under [`example/`](example/), with descriptive filenames, matching metadata, tutorial-specific parameters, and browsable reference outputs. It runs in an isolated `example/run_results/` tree, so it never reads from or writes to the normal `data/fastq/` or `results/` locations.
+
+After installing dependencies and downloading the taxonomy reference databases, run:
+
+``` bash
+Rscript example/run_example.R
+```
+
+See the [example guide](example/README.md) for scope, renamed-sample mapping, provenance, and the required Kozich et al. (2013) dataset citation.
 
 ------------------------------------------------------------------------
 
@@ -358,6 +373,15 @@ DADA2_16S_Illumina_PairedEnd_Workflow/
 │   │   └── .gitkeep
 │   └── cell_count/
 │       └── cell_count.tsv
+├── example/
+│   ├── README.md
+│   ├── run_example.R
+│   ├── data/
+│   │   ├── metadata.tsv
+│   │   └── fastq/
+│   ├── config/
+│   │   └── dada2_filter_parameters.xlsx
+│   └── reference_results/
 │
 └── tools/
     ├── cutadapt/
@@ -392,6 +416,7 @@ DADA2_16S_Illumina_PairedEnd_Workflow/
 
 ### Methods
 
+- Kozich JJ, Westcott SL, Baxter NT, Highlander SK, Schloss PD (2013). Development of a dual-index sequencing strategy and curation pipeline for analyzing amplicon sequence data on the MiSeq Illumina sequencing platform. *Applied and Environmental Microbiology*, 79(17):5112–5120. [DOI:10.1128/AEM.01043-13](https://doi.org/10.1128/AEM.01043-13). Source study for the bundled DADA2 tutorial dataset.
 - Callahan BJ, et al. (2016). DADA2: High-resolution sample inference from Illumina amplicon data. *Nature Methods*, 13(7):581-583. [DOI:10.1038/nmeth.3869](https://doi.org/10.1038/nmeth.3869)
 - Price MN, et al. (2010). FastTree 2 – Approximately Maximum-Likelihood Trees for Large Alignments. *PLoS ONE*, 5(3):e9490. [DOI:10.1371/journal.pone.0009490](https://doi.org/10.1371/journal.pone.0009490)
 - McMurdie PJ, Holmes S (2013). phyloseq: An R Package for Reproducible Interactive Analysis and Graphics of Microbiome Census Data. *PLoS ONE*, 8(4):e61217. [DOI:10.1371/journal.pone.0061217](https://doi.org/10.1371/journal.pone.0061217)

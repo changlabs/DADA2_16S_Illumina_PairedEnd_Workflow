@@ -234,6 +234,10 @@ source(here("R", "functions", "render_output_links_function.R"))
 # scanned live from disk at knit time so it always matches what was actually
 # produced on this run.
 source(here("R", "functions", "render_output_tree_function.R"))
+
+# Keep alternate datasets (including the bundled tutorial example) isolated
+# without changing the historical data/ and results/ defaults.
+source(here("R", "functions", "workflow_paths_function.R"))
 ```
 
 ------------------------------------------------------------------------
@@ -246,19 +250,19 @@ Set up the input and output directory paths. Using `here()` ensures paths are re
 
 ```{r define-paths}
 # Input folder containing DADA2 pipeline results (Step 5, always required)
-dada2_results_folder <- here("results", "5_dada2_pipeline")
+dada2_results_folder <- workflow_results_dir("5_dada2_pipeline")
 
 # Input folder containing the phylogenetic tree (optional, from Step 6)
-tree_results_folder <- here("results", "6_phylogenetic_tree")
+tree_results_folder <- workflow_results_dir("6_phylogenetic_tree")
 
 # Input folder containing copy-number-corrected counts (optional, from Step 7)
-copy_number_results_folder <- here("results", "7_copy_number_correction")
+copy_number_results_folder <- workflow_results_dir("7_copy_number_correction")
 
 # Input folder containing microbial-load-corrected counts (optional, from Step 8)
-microbial_load_results_folder <- here("results", "8_microbial_load_correction")
+microbial_load_results_folder <- workflow_results_dir("8_microbial_load_correction")
 
 # Base results folder for all pipeline outputs
-results_folder <- here("results")
+results_folder <- workflow_results_dir()
 
 # Specific output folder for this step (Step 9: Phyloseq Object)
 final_output_folder <- here(results_folder, "9_phyloseq_object")
@@ -351,7 +355,7 @@ Configure the optional components to include. Which **taxonomy database(s)** (SI
 # and values with your own before drawing conclusions from metadata-based
 # groupings. Set to NULL to build phyloseq
 # objects without any metadata.
-metadata_path <- here("data", "metadata.tsv")
+metadata_path <- workflow_data_dir("metadata.tsv")
 
 # Whether to include the phylogenetic tree (if available from Step 6)
 include_tree <- TRUE

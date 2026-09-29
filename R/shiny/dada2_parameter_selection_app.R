@@ -78,6 +78,12 @@ library(openxlsx)       # Excel workbook creation/writing
 source(file.path("..", "functions", "add_sheet_to_excel_function.R"), local = TRUE)
 source(file.path("..", "functions", "build_column_dictionary_function.R"), local = TRUE)
 
+# Resolve the project and mutable results roots once. DADA2_RESULTS_DIR lets
+# the bundled example use example/run_results without touching normal results/.
+PROJECT_ROOT_DIR <- normalizePath(file.path("..", ".."), mustWork = FALSE)
+source(file.path("..", "functions", "workflow_paths_function.R"), local = TRUE)
+WORKFLOW_RESULTS_DIR <- workflow_results_dir(project_root = PROJECT_ROOT_DIR)
+
 # Paired FASTQ sampling, paired-retention calculations, representative-sample
 # selection, and empirical DADA2 validation used by Select and Validate.
 source(file.path("functions", "paired_read_retention_engine_function.R"), local = TRUE)
@@ -263,7 +269,7 @@ SAMPLING_BASE_SEED <- 20260806L
 # manually.
 
 CANDIDATE_DEFAULT_FASTQ_DIR <- file.path(
-    "..", "..", "results", "3_cutadapt_primer_trimming", "primer_trimmed_reads"
+    WORKFLOW_RESULTS_DIR, "3_cutadapt_primer_trimming", "primer_trimmed_reads"
 )
 
 DEFAULT_FASTQ_DIR <- if (dir.exists(CANDIDATE_DEFAULT_FASTQ_DIR)) {
@@ -277,8 +283,6 @@ DEFAULT_FASTQ_DIR <- if (dir.exists(CANDIDATE_DEFAULT_FASTQ_DIR)) {
 # -----------------------------------------------------------------------------
 # Resolve the project root once so Export can record project-relative input and
 # output locations whenever possible.
-PROJECT_ROOT_DIR <- normalizePath(file.path("..", ".."), mustWork = FALSE)
-
 # Strips PROJECT_ROOT_DIR off the front of an absolute path, returning a
 # forward-slash, project-root-relative path (e.g.
 # "results/3_cutadapt_primer_trimming/primer_trimmed_reads"). Falls back
@@ -330,14 +334,16 @@ PLATFORM_READ_LENGTHS <- c(
 # numeric cells are restored after the shared table writer has saved the file;
 # see fix_excel_numeric_typed_cells().
 
-REPORT_EXCEL_OUTPUT_DIR <- file.path("..", "..", "results", "4_dada2_parameter_selection")
+REPORT_EXCEL_OUTPUT_DIR <- file.path(WORKFLOW_RESULTS_DIR, "4_dada2_parameter_selection")
 REPORT_EXCEL_FILENAME <- "dada2_filter_parameters.xlsx"
 REPORT_EXCEL_PARAMETERS_SHEET <- "Parameters"
 REPORT_EXCEL_INFO_SHEET <- "Info"
 
 # Project-relative label shown in the Export table. File operations use
 # REPORT_EXCEL_OUTPUT_DIR above.
-REPORT_EXCEL_SAVE_LOCATION_LABEL <- file.path("results", "4_dada2_parameter_selection", REPORT_EXCEL_FILENAME)
+REPORT_EXCEL_SAVE_LOCATION_LABEL <- to_project_relative_path(file.path(
+    REPORT_EXCEL_OUTPUT_DIR, REPORT_EXCEL_FILENAME
+))
 
 # Column descriptions shared by the Parameters and Info sheets and used to
 # build the trailing Column_Dictionary sheet.

@@ -55,6 +55,10 @@ data/fastq/*.fastq.gz
 data/fastq/*.fq
 data/fastq/*.fq.gz
 
+# The bundled example writes reruns to a disposable, isolated directory.
+# Curated outputs for browsing remain tracked under example/reference_results/.
+example/run_results/
+
 # Intermediate FASTQ files
 results/**/*.fastq
 results/**/*.fastq.gz
@@ -190,3 +194,8 @@ logs/
 credentials/
 secrets/
 .positai
+
+# Curated example deliverables are intentionally version-controlled even when
+# their file types are ignored for ordinary pipeline runs.
+!example/reference_results/**/*.pdf
+!example/reference_results/**/*.RData

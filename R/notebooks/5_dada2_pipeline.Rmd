@@ -251,6 +251,10 @@ source(here("R", "functions", "render_output_links_function.R"))
 # produced on this run.
 source(here("R", "functions", "render_output_tree_function.R"))
 
+# Keep alternate datasets (including the bundled tutorial example) isolated
+# without changing the historical data/ and results/ defaults.
+source(here("R", "functions", "workflow_paths_function.R"))
+
 # Safe DataTable Display
 #
 # Wrapper function to display data tables that handles errors gracefully.
@@ -297,12 +301,12 @@ safe_datatable <- function(data, options = list(), ...) {
 Set up the input and output directory paths. Using `here()` ensures paths are relative to the project root, making the script portable across different systems.
 
 ```{r define-paths}
+# Base results folder for all pipeline outputs
+results_folder <- workflow_results_dir()
+
 # Input folder containing primer-trimmed FASTQ files from Step 3
 # This should be the output directory from the Cutadapt primer trimming step
-input_folder <- here("results", "3_cutadapt_primer_trimming", "primer_trimmed_reads")
-
-# Base results folder for all pipeline outputs
-results_folder <- here("results")
+input_folder <- file.path(results_folder, "3_cutadapt_primer_trimming", "primer_trimmed_reads")
 
 # Specific output folder for this step (Step 5: DADA2 Pipeline)
 # Numbered prefix maintains pipeline organization
@@ -645,7 +649,11 @@ Choose between SILVA, GTDB, or both reference databases for taxonomic assignment
 # SILVA: Widely used, comprehensive ribosomal RNA database
 # GTDB: Genome Taxonomy Database, based on genome phylogeny
 # BOTH: Run both databases and generate two taxonomy tables for comparison
-taxonomy_database <- "BOTH"  # Change to "SILVA", "GTDB", or "BOTH"
+taxonomy_database <- toupper(Sys.getenv("DADA2_TAXONOMY_DATABASE", unset = "BOTH"))
+if (!taxonomy_database %in% c("SILVA", "GTDB", "BOTH")) {
+    stop("DADA2_TAXONOMY_DATABASE must be SILVA, GTDB, or BOTH; received: ",
+         taxonomy_database)
+}
 
 # Path to the trainsets folder containing taxonomy reference files
 trainsets_folder <- here("tools", "trainsets")

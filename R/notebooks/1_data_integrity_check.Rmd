@@ -185,6 +185,10 @@ source(here("R", "functions", "render_output_links_function.R"))
 # scanned live from disk at knit time so it always matches what was actually
 # produced on this run.
 source(here("R", "functions", "render_output_tree_function.R"))
+
+# Keep alternate datasets (including the bundled tutorial example) isolated
+# without changing the historical data/ and results/ defaults.
+source(here("R", "functions", "workflow_paths_function.R"))
 ```
 
 ------------------------------------------------------------------------
@@ -198,10 +202,10 @@ Set up the input and output directory paths. Using `here()` ensures paths are re
 ```{r define-paths}
 # Input folder containing raw FASTQ files to be checked
 # The here() function constructs the path relative to the project root
-fastq_input_folder <- here("data", "fastq")
+fastq_input_folder <- workflow_data_dir("fastq")
 
 # Base results folder for all pipeline outputs
-results_folder <- here("results")
+results_folder <- workflow_results_dir()
 
 # Output folder where the integrity check results will be saved
 # Results are organized in a numbered folder for pipeline step tracking

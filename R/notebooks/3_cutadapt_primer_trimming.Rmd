@@ -214,6 +214,10 @@ source(here("R", "functions", "render_output_links_function.R"))
 # scanned live from disk at knit time so it always matches what was actually
 # produced on this run.
 source(here("R", "functions", "render_output_tree_function.R"))
+
+# Keep alternate datasets (including the bundled tutorial example) isolated
+# without changing the historical data/ and results/ defaults.
+source(here("R", "functions", "workflow_paths_function.R"))
 ```
 
 ------------------------------------------------------------------------
@@ -227,10 +231,10 @@ Set up the input and output directory paths. Using `here()` ensures paths are re
 ```{r define-paths}
 # Input folder containing raw FASTQ files
 # This should be the same directory used in Steps 1 and 2
-fastq_input_folder <- here("data", "fastq")
+fastq_input_folder <- workflow_data_dir("fastq")
 
 # Base results folder for all pipeline outputs
-results_folder <- here("results")
+results_folder <- workflow_results_dir()
 
 # Specific output folder for this step (Step 3: Primer Trimming)
 output_folder <- here(results_folder, "3_cutadapt_primer_trimming")
@@ -284,11 +288,17 @@ Specify the primer sequences used for 16S amplicon generation. These primers wil
 ```{r define-primers}
 # Forward primer sequence (5' -> 3') targeting the desired 16S variable region
 # IUPAC ambiguity codes: N = any, W = A/T
-forward_primer <- "CCTACGGGNGGCWGCAG"
+forward_primer <- Sys.getenv(
+  "DADA2_FORWARD_PRIMER",
+  unset = "CCTACGGGNGGCWGCAG"
+)
 
 # Reverse primer sequence (5' -> 3') targeting the desired 16S variable region
 # IUPAC ambiguity codes: H = A/C/T, V = A/C/G
-reverse_primer <- "GACTACHVGGGTATCTAATCC"
+reverse_primer <- Sys.getenv(
+  "DADA2_REVERSE_PRIMER",
+  unset = "GACTACHVGGGTATCTAATCC"
+)
 
 # Reverse complements of each primer. These are the sequences that appear at
 # the 3' END of a read when the insert is shorter than the read length and the
@@ -331,6 +341,22 @@ primer_anchor_buffer <- 2L
 # Number of reads loaded from each FASTQ at a time while counting primer hits.
 # This bounds memory use independently of total file size.
 fastq_chunk_size <- 100000L
+
+# Remove opposite-primer read-through at the 3' ends by default. Set
+# DADA2_TRIM_READ_THROUGH=false for fixtures or assays where only the primary
+# 5' primers should be removed.
+trim_read_through <- !tolower(Sys.getenv(
+  "DADA2_TRIM_READ_THROUGH",
+  unset = "true"
+)) %in% c("false", "0", "no")
+
+cutadapt_times <- suppressWarnings(as.integer(Sys.getenv(
+  "DADA2_CUTADAPT_TIMES",
+  unset = "2"
+)))
+if (length(cutadapt_times) != 1L || is.na(cutadapt_times) || cutadapt_times < 1L) {
+  stop("DADA2_CUTADAPT_TIMES must be a positive whole number.")
+}
 
 # Path to the project-local Cutadapt executable
 cutadapt_path <- here("tools", "cutadapt", "venv", "bin", "cutadapt")
@@ -781,18 +807,18 @@ Run Cutadapt on each sample to remove primer sequences from paired-end reads. Th
 ```{r run-cutadapt, message=FALSE}
 # Write this run into an isolated staging tree. The final folders consumed by
 # downstream steps are replaced only after every Cutadapt command succeeds.
-staging_folder <- path(
+staging_folder <- fs::path(
   output_folder,
   paste0(".cutadapt-staging-", format(Sys.time(), "%Y%m%d%H%M%S"), "-", Sys.getpid())
 )
-staging_trimmed_folder <- path(staging_folder, "primer_trimmed_reads")
-staging_log_folder <- path(staging_folder, "cutadapt_logs")
+staging_trimmed_folder <- fs::path(staging_folder, "primer_trimmed_reads")
+staging_log_folder <- fs::path(staging_folder, "cutadapt_logs")
 dir_create(staging_trimmed_folder, recurse = TRUE)
 dir_create(staging_log_folder, recurse = TRUE)
 
 # Define output paths for cutadapt's primer-trimmed files
-fwd_staging_paths <- path(staging_trimmed_folder, basename(fwd_raw_paths))
-rev_staging_paths <- path(staging_trimmed_folder, basename(rev_raw_paths))
+fwd_staging_paths <- fs::path(staging_trimmed_folder, basename(fwd_raw_paths))
+rev_staging_paths <- fs::path(staging_trimmed_folder, basename(rev_raw_paths))
 
 cat("Running Cutadapt for primer trimming...\n",
     "Processing", length(sample_names), "samples.\n\n")
@@ -803,24 +829,26 @@ for (i in seq_along(sample_names)) {
   cat("Processing sample", i, "of", length(sample_names), ":", sample_names[i], "\n")
 
   # Define log file path
-  log_file <- path(staging_log_folder, paste0(sample_names[i], "_cutadapt.log"))
+  log_file <- fs::path(staging_log_folder, paste0(sample_names[i], "_cutadapt.log"))
 
   # Build cutadapt command arguments
   cutadapt_args <- c(
     # Forward read trimming:
     # -g: Trim forward primer from 5' end of forward reads
-    # -a: Trim reverse complement of reverse primer from 3' end (read-through)
     "-g", shQuote(forward_primer),
-    "-a", shQuote(rev_primer_rc),
 
     # Reverse read trimming:
     # -G: Trim reverse primer from 5' end of reverse reads
-    # -A: Trim reverse complement of forward primer from 3' end (read-through)
     "-G", shQuote(reverse_primer),
-    "-A", shQuote(fwd_primer_rc),
 
-    # Allow up to 2 primers to be removed per read
-    "-n", "2",
+    # Opposite-primer read-through adapters are added below when enabled.
+    if (trim_read_through) c(
+      "-a", shQuote(rev_primer_rc),
+      "-A", shQuote(fwd_primer_rc)
+    ),
+
+    # Maximum number of adapter-removal rounds per read.
+    "-n", as.character(cutadapt_times),
 
     # Respect the same bounded thread setting reported above.
     paste0("--cores=", nr_threads),
@@ -853,8 +881,8 @@ for (i in seq_along(sample_names)) {
 # Publish the complete run as one dataset only after every sample succeeded.
 # Preserve the previous run inside staging until both replacements succeed so a
 # filesystem error during publication can roll back to the complete old run.
-previous_trimmed_backup <- path(staging_folder, "previous_primer_trimmed_reads")
-previous_log_backup <- path(staging_folder, "previous_cutadapt_logs")
+previous_trimmed_backup <- fs::path(staging_folder, "previous_primer_trimmed_reads")
+previous_log_backup <- fs::path(staging_folder, "previous_cutadapt_logs")
 tryCatch({
   if (dir_exists(primer_trimmed_folder)) file_move(primer_trimmed_folder, previous_trimmed_backup)
   if (dir_exists(log_folder)) file_move(log_folder, previous_log_backup)
@@ -870,8 +898,8 @@ tryCatch({
 })
 dir_delete(staging_folder)
 
-fwd_trimmed_paths <- path(primer_trimmed_folder, basename(fwd_raw_paths))
-rev_trimmed_paths <- path(primer_trimmed_folder, basename(rev_raw_paths))
+fwd_trimmed_paths <- fs::path(primer_trimmed_folder, basename(fwd_raw_paths))
+rev_trimmed_paths <- fs::path(primer_trimmed_folder, basename(rev_raw_paths))
 ```
 
 ```{r echo=FALSE}

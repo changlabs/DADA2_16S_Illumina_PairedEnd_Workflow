@@ -10,6 +10,30 @@ Raw FASTQ datasets are ignored by Git. The metadata and cell-count files include
 
 ------------------------------------------------------------------------
 
+## Bundled Example Dataset
+
+A clone-ready test dataset is maintained separately under [`example/`](../example/) so it cannot be discovered together with files placed in `data/fastq/`. Its generated reruns also go to the ignored `example/run_results/` directory rather than the normal `results/` tree. This separation prevents an example run from overwriting a user's results and prevents newly added user FASTQs from changing the example analysis.
+
+The example contains 20 paired samples (19 longitudinal mouse-feces samples and one defined mock community) from the official DADA2 paired-end tutorial / mothur MiSeq SOP dataset. Filenames use descriptive IDs such as `Mouse-F3-Day-141` and `Mock-Community`; [`example/data/metadata.tsv`](../example/data/metadata.tsv) retains each source code in `OriginalSampleID` and otherwise follows the metadata layout documented below.
+
+The source tutorial reads were distributed after primer removal. To test this workflow's Step 3, the bundled `fastq.gz` records physically contain a synthetic concrete 515F prefix on every R1 sequence and a synthetic concrete 806R prefix on every R2 sequence. Matching Phred-40 characters were added to the quality strings. The example runner configures the corresponding degenerate 515F/806R definitions, runs Cutadapt, and recovers the original primer-free reads. These added primer bases are a transparent test-fixture transformation, not original sequencer observations.
+
+After installing dependencies and reference databases, run the isolated example from the repository root:
+
+``` bash
+Rscript example/run_example.R
+```
+
+Browsable outputs are included under [`example/reference_results/`](../example/reference_results/). Full provenance, run scope, filename mapping, and third-party data notice are in the [example guide](../example/README.md).
+
+Dataset reference:
+
+> Kozich JJ, Westcott SL, Baxter NT, Highlander SK, Schloss PD. (2013). Development of a dual-index sequencing strategy and curation pipeline for analyzing amplicon sequence data on the MiSeq Illumina sequencing platform. *Applied and Environmental Microbiology*, 79(17), 5112–5120. https://doi.org/10.1128/AEM.01043-13
+
+The source archive is linked from both the [DADA2 tutorial](https://benjjneb.github.io/dada2/tutorial) and the [mothur MiSeq SOP](https://mothur.org/wiki/miseq_sop/).
+
+------------------------------------------------------------------------
+
 ## Paired-End FASTQ Files
 
 Place raw paired-end FASTQ files directly in [`data/fastq/`](fastq/) before running the pipeline.

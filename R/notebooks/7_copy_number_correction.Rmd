@@ -211,6 +211,10 @@ source(here("R", "functions", "render_output_links_function.R"))
 # scanned live from disk at knit time so it always matches what was actually
 # produced on this run.
 source(here("R", "functions", "render_output_tree_function.R"))
+
+# Keep alternate datasets (including the bundled tutorial example) isolated
+# without changing the historical data/ and results/ defaults.
+source(here("R", "functions", "workflow_paths_function.R"))
 ```
 
 ------------------------------------------------------------------------
@@ -319,7 +323,7 @@ This chunk resolves every input and output path relative to the [project root](.
 
 ```{r define-paths}
 # Base results folder for all pipeline outputs
-results_folder <- here("results")
+results_folder <- workflow_results_dir()
 
 # Folder containing Step 5's outputs (this step's inputs)
 step5_output_folder <- here(results_folder, "5_dada2_pipeline")
