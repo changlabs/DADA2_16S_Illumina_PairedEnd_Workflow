@@ -198,7 +198,9 @@ The workflow accomplishes the following tasks:
   [results/4_dada2_parameter_selection/dada2_filter_parameters.xlsx](../../results/4_dada2_parameter_selection/dada2_filter_parameters.xlsx).
   When present, its Step 4 selections are loaded automatically; when
   absent, the values in section [Configure DADA2
-  Parameters](#load-shiny-params) are used.
+  Parameters](#load-shiny-params) are used. Automated callers may set
+  `DADA2_PARAMETER_FILE` to read a specific Step 4 export without
+  copying it into the results tree.
 - **Naming Convention**: Paired files must follow a consistent naming
   pattern, for example:
   - Forward reads: `{sample_id}_L001_R1_001.fastq.gz` or
@@ -502,12 +504,25 @@ default_dada2_parameters <- c(
     amplicon_max_length = 455
 )
 
-# This is the exact path written by the Step 4 app's "Save parameters" button.
-step4_parameters_path <- here(
-    results_folder,
-    "4_dada2_parameter_selection",
-    "dada2_filter_parameters.xlsx"
-)
+# Normally this is the exact path written by the Step 4 app's "Save
+# parameters" button. An automated caller may instead point
+# DADA2_PARAMETER_FILE at a specific Step 4 export. The bundled example uses
+# that override so its prepared workbook remains an input under example/data/
+# and is read directly rather than copied into generated results.
+configured_step4_parameters <- trimws(Sys.getenv("DADA2_PARAMETER_FILE", unset = ""))
+if (nzchar(configured_step4_parameters)) {
+    configured_step4_parameters <- path_expand(configured_step4_parameters)
+    step4_parameters_path <- path_abs(configured_step4_parameters, start = here())
+    if (!file_exists(step4_parameters_path)) {
+        stop("DADA2_PARAMETER_FILE does not exist: ", step4_parameters_path)
+    }
+} else {
+    step4_parameters_path <- here(
+        results_folder,
+        "4_dada2_parameter_selection",
+        "dada2_filter_parameters.xlsx"
+    )
+}
 
 # Begin with the fallback values, then replace each value available in a valid
 # Step 4 report. Keeping the resolved settings in one named vector makes their
@@ -2477,6 +2492,9 @@ notebook’s output do not match the selection you intended to use.
 
 **Possible causes**:
 
+- `DADA2_PARAMETER_FILE` is set by an automated caller. When set, that
+  specific Step 4 export takes priority over the normal results-tree
+  location.
 - The Step 4 Export tab writes
   [results/4_dada2_parameter_selection/dada2_filter_parameters.xlsx](../../results/4_dada2_parameter_selection/dada2_filter_parameters.xlsx).
   When that report exists, its saved values intentionally take priority

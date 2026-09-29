@@ -27,12 +27,13 @@ data_root <- file.path(project_root, "example", "data")
 run_results <- file.path(project_root, "example", "run_results")
 reference_results <- file.path(project_root, "example", "reference_results")
 configuration_workbook <- file.path(
-  project_root, "example", "config", "dada2_filter_parameters.xlsx"
+  data_root, "dada2_filter_parameters.xlsx"
 )
 
 Sys.setenv(
   DADA2_DATA_DIR = data_root,
   DADA2_RESULTS_DIR = run_results,
+  DADA2_PARAMETER_FILE = configuration_workbook,
   DADA2_TAXONOMY_DATABASE = "GTDB",
   DADA2_FORWARD_PRIMER = "GTGCCAGCMGCCGCGGTAA",
   DADA2_REVERSE_PRIMER = "GGACTACHVGGGTWTCTAAT",
@@ -53,8 +54,8 @@ if (length(missing_packages)) {
 }
 
 # Validate the prepared Step 4 handoff before running any notebooks. Step 5
-# automatically imports this workbook from the isolated example results tree;
-# its generic fallback values must never be used for the tutorial dataset.
+# reads this example-data artifact directly through DADA2_PARAMETER_FILE; its
+# generic fallback values must never be used for the tutorial dataset.
 expected_step4_parameters <- c(
   truncation_length_forward = 240,
   truncation_length_reverse = 160,
@@ -202,18 +203,9 @@ if (length(fastq_files) != 40L) {
   stop("Expected 40 bundled FASTQ files but found ", length(fastq_files), call. = FALSE)
 }
 
-parameter_directory <- file.path(run_results, "4_dada2_parameter_selection")
-dir.create(parameter_directory, recursive = TRUE, showWarnings = FALSE)
-if (!file.copy(
-  configuration_workbook,
-  file.path(parameter_directory, basename(configuration_workbook)),
-  overwrite = TRUE
-)) {
-  stop("Could not stage the example DADA2 parameter workbook.", call. = FALSE)
-}
 message(
-  "Staged the validated Step 4 workbook for automatic import by Step 5: ",
-  file.path(parameter_directory, basename(configuration_workbook))
+  "Step 5 will read the validated Step 4 workbook directly from example data: ",
+  configuration_workbook
 )
 
 report_directory <- file.path(run_results, "reports")
