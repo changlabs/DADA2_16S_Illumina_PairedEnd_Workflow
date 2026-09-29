@@ -2,6 +2,8 @@
 
 This directory contains a self-contained example profile for the workflow. It is deliberately separate from [`data/`](../data/) and [`results/`](../results/): running the example cannot mix tutorial reads with a user's FASTQ files, and adding another dataset to `data/fastq/` cannot change the example run.
 
+The source dataset consists of **Illumina MiSeq paired-end 2 x 250 bp reads targeting the 16S rRNA V4 region**. The bundled pre-trimming FASTQs are slightly longer because documented synthetic primer sequences were added to exercise Step 3; trimming removes those prefixes and restores the original tutorial sequences and read lengths from the nominal 2 x 250 bp run.
+
 ## Contents
 
 - `data/fastq/`: 20 paired samples (40 gzip-compressed FASTQ files) with documented synthetic V4 primer prefixes.

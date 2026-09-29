@@ -129,7 +129,7 @@ Step 4 is optional but recommended. Its DADA2 Parameter Explorer Shiny app is ru
 
 ## Bundled Example Dataset
 
-The repository includes the 20-sample paired-end dataset used by the official DADA2 tutorial under [`example/`](example/), with descriptive filenames, matching metadata, tutorial-specific parameters, and browsable reference outputs. It runs in an isolated `example/run_results/` tree, so it never reads from or writes to the normal `data/fastq/` or `results/` locations.
+The repository includes the 20-sample **Illumina MiSeq paired-end 2 x 250 bp V4** dataset used by the official DADA2 tutorial under [`example/`](example/), with descriptive filenames, matching metadata, tutorial-specific parameters, and browsable reference outputs. It runs in an isolated `example/run_results/` tree, so it never reads from or writes to the normal `data/fastq/` or `results/` locations.
 
 After installing dependencies, project-local tools, PICRUSt2, and the taxonomy reference databases, run:
 
