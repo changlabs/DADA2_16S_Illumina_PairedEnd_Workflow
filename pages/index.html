@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Executable R Markdown notebooks for the DADA2 Illumina paired-end 16S rRNA amplicon sequencing workflow.">
+  <meta name="description" content="Rendered reports from the bundled DADA2 Illumina paired-end 16S rRNA V4 example dataset.">
   <meta name="theme-color" content="#315f72">
   <title>DADA2 Paired-End 16S Workflow</title>
   <style>
@@ -245,6 +245,10 @@
 
   <main id="notebooks">
     <div class="section-head">
+      <div>
+        <h2>Rendered example dataset reports</h2>
+        <p>These reports show the complete bundled Illumina MiSeq 2 × 250 V4 example run. Step 4 is interactive, so its validated exported workbook is linked in place of an HTML report.</p>
+      </div>
       <div class="legend" aria-label="Step status legend">
         <span>Required</span>
         <span class="recommended">Recommended</span>
@@ -264,13 +268,13 @@
             <div class="card-top"><span class="step">Step 1</span></div>
             <h4>Data Integrity Check</h4>
             <p>Validate FASTQ structure, naming, pairing, compression, and read integrity.</p>
-            <div class="actions"><a class="report-link" href="notebooks/1_data_integrity_check.html">Example</a><a class="source-link" href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/1_data_integrity_check.md">GitHub</a></div>
+            <div class="actions"><a class="report-link" href="reports/1_data_integrity_check.html">Example report</a><a class="source-link" href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/1_data_integrity_check.md">Source</a></div>
           </article>
           <article class="card optional">
             <div class="card-top"><span class="step">Step 2</span></div>
             <h4>FastQC Quality Reports</h4>
             <p>Review per-file FastQC results and the combined MultiQC summary.</p>
-            <div class="actions"><a class="report-link" href="notebooks/2_fastqc_quality_reports.html">Example</a><a class="source-link" href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/2_fastqc_quality_reports.md">GitHub</a></div>
+            <div class="actions"><a class="report-link" href="reports/2_fastqc_quality_reports.html">Example report</a><a class="source-link" href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/2_fastqc_quality_reports.md">Source</a></div>
           </article>
         </div>
       </section>
@@ -286,19 +290,19 @@
             <div class="card-top"><span class="step">Step 3</span></div>
             <h4>Primer Trimming</h4>
             <p>Remove paired-end PCR primers with Cutadapt and verify trimming.</p>
-            <div class="actions"><a class="report-link" href="notebooks/3_cutadapt_primer_trimming.html">Example</a><a class="source-link" href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/3_cutadapt_primer_trimming.md">GitHub</a></div>
+            <div class="actions"><a class="report-link" href="reports/3_cutadapt_primer_trimming.html">Example report</a><a class="source-link" href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/3_cutadapt_primer_trimming.md">Source</a></div>
           </article>
           <article class="card recommended">
             <div class="card-top"><span class="step">Step 4</span></div>
             <h4>Parameter Explorer App</h4>
             <p>Select and export filtering parameters with the interactive Shiny workflow.</p>
-            <div class="actions"><a class="report-link" href="notebooks/4_dada2_parameter_selection.html">Example</a><a class="source-link" href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/4_dada2_parameter_selection.md">GitHub</a></div>
+            <div class="actions"><a class="report-link" href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/example/data/dada2_filter_parameters.xlsx">Example workbook</a><a class="source-link" href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/4_dada2_parameter_selection.md">Guide</a></div>
           </article>
           <article class="card">
             <div class="card-top"><span class="step">Step 5</span></div>
             <h4>DADA2 Pipeline</h4>
             <p>Filter, denoise, merge pairs, remove chimeras, and assign taxonomy.</p>
-            <div class="actions"><a class="report-link" href="notebooks/5_dada2_pipeline.html">Example</a><a class="source-link" href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/5_dada2_pipeline.md">GitHub</a></div>
+            <div class="actions"><a class="report-link" href="reports/5_dada2_pipeline.html">Example report</a><a class="source-link" href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/5_dada2_pipeline.md">Source</a></div>
           </article>
         </div>
       </section>
@@ -316,19 +320,19 @@
               <div class="card-top"><span class="step">Step 6</span></div>
               <h4>Phylogenetic Tree</h4>
               <p>Align ASV sequences and construct a maximum-likelihood phylogenetic tree.</p>
-              <div class="actions"><a class="report-link" href="notebooks/6_phylogenetic_tree.html">Example</a><a class="source-link" href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/6_phylogenetic_tree.md">GitHub</a></div>
+              <div class="actions"><a class="report-link" href="reports/6_phylogenetic_tree.html">Example report</a><a class="source-link" href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/6_phylogenetic_tree.md">Source</a></div>
             </article>
             <article class="card optional">
               <div class="card-top"><span class="step">Step 7</span></div>
               <h4>Copy Number Correction</h4>
               <p>Predict and correct 16S rRNA gene copy-number variation with PICRUSt2.</p>
-              <div class="actions"><a class="report-link" href="notebooks/7_copy_number_correction.html">Example</a><a class="source-link" href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/7_copy_number_correction.md">GitHub</a></div>
+              <div class="actions"><a class="report-link" href="reports/7_copy_number_correction.html">Example report</a><a class="source-link" href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/7_copy_number_correction.md">Source</a></div>
             </article>
             <article class="card optional">
               <div class="card-top"><span class="step">Step 8</span></div>
               <h4>Microbial Load Correction</h4>
               <p>Generate cell-count-scaled quantitative microbiome profiles after Step 7.</p>
-              <div class="actions"><a class="report-link" href="notebooks/8_microbial_load_correction.html">Example</a><a class="source-link" href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/8_microbial_load_correction.md">GitHub</a></div>
+              <div class="actions"><a class="report-link" href="reports/8_microbial_load_correction.html">Example report</a><a class="source-link" href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/8_microbial_load_correction.md">Source</a></div>
             </article>
           </div>
         </div>
@@ -345,7 +349,7 @@
             <div class="card-top"><span class="step">Step 9</span></div>
             <h4>Phyloseq Objects</h4>
             <p>Assemble validated abundance, taxonomy, metadata, and optional phylogenetic-tree inputs into analysis-ready objects.</p>
-            <div class="actions"><a class="report-link" href="notebooks/9_phyloseq_object.html">Example</a><a class="source-link" href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/9_phyloseq_object.md">GitHub</a></div>
+            <div class="actions"><a class="report-link" href="reports/9_phyloseq_object.html">Example report</a><a class="source-link" href="https://github.com/changlabs/DADA2_16S_Illumina_PairedEnd_Workflow/blob/main/R/notebooks/9_phyloseq_object.md">Source</a></div>
           </article>
         </div>
       </section>

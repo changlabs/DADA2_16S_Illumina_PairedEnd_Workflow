@@ -1,4 +1,4 @@
-name: Deploy notebook reports to GitHub Pages
+name: Deploy example reports to GitHub Pages
 
 on:
   push:
@@ -28,10 +28,10 @@ jobs:
 
       - name: Assemble static site
         run: |
-          mkdir -p _site/notebooks _site/images
+          mkdir -p _site/reports
           cp pages/index.html _site/index.html
-          cp R/notebooks/*.html _site/notebooks/
-          cp R/images/* _site/images/
+          cp example/reference_results/reports/*.html _site/reports/
+          test "$(find _site/reports -maxdepth 1 -name '*.html' | wc -l)" -eq 8
           touch _site/.nojekyll
 
       - name: Upload GitHub Pages artifact

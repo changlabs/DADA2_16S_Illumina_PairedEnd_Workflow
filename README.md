@@ -308,7 +308,7 @@ Every Excel workbook produced in this pipeline—including the Step 4 app export
 
 ## Project Structure
 
-The tree below summarizes the maintained workflow files plus the project-local tools and reference databases created by Setup. Notebook HTML and Markdown companions are retained for GitHub viewing.
+The tree below summarizes the maintained workflow files plus the project-local tools and reference databases created by Setup. Markdown notebook companions are retained for GitHub viewing; GitHub Pages publishes the rendered bundled-example reports from `example/reference_results/reports/`.
 
 ```         
 DADA2_16S_Illumina_PairedEnd_Workflow/
@@ -342,8 +342,7 @@ DADA2_16S_Illumina_PairedEnd_Workflow/
 │   │   ├── 7_copy_number_correction.Rmd
 │   │   ├── 8_microbial_load_correction.Rmd
 │   │   ├── 9_phyloseq_object.Rmd
-│   │   ├── *.md
-│   │   └── *.html
+│   │   └── *.md
 │   │
 │   ├── functions/
 │   │   ├── add_sheet_to_excel_function.R
@@ -386,6 +385,8 @@ DADA2_16S_Illumina_PairedEnd_Workflow/
 │   │   │   └── cell_count.tsv
 │   │   └── fastq/
 │   └── reference_results/
+│       └── reports/
+│           └── *.html
 │
 └── tools/
     ├── cutadapt/

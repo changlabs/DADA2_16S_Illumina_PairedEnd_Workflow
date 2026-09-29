@@ -124,8 +124,9 @@ inst/doc
 # =============================================================================
 # Output Documents
 # =============================================================================
-# Notebook HTML reports are intentionally tracked alongside their .Rmd and
-# manually generated .md companions so they can be viewed from GitHub.
+# Notebook HTML generated locally is not version-controlled. GitHub Pages
+# publishes the coherent example run from example/reference_results/reports/.
+R/notebooks/*.html
 R/notebooks/*_files/
 
 # PDF outputs
