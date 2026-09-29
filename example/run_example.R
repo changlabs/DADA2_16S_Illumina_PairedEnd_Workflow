@@ -1,6 +1,8 @@
 #!/usr/bin/env Rscript
 
-# Run the repository's core workflow against the bundled DADA2 tutorial data.
+# Run the repository's complete executable workflow against the bundled DADA2
+# tutorial data. Step 4 is represented by the validated, preconfigured parameter
+# workbook because its Shiny app is intentionally interactive.
 # Inputs, generated outputs, and rendered reports stay below example/ so the
 # normal data/fastq and results/ trees are never read or modified.
 
@@ -14,16 +16,12 @@ project_root <- normalizePath(file.path(dirname(script_path), ".."), mustWork = 
 setwd(project_root)
 
 run_arguments <- commandArgs(trailingOnly = TRUE)
-supported_arguments <- "--include-qmp"
-unknown_arguments <- setdiff(run_arguments, supported_arguments)
-if (length(unknown_arguments)) {
+if (length(run_arguments)) {
   stop(
-    "Unknown argument(s): ", paste(unknown_arguments, collapse = ", "), "\n",
-    "Supported optional argument: --include-qmp",
+    "This runner does not accept arguments. Use: Rscript example/run_example.R",
     call. = FALSE
   )
 }
-include_qmp <- "--include-qmp" %in% run_arguments
 
 data_root <- file.path(project_root, "example", "data")
 run_results <- file.path(project_root, "example", "run_results")
@@ -92,12 +90,28 @@ if (!all(file.exists(gtdb_files))) {
   )
 }
 
-cutadapt_executable <- file.path(
-  project_root, "tools", "cutadapt", "venv", "bin", "cutadapt"
+required_executables <- c(
+  Cutadapt = file.path(project_root, "tools", "cutadapt", "venv", "bin", "cutadapt"),
+  FastQC = file.path(project_root, "tools", "FastQC", "fastqc"),
+  MultiQC = file.path(project_root, "tools", "multiqc", "venv", "bin", "multiqc"),
+  FastTree = file.path(project_root, "tools", "fasttree", "FastTree")
 )
-if (file.access(cutadapt_executable, 1L) != 0L) {
+missing_executables <- names(required_executables)[
+  file.access(required_executables, 1L) != 0L
+]
+if (length(missing_executables)) {
   stop(
-    "Cutadapt is missing. Run setup/install_required_tools.R before the example.",
+    "Required project-local tool(s) missing or not executable: ",
+    paste(missing_executables, collapse = ", "), ".\n",
+    "Run setup/install_required_tools.R before the example.",
+    call. = FALSE
+  )
+}
+
+if (!nzchar(Sys.which("conda"))) {
+  stop(
+    "Conda is required for Step 7 but was not found on PATH. Install PICRUSt2 ",
+    "as documented in setup/install_picrust2.sh before running the example.",
     call. = FALSE
   )
 }
@@ -137,21 +151,21 @@ render_step <- function(filename) {
 }
 
 render_step("1_data_integrity_check.Rmd")
+render_step("2_fastqc_quality_reports.Rmd")
 render_step("3_cutadapt_primer_trimming.Rmd")
 render_step("5_dada2_pipeline.Rmd")
-if (include_qmp) {
-  message(
-    "\nExtended QMP mode requested. The bundled cell counts are synthetic test ",
-    "values and must not be interpreted as measurements from the source study."
-  )
-  render_step("7_copy_number_correction.Rmd")
-  render_step("8_microbial_load_correction.Rmd")
-}
+render_step("6_phylogenetic_tree.Rmd")
+message(
+  "\nThe bundled cell counts used by Steps 7-8 are synthetic test values and ",
+  "must not be interpreted as measurements from the source study."
+)
+render_step("7_copy_number_correction.Rmd")
+render_step("8_microbial_load_correction.Rmd")
 render_step("9_phyloseq_object.Rmd")
 
 message(
   "\nExample run complete.\n",
-  "Mode: ", if (include_qmp) "core + synthetic-cell-count QMP" else "core", "\n",
+  "Completed: Steps 1-3, preconfigured Step 4 handoff, and Steps 5-9.\n",
   "Generated results: ", run_results, "\n",
   "Bundled reference results: ", reference_results, "\n",
   "Compare the two trees without touching data/fastq or results/."

@@ -131,19 +131,13 @@ Step 4 is optional but recommended. Its DADA2 Parameter Explorer Shiny app is ru
 
 The repository includes the 20-sample paired-end dataset used by the official DADA2 tutorial under [`example/`](example/), with descriptive filenames, matching metadata, tutorial-specific parameters, and browsable reference outputs. It runs in an isolated `example/run_results/` tree, so it never reads from or writes to the normal `data/fastq/` or `results/` locations.
 
-After installing dependencies and downloading the taxonomy reference databases, run:
+After installing dependencies, project-local tools, PICRUSt2, and the taxonomy reference databases, run:
 
 ``` bash
 Rscript example/run_example.R
 ```
 
-To also exercise the optional copy-number and microbial-load branch with the bundled, explicitly synthetic cell-count fixture, install PICRUSt2 and run:
-
-``` bash
-Rscript example/run_example.R --include-qmp
-```
-
-The synthetic values are plausible-scale test inputs, not measurements from the tutorial study, and must not be used for biological interpretation.
+The command runs Steps 1–3, uses the supplied Step 4 parameter workbook, and then runs Steps 5–9. Step 4's Shiny app remains interactive; its bundled workbook is the validated example output passed to Step 5. The cell counts used in Steps 7–8 are plausible-scale synthetic test inputs, not measurements from the tutorial study, and must not be used for biological interpretation.
 
 See the [example guide](example/README.md) for scope, renamed-sample mapping, provenance, and the required Kozich et al. (2013) dataset citation.
 
