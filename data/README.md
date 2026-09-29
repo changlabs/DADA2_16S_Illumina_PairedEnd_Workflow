@@ -6,7 +6,7 @@ The `data/` directory holds the user-provided inputs for this workflow:
 - optional sample metadata at `data/metadata.tsv` for Step 9;
 - optional microbial-load measurements at `data/cell_count/cell_count.tsv` for Step 8.
 
-Raw FASTQ datasets are ignored by Git. The metadata and cell-count files included in the repository are templates and must be reviewed or replaced before analysis.
+FASTQ datasets placed under `data/fastq/` are ignored by Git. The separately documented tutorial fixture under `example/data/fastq/` is intentionally tracked. The metadata and cell-count files in this normal `data/` directory are templates and must be reviewed or replaced before analysis.
 
 ------------------------------------------------------------------------
 

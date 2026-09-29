@@ -380,12 +380,11 @@ DADA2_16S_Illumina_PairedEnd_Workflow/
 │   ├── run_example.R
 │   ├── data/
 │   │   ├── metadata.tsv
+│   │   ├── dada2_filter_parameters.xlsx
 │   │   ├── cell_count/
 │   │   │   ├── README.md
 │   │   │   └── cell_count.tsv
 │   │   └── fastq/
-│   ├── config/
-│   │   └── dada2_filter_parameters.xlsx
 │   └── reference_results/
 │
 └── tools/

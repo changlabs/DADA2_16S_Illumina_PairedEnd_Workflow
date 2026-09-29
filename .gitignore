@@ -48,8 +48,9 @@ results/
 # =============================================================================
 # Large Data Files
 # =============================================================================
-# Ignore all raw FASTQ datasets. Users supply their own reads locally; no
-# sequencing dataset is included in version control.
+# Ignore raw FASTQ datasets placed in the normal user-data directory. The
+# documented tutorial fixture under example/data/fastq/ is intentionally
+# version-controlled and is not matched by these data/fastq/ patterns.
 data/fastq/*.fastq
 data/fastq/*.fastq.gz
 data/fastq/*.fq

@@ -1,6 +1,6 @@
 # Bundled DADA2 tutorial example
 
-This directory contains a self-contained example profile for the workflow. It is deliberately separate from [`data/`](../data/) and [`results/`](../results/): running the example cannot mix tutorial reads with a user's FASTQ files, and adding another dataset to `data/fastq/` cannot change the example run.
+This directory contains a self-contained example profile for the workflow. It is deliberately separate from [`data/`](../data/) and the generated `results/` directory: running the example cannot mix tutorial reads with a user's FASTQ files, and adding another dataset to `data/fastq/` cannot change the example run.
 
 The source dataset consists of **Illumina MiSeq paired-end 2 x 250 bp reads targeting the 16S rRNA V4 region**. The bundled pre-trimming FASTQs are slightly longer because documented synthetic primer sequences were added to exercise Step 3; trimming removes those prefixes and restores the original tutorial sequences and read lengths from the nominal 2 x 250 bp run.
 
@@ -8,8 +8,8 @@ The source dataset consists of **Illumina MiSeq paired-end 2 x 250 bp reads targ
 
 - `data/fastq/`: 20 paired samples (40 gzip-compressed FASTQ files) with documented synthetic V4 primer prefixes.
 - `data/metadata.tsv`: the repository's normal metadata layout, plus `TimePeriod` and `OriginalSampleID` provenance columns.
-- `data/cell_count/cell_count.tsv`: clearly labelled synthetic microbial loads matched to all 20 samples, for testing the optional QMP branch.
-- `config/dada2_filter_parameters.xlsx`: tutorial-appropriate DADA2 settings (`truncLen = 240/160`, `maxEE = 2/2`, retained amplicon length 250–256 bp).
+- `data/cell_count/cell_count.tsv`: clearly labelled synthetic microbial loads matched to all 20 samples, allowing the example runner to execute the QMP steps.
+- `data/dada2_filter_parameters.xlsx`: the prepared Step 4 export with tutorial-appropriate DADA2 settings (`truncLen = 240/160`, `maxEE = 2/2`, retained amplicon length 250–256 bp).
 - `reference_results/`: curated outputs from the complete example run, for inspection without running the workflow.
 - `run_example.R`: runs every executable step and recreates results under the ignored `example/run_results/` directory.
 
