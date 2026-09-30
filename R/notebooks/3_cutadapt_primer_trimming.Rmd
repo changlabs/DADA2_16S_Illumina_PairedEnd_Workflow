@@ -117,8 +117,8 @@ Before running this notebook, ensure that:
 
 1.  FASTQ files (`.fastq`, `.fq`, and their gzip-compressed variants, case-insensitively) are present in the [data/fastq/](../../data/fastq/) directory
 2.  **Cutadapt** is installed in the [tools/cutadapt/](../../tools/cutadapt/) R project directory by running the [setup/install_required_tools.R](../../setup/install_required_tools.R) script
-3.  **[Step 1 (Data Integrity Check)](1_data_integrity_check.md)** has been completed successfully (**optional**)
-4.  **[Step 2 (FastQC Quality Reports)](2_fastqc_quality_reports.md)** has been completed successfully (**optional**)
+3.  **[Step 1 (Data Integrity Check)](1_data_integrity_check.md)** has been completed successfully (**recommended**)
+4.  **[Step 2 (FastQC Quality Reports)](2_fastqc_quality_reports.md)** has been completed successfully (**recommended**)
 
 ## What This Notebook Does
 
@@ -1134,8 +1134,8 @@ sessionInfo()
 
 ## Related
 
--   [Step 1 — Data Integrity Check](1_data_integrity_check.md) — optional prerequisite; validates FASTQ files before this notebook runs.
--   [Step 2 — FastQC Quality Reports](2_fastqc_quality_reports.md) — optional prerequisite; read-quality inspection before trimming.
+-   [Step 1 — Data Integrity Check](1_data_integrity_check.md) — recommended prerequisite; validates FASTQ files before this notebook runs.
+-   [Step 2 — FastQC Quality Reports](2_fastqc_quality_reports.md) — recommended prerequisite; read-quality inspection before trimming.
 -   [Step 4 — DADA2 Parameter Explorer](4_dada2_parameter_selection.md) — optional prerequisite; visualize the amplified target, inspect read quality and retention and save filtering parameters
 -   [Step 5 — DADA2 Pipeline](5_dada2_pipeline.md) — this notebook's recommended next step; consumes the primer-trimmed reads produced here.
 

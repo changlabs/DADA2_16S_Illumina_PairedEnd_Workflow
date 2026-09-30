@@ -113,7 +113,7 @@ table {
 ## Purpose
 
 This notebook is **Step 1** of the 16S rRNA sequencing workflow. It
-performs an optional but recommended structural integrity check of
+performs a recommended structural integrity check of
 paired-end [FASTQ](https://doi.org/10.1093/nar/gkp1137) files before
 downstream processing. It confirms that files are readable and
 parseable, matches forward and reverse files by name, counts complete
@@ -869,7 +869,7 @@ hand-maintained list.
 
 # Recommended Next Step
 
-This notebook’s integrity check is optional but recommended before
+This notebook’s integrity check is recommended before
 continuing. Proceed to [Step 2 — FastQC Quality
 Reports](2_fastqc_quality_reports.md), which generates FastQC and
 MultiQC quality reports for the same FASTQ files in

@@ -22,8 +22,8 @@ A reproducible R-based pipeline for processing **Illumina paired-end** 16S rRNA 
   - [7. Copy Your FASTQ Files](#7-copy-your-fastq-files)
   - [8. Copy Your Cell Count File (Optional)](#8-copy-your-cell-count-file-optional)
 - [Running the Pipeline](#running-the-pipeline)
-  - [Step 1 — Data Integrity Check](#step-1--data-integrity-check-optional)
-  - [Step 2 — FastQC Quality Reports](#step-2--fastqc-quality-reports-optional)
+  - [Step 1 — Data Integrity Check](#step-1--data-integrity-check-recommended)
+  - [Step 2 — FastQC Quality Reports](#step-2--fastqc-quality-reports-recommended)
   - [Step 3 — Primer Trimming](#step-3--primer-trimming)
   - [Step 4 — DADA2 Parameter Explorer](#step-4--dada2-parameter-explorer)
   - [Step 5 — DADA2 Pipeline](#step-5--dada2-pipeline)
@@ -59,16 +59,16 @@ A reproducible R-based pipeline for processing **Illumina paired-end** 16S rRNA 
        Raw FASTQ Files
               │
               ▼
-    ┌───────────────────┐
-    │ Step 1 (Optional) │  Verify file integrity, pair matching,
-    │  Integrity Check  │  read counts, and FASTQ validation
-    └─────────┬─────────┘
+    ┌────────────────────┐
+    │ Step 1 Recommended │  Verify file integrity, pair matching,
+    │  Integrity Check   │  read counts, and FASTQ validation
+    └─────────┬──────────┘
               │
               ▼
-    ┌───────────────────┐
-    │ Step 2 (Optional) │  Per-sample FastQC reports aggregated
-    │  FastQC Reports   │  into a MultiQC summary
-    └─────────┬─────────┘
+    ┌────────────────────┐
+    │ Step 2 Recommended │  Per-sample FastQC reports aggregated
+    │   FastQC Reports   │  into a MultiQC summary
+    └─────────┬──────────┘
               │
               ▼
     ┌───────────────────┐
@@ -254,13 +254,13 @@ Only needed for Step 9 if you want experimental sample information included in t
 
 ## Running the Pipeline
 
-Open each required notebook in RStudio and run **chunkwise** or click **Run All** (Ctrl+Alt+R / Cmd+Alt+R). Use **Knit** when you want an HTML report. Steps 1 and 2 are optional preflight checks; Step 3 precedes the recommended Step 4 app and required Step 5 pipeline. After Step 5, Steps 6 and 7 are independent optional branches. Step 8 is optional but requires Step 7. Run Step 9 last if you want phyloseq objects assembled from whichever upstream outputs are available.
+Open each required notebook in RStudio and run **chunkwise** or click **Run All** (Ctrl+Alt+R / Cmd+Alt+R). Use **Knit** when you want an HTML report. Steps 1 and 2 are recommended preflight checks; Step 3 precedes the recommended Step 4 app and required Step 5 pipeline. After Step 5, Steps 6 and 7 are independent optional branches. Step 8 is optional but requires Step 7. Run Step 9 last if you want phyloseq objects assembled from whichever upstream outputs are available.
 
-### Step 1 — [Data Integrity Check](R/notebooks/1_data_integrity_check.md) *(optional)*
+### Step 1 — [Data Integrity Check](R/notebooks/1_data_integrity_check.md) *(recommended)*
 
 Open [`1_data_integrity_check.Rmd`](R/notebooks/1_data_integrity_check.Rmd) and run as-is. Verifies that all FASTQ files are intact, correctly paired, and consistently named before proceeding.
 
-### Step 2 — [FastQC Quality Reports](R/notebooks/2_fastqc_quality_reports.md) *(optional)*
+### Step 2 — [FastQC Quality Reports](R/notebooks/2_fastqc_quality_reports.md) *(recommended)*
 
 Open [`2_fastqc_quality_reports.Rmd`](R/notebooks/2_fastqc_quality_reports.Rmd) and run as-is. Generates per-sample [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) reports and an aggregated [MultiQC](https://multiqc.info/) summary. Use the quality profiles to inform the filter parameters in [Step 4](#step-4--dada2-parameter-explorer) and [Step 5](#step-5--dada2-pipeline).
 

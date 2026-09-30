@@ -108,7 +108,7 @@ Before running this notebook, ensure that:
 1.  FASTQ files (`.fastq`, `.fq`, and their gzip-compressed variants) are present in the [data/fastq/](../../data/fastq/) input directory
 2.  FastQC is installed in the [tools/FastQC/](../../tools/FastQC/) R project directory by running the [setup/install_required_tools.R](../../setup/install_required_tools.R) script
 3.  MultiQC is installed in the [tools/multiqc/](../../tools/multiqc/) R project directory by running the [setup/install_required_tools.R](../../setup/install_required_tools.R) script
-4.  **Step 1 (Data Integrity Check)** has been completed successfully (**optional**)
+4.  **Step 1 (Data Integrity Check)** has been completed successfully (**recommended**)
 
 ## What This Notebook Does
 
@@ -1054,7 +1054,7 @@ render_output_tree(
 
 # Recommended Next Step
 
-The FastQC and MultiQC reports above are diagnostic only -- nothing downstream reads them programmatically -- so once you have reviewed them (paying particular attention to per-base quality, adapter content, and any sample that stands out from the rest), proceed to [Step 3 — Cutadapt Primer Trimming](3_cutadapt_primer_trimming.md), which lists this notebook as an optional but recommended prerequisite. Reviewing quality here first lets you set informed trimming parameters in Step 3 and gives you a pre-trimming baseline to compare its own before/after primer counts against.
+The FastQC and MultiQC reports above are diagnostic only -- nothing downstream reads them programmatically -- so once you have reviewed them (paying particular attention to per-base quality, adapter content, and any sample that stands out from the rest), proceed to [Step 3 — Cutadapt Primer Trimming](3_cutadapt_primer_trimming.md), which lists this notebook as a recommended prerequisite. Reviewing quality here first lets you set informed trimming parameters in Step 3 and gives you a pre-trimming baseline to compare its own before/after primer counts against.
 
 ------------------------------------------------------------------------
 
@@ -1078,7 +1078,7 @@ sessionInfo()
 
 ## Related
 
--   [Step 1 — Data Integrity Check](1_data_integrity_check.md) — optional prerequisite; confirms FASTQ file integrity before quality is assessed here.
+-   [Step 1 — Data Integrity Check](1_data_integrity_check.md) — recommended prerequisite; confirms FASTQ file integrity before quality is assessed here.
 -   [Step 3 — Cutadapt Primer Trimming](3_cutadapt_primer_trimming.md) — this notebook's recommended next step.
 
 ------------------------------------------------------------------------

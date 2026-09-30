@@ -98,7 +98,7 @@ th, td {
 
 ## Purpose
 
-This notebook is **Step 1** of the 16S rRNA sequencing workflow. It performs an optional but recommended structural integrity check of paired-end [FASTQ](https://doi.org/10.1093/nar/gkp1137) files before downstream processing. It confirms that files are readable and parseable, matches forward and reverse files by name, counts complete FASTQ records, and compares paired read counts. It does not replace checksum verification against values supplied by a sequencing facility or data repository.
+This notebook is **Step 1** of the 16S rRNA sequencing workflow. It performs a recommended structural integrity check of paired-end [FASTQ](https://doi.org/10.1093/nar/gkp1137) files before downstream processing. It confirms that files are readable and parseable, matches forward and reverse files by name, counts complete FASTQ records, and compares paired read counts. It does not replace checksum verification against values supplied by a sequencing facility or data repository.
 
 ## Prerequisites
 
@@ -910,7 +910,7 @@ render_output_tree(
 
 # Recommended Next Step
 
-This notebook's integrity check is optional but recommended before continuing. Proceed to [Step 2 — FastQC Quality Reports](2_fastqc_quality_reports.md), which generates FastQC and MultiQC quality reports for the same FASTQ files in [data/fastq/](../../data/fastq/); Step 2 re-derives its own file discovery and sample identification directly from that folder, so it can be run whether or not this notebook was completed first.
+This notebook's integrity check is recommended before continuing. Proceed to [Step 2 — FastQC Quality Reports](2_fastqc_quality_reports.md), which generates FastQC and MultiQC quality reports for the same FASTQ files in [data/fastq/](../../data/fastq/); Step 2 re-derives its own file discovery and sample identification directly from that folder, so it can be run whether or not this notebook was completed first.
 
 ------------------------------------------------------------------------
 

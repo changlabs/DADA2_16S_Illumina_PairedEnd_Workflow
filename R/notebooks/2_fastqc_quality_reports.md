@@ -135,7 +135,7 @@ Before running this notebook, ensure that:
     [setup/install_required_tools.R](../../setup/install_required_tools.R)
     script
 4.  **Step 1 (Data Integrity Check)** has been completed successfully
-    (**optional**)
+    (**recommended**)
 
 ## What This Notebook Does
 
@@ -1026,7 +1026,7 @@ downstream reads them programmatically – so once you have reviewed them
 (paying particular attention to per-base quality, adapter content, and
 any sample that stands out from the rest), proceed to [Step 3 — Cutadapt
 Primer Trimming](3_cutadapt_primer_trimming.md), which lists this
-notebook as an optional but recommended prerequisite. Reviewing quality
+notebook as a recommended prerequisite. Reviewing quality
 here first lets you set informed trimming parameters in Step 3 and gives
 you a pre-trimming baseline to compare its own before/after primer
 counts against.
@@ -1057,7 +1057,7 @@ Record the R environment for reproducibility.
 
 ## Related
 
-- [Step 1 — Data Integrity Check](1_data_integrity_check.md) — optional
+- [Step 1 — Data Integrity Check](1_data_integrity_check.md) — recommended
   prerequisite; confirms FASTQ file integrity before quality is assessed
   here.
 - [Step 3 — Cutadapt Primer Trimming](3_cutadapt_primer_trimming.md) —

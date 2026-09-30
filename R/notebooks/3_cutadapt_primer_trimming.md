@@ -149,9 +149,9 @@ Before running this notebook, ensure that:
     [setup/install_required_tools.R](../../setup/install_required_tools.R)
     script
 3.  **[Step 1 (Data Integrity Check)](1_data_integrity_check.md)** has
-    been completed successfully (**optional**)
+    been completed successfully (**recommended**)
 4.  **[Step 2 (FastQC Quality Reports)](2_fastqc_quality_reports.md)**
-    has been completed successfully (**optional**)
+    has been completed successfully (**recommended**)
 
 ## What This Notebook Does
 
@@ -1141,10 +1141,10 @@ Record the R environment for reproducibility.
 
 ## Related
 
-- [Step 1 — Data Integrity Check](1_data_integrity_check.md) — optional
+- [Step 1 — Data Integrity Check](1_data_integrity_check.md) — recommended
   prerequisite; validates FASTQ files before this notebook runs.
 - [Step 2 — FastQC Quality Reports](2_fastqc_quality_reports.md) —
-  optional prerequisite; read-quality inspection before trimming.
+  recommended prerequisite; read-quality inspection before trimming.
 - [Step 4 — DADA2 Parameter Explorer](4_dada2_parameter_selection.md) —
   optional prerequisite; visualize the amplified target, inspect read
   quality and retention and save filtering parameters
