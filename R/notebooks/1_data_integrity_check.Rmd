@@ -27,7 +27,7 @@ knitr::opts_chunk$set(
   echo = TRUE)
 ```
 
-```{css custom-styles, echo=FALSE, eval=knitr::is_html_output()}
+```{css custom-styles, echo=FALSE, eval=identical(render_target, "html"), include=identical(render_target, "html")}
 /* Custom styling for improved readability */
 body {
   font-size: 16px;

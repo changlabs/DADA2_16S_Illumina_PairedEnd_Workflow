@@ -48,15 +48,14 @@ results/
 # =============================================================================
 # Large Data Files
 # =============================================================================
-# Ignore raw FASTQ datasets placed in the normal user-data directory. The
-# documented tutorial fixture under example/data/fastq/ is intentionally
-# version-controlled and is not matched by these data/fastq/ patterns.
+# FASTQs remain local; publish only the saved example results.
+example/data/fastq/
 data/fastq/*.fastq
 data/fastq/*.fastq.gz
 data/fastq/*.fq
 data/fastq/*.fq.gz
 
-# The bundled example writes reruns to a disposable, isolated directory.
+# Local example reruns write to a disposable, isolated directory.
 # Curated outputs for browsing remain tracked under example/reference_results/.
 example/run_results/
 

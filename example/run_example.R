@@ -1,7 +1,8 @@
 #!/usr/bin/env Rscript
 
-# Run the repository's complete executable workflow against the bundled DADA2
-# tutorial data. Step 4 is represented by the validated, preconfigured parameter
+# Requires the original prepared DADA2 tutorial FASTQs.
+# Input reads are not included in the repository. View saved
+# results under example/reference_results/ without running this script. Step 4 is represented by the validated, preconfigured parameter
 # workbook because its Shiny app is intentionally interactive.
 # Inputs, generated outputs, and rendered reports stay below example/ so the
 # normal data/fastq and results/ trees are never read or modified.
@@ -29,6 +30,21 @@ reference_results <- file.path(project_root, "example", "reference_results")
 configuration_workbook <- file.path(
   data_root, "dada2_filter_parameters.xlsx"
 )
+
+fastq_files <- sort(list.files(
+  file.path(data_root, "fastq"),
+  pattern = "[.]fastq[.]gz$",
+  full.names = TRUE
+))
+if (length(fastq_files) != 40L) {
+  stop(
+    "This script requires 40 prepared FASTQ files in ",
+    "example/data/fastq/; found ", length(fastq_files), ". ",
+    "Input reads are not included in repository checkouts. ",
+    "View saved results in example/reference_results/ or on the example landing page.",
+    call. = FALSE
+  )
+}
 
 Sys.setenv(
   DADA2_DATA_DIR = data_root,
@@ -203,14 +219,6 @@ if (!nzchar(Sys.which("conda"))) {
   )
 }
 
-fastq_files <- sort(list.files(
-  file.path(data_root, "fastq"),
-  pattern = "[.]fastq[.]gz$",
-  full.names = TRUE
-))
-if (length(fastq_files) != 40L) {
-  stop("Expected 40 bundled FASTQ files but found ", length(fastq_files), call. = FALSE)
-}
 
 message(
   "Step 5 will read the validated Step 4 workbook directly from example data: ",
@@ -284,6 +292,6 @@ message(
   "Taxonomy: SILVA and GTDB, including both labelled trees and all six ",
   "database-by-abundance phyloseq objects.\n",
   "Generated results: ", run_results, "\n",
-  "Bundled reference results: ", reference_results, "\n",
+  "Saved reference results: ", reference_results, "\n",
   "Compare the two trees without touching data/fastq or results/."
 )

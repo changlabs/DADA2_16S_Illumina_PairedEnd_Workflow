@@ -20,6 +20,7 @@ output:
 # This document is a guide rather than a processing notebook. Code is not
 # evaluated by default so knitting it cannot alter pipeline outputs or launch
 # a Shiny process that never returns.
+render_target <- knitr::opts_knit$get("rmarkdown.pandoc.to")
 knitr::opts_chunk$set(
   eval = FALSE,
   echo = TRUE,
@@ -28,7 +29,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{css custom-styles, echo=FALSE, eval=knitr::is_html_output()}
+```{css custom-styles, echo=FALSE, eval=identical(render_target, "html"), include=identical(render_target, "html")}
 body {
   font-size: 16px;
   line-height: 1.6;

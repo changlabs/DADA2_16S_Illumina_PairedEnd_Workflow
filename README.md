@@ -10,8 +10,6 @@ A reproducible R-based pipeline for processing **Illumina paired-end** 16S rRNA 
 
 - [Key Features](#key-features)
 - [Pipeline Overview](#pipeline-overview)
-- [Bundled Example Dataset](#bundled-example-dataset)
-- [Quick Start](#quick-start)
 - [Setup](#setup)
   - [1. Clone the Repository](#1-clone-the-repository)
   - [2. Open the R Project in RStudio](#2-open-the-r-project-in-rstudio)
@@ -21,6 +19,7 @@ A reproducible R-based pipeline for processing **Illumina paired-end** 16S rRNA 
   - [6. Download Reference Databases](#6-download-reference-databases)
   - [7. Copy Your FASTQ Files](#7-copy-your-fastq-files)
   - [8. Copy Your Cell Count File (Optional)](#8-copy-your-cell-count-file-optional)
+- [Example run](#example-run)
 - [Running the Pipeline](#running-the-pipeline)
   - [Step 1 — Data Integrity Check](#step-1--data-integrity-check-recommended)
   - [Step 2 — FastQC Quality Reports](#step-2--fastqc-quality-reports-recommended)
@@ -124,22 +123,6 @@ A reproducible R-based pipeline for processing **Illumina paired-end** 16S rRNA 
 ```
 
 Step 4 is optional but recommended. Its DADA2 Parameter Explorer Shiny app is run interactively, while the accompanying RMarkdown guide can be used as a reference document. The app visualizes the amplified target and primer coordinates, helps you inspect quality and retention while choosing `truncLen`/`maxEE`, and keeps `truncQ` fixed at 2 before Step 5. Steps 6 and 7 are independent optional branches off Step 5. Step 8 follows Step 7 because microbial load correction requires the copy-number-corrected table; the tree from Step 6 is independent of both. Step 9 runs last, validates the provenance of optional corrected inputs, and builds every valid taxonomy-database x abundance-source combination.
-
-------------------------------------------------------------------------
-
-## Bundled Example Dataset
-
-The repository includes the 20-sample **Illumina MiSeq paired-end 2 x 250 bp V4** dataset used by the official DADA2 tutorial under [`example/`](example/), with descriptive filenames, matching metadata, tutorial-specific parameters, and browsable reference outputs. The example assigns taxonomy with both SILVA and GTDB and carries both taxonomy branches into the labelled-tree and phyloseq deliverables. It runs in an isolated `example/run_results/` tree, so it never reads from or writes to the normal `data/fastq/` or `results/` locations.
-
-After installing dependencies, project-local tools, PICRUSt2, and the taxonomy reference databases, run:
-
-``` bash
-Rscript example/run_example.R
-```
-
-The command runs Steps 1–3, reads the supplied Step 4 export from `example/data/dada2_filter_parameters.xlsx`, and then runs Steps 5–9. Step 4's Shiny app remains interactive; its bundled workbook is the validated example output read directly by Step 5. The runner verifies and reports its V4/2 x 250 settings before analysis: `truncLen = 240/160`, `maxEE = 2/2`, and a `250–256 bp` merged-amplicon filter. The generic Step 5 fallback values are not used. The cell counts used in Steps 7–8 are plausible-scale synthetic test inputs, not measurements from the tutorial study, and must not be used for biological interpretation.
-
-See the [example guide](example/README.md) for scope, renamed-sample mapping, provenance, and the required Kozich et al. (2013) dataset citation.
 
 ------------------------------------------------------------------------
 
@@ -252,6 +235,18 @@ Only needed for Step 9 if you want experimental sample information included in t
 
 ------------------------------------------------------------------------
 
+## Example run
+
+You can view the completed example results without installing dependencies or running the example: open the [example landing page](https://changlabs.github.io/DADA2_16S_Illumina_PairedEnd_Workflow/) for HTML reports, or browse the [example results directory](example/reference_results/) for workbooks, figures, tables, trees, and phyloseq objects.
+
+The saved results demonstrate processing of the 20-sample **Illumina MiSeq paired-end 2 x 250 bp V4** dataset used by the [official DADA2 tutorial](https://benjjneb.github.io/dada2/tutorial.html). The example includes SILVA and GTDB taxonomy assignments, labelled phylogenetic trees, and phyloseq objects for both databases.
+
+**The example is provided for viewing completed results. Input FASTQ files are not included in the repository.** You do not need to install dependencies or run the pipeline to inspect the reports and saved outputs. Use the workflow notebooks with your own FASTQs following Setup and Running the Pipeline below.
+
+The cell counts used for the saved microbial-load-corrected results are synthetic test inputs, not measurements from the source study, and must not be used for biological interpretation. See the [reference-results notes](example/reference_results/README.md) for software/database versions, output scope, and limitations.
+
+------------------------------------------------------------------------
+
 ## Running the Pipeline
 
 Open each required notebook in RStudio and run **chunkwise** or click **Run All** (Ctrl+Alt+R / Cmd+Alt+R). Use **Knit** when you want an HTML report. Steps 1 and 2 are recommended preflight checks; Step 3 precedes the recommended Step 4 app and required Step 5 pipeline. After Step 5, Steps 6 and 7 are independent optional branches. Step 8 is optional but requires Step 7. Run Step 9 last if you want phyloseq objects assembled from whichever upstream outputs are available.
@@ -310,7 +305,7 @@ Every Excel workbook produced in this pipeline—including the Step 4 app export
 
 ## Project Structure
 
-The tree below summarizes the maintained workflow files plus the project-local tools and reference databases created by Setup. Markdown notebook companions are retained for GitHub viewing; GitHub Pages publishes the rendered bundled-example reports from `example/reference_results/reports/`.
+The tree below summarizes the maintained workflow files plus the project-local tools and reference databases created by Setup. Markdown notebook companions are retained for GitHub viewing; GitHub Pages publishes the rendered example reports from `example/reference_results/reports/`.
 
 ```         
 DADA2_16S_Illumina_PairedEnd_Workflow/
@@ -378,14 +373,12 @@ DADA2_16S_Illumina_PairedEnd_Workflow/
 │       └── cell_count.tsv
 ├── example/
 │   ├── README.md
-│   ├── run_example.R
 │   ├── data/
 │   │   ├── metadata.tsv
 │   │   ├── dada2_filter_parameters.xlsx
-│   │   ├── cell_count/
-│   │   │   ├── README.md
-│   │   │   └── cell_count.tsv
-│   │   └── fastq/
+│   │   └── cell_count/
+│   │       ├── README.md
+│   │       └── cell_count.tsv
 │   └── reference_results/
 │       └── reports/
 │           └── *.html
@@ -423,7 +416,7 @@ DADA2_16S_Illumina_PairedEnd_Workflow/
 
 ### Methods
 
-- Kozich JJ, Westcott SL, Baxter NT, Highlander SK, Schloss PD (2013). Development of a dual-index sequencing strategy and curation pipeline for analyzing amplicon sequence data on the MiSeq Illumina sequencing platform. *Applied and Environmental Microbiology*, 79(17):5112–5120. [DOI:10.1128/AEM.01043-13](https://doi.org/10.1128/AEM.01043-13). Source study for the bundled DADA2 tutorial dataset.
+- Kozich JJ, Westcott SL, Baxter NT, Highlander SK, Schloss PD (2013). Development of a dual-index sequencing strategy and curation pipeline for analyzing amplicon sequence data on the MiSeq Illumina sequencing platform. *Applied and Environmental Microbiology*, 79(17):5112–5120. [DOI:10.1128/AEM.01043-13](https://doi.org/10.1128/AEM.01043-13). Source study for the tutorial dataset used to generate the saved example results.
 - Callahan BJ, et al. (2016). DADA2: High-resolution sample inference from Illumina amplicon data. *Nature Methods*, 13(7):581-583. [DOI:10.1038/nmeth.3869](https://doi.org/10.1038/nmeth.3869)
 - Price MN, et al. (2010). FastTree 2 – Approximately Maximum-Likelihood Trees for Large Alignments. *PLoS ONE*, 5(3):e9490. [DOI:10.1371/journal.pone.0009490](https://doi.org/10.1371/journal.pone.0009490)
 - McMurdie PJ, Holmes S (2013). phyloseq: An R Package for Reproducible Interactive Analysis and Graphics of Microbiome Census Data. *PLoS ONE*, 8(4):e61217. [DOI:10.1371/journal.pone.0061217](https://doi.org/10.1371/journal.pone.0061217)
@@ -450,7 +443,7 @@ DADA2_16S_Illumina_PairedEnd_Workflow/
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+The workflow software is licensed under the MIT License - see [LICENSE](LICENSE). Input FASTQ files are not included in the repository. The saved example results derive from third-party research data; see the [data provenance notice](example/README.md#data-provenance-and-citation).
 
 ------------------------------------------------------------------------
 
